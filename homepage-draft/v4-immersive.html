@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hiku by harper — The House</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       HIKU V4 — Immersive, Layered, Playful
+       "The British Dollhouse of Curiosities"
+       ======================================== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --pink: #F5E6E0;
+      --brown: #3D1C1E;
+      --rosewood: #C4A0A7;
+      --almond: #FDF8F5;
+      --mauve: #B8A0B8;
+      --vivid-pink: #E782A9;
+      --baby-blue: #B8D4E8;
+      --oat-matcha: #C4CFA0;
+      --stone-300: #D6D3D1;
+      --stone-400: #A6A09B;
+      --glow-pink: rgba(231,130,169,0.15);
+      --glow-mauve: rgba(184,160,184,0.15);
+      --serif: 'Playfair Display', 'Big Caslon', Georgia, serif;
+      --sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 1.2;
+      color: var(--brown);
+      background: var(--almond);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    h1, h2, h3, h4 { font-family: var(--serif); font-weight: 500; line-height: 1.1; }
+    h1 { font-size: 56px; }
+    h2 { font-size: 36px; }
+    h3 { font-size: 24px; }
+
+    .subhead {
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .btn {
+      display: inline-block;
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 1;
+      padding: 14px 28px;
+      border-radius: 4px;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn:active { transform: translateY(0); }
+    .btn-primary {
+      background: var(--brown);
+      color: var(--almond);
+      box-shadow: 0 4px 16px rgba(61,28,30,0.2);
+    }
+    .btn-primary:hover { box-shadow: 0 8px 28px rgba(61,28,30,0.3); }
+    .btn-outline { background: transparent; color: var(--almond); border: 1px solid rgba(253,248,245,0.5); }
+    .btn-outline:hover { border-color: var(--almond); background: rgba(253,248,245,0.08); }
+    .btn-outline-dark { background: transparent; color: var(--brown); border: 1px solid var(--brown); }
+    .btn-outline-dark:hover { background: rgba(61,28,30,0.04); }
+
+    /* --- Scroll Reveal --- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ============================
+       1. ANNOUNCEMENT BANNER
+       ============================ */
+    .banner {
+      background: var(--brown);
+      height: 41px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: var(--almond);
+      letter-spacing: 0.02em;
+      position: relative;
+    }
+    .banner__controls {
+      position: absolute;
+      right: 24px;
+      display: flex;
+      gap: 10px;
+    }
+    .banner__controls button {
+      background: none; border: none; cursor: pointer;
+      color: var(--almond); font-size: 11px; opacity: 0.4;
+      transition: opacity 0.2s;
+    }
+    .banner__controls button:hover { opacity: 0.9; }
+
+    /* ============================
+       2. NAVIGATION
+       ============================ */
+    .nav {
+      background: var(--brown);
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      transition: box-shadow 0.3s;
+    }
+    .nav--scrolled { box-shadow: 0 4px 30px rgba(61,28,30,0.15); }
+    .nav__logo {
+      font-family: var(--serif);
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--almond);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+      transition: transform 0.3s;
+    }
+    .nav__logo:hover { transform: scale(1.02); }
+    .nav__logo sup { font-size: 9px; font-style: italic; font-weight: 400; opacity: 0.6; vertical-align: super; margin-left: 2px; }
+    .nav__right { display: flex; align-items: center; gap: 8px; }
+    .nav__link {
+      color: var(--almond);
+      text-decoration: none;
+      font-size: 13px;
+      padding: 10px 14px;
+      opacity: 0.85;
+      transition: opacity 0.2s;
+    }
+    .nav__link:hover { opacity: 1; }
+    .nav__cta { margin-left: 12px; }
+    .nav__icons { display: flex; gap: 18px; margin-left: 24px; }
+    .nav__icon {
+      color: var(--almond); opacity: 0.65; cursor: pointer;
+      background: none; border: none; font-size: 15px;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .nav__icon:hover { opacity: 1; transform: scale(1.1); }
+
+    /* ============================
+       3. HERO — Immersive Foyer
+       ============================ */
+    .hero {
+      height: 100vh;
+      max-height: 900px;
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .hero__left {
+      position: relative;
+      background:
+        radial-gradient(ellipse at 70% 35%, rgba(212,165,116,0.9) 0%, transparent 50%),
+        radial-gradient(ellipse at 55% 55%, rgba(201,148,122,0.8) 0%, transparent 45%),
+        radial-gradient(circle at 72% 38%, rgba(139,180,196,0.6) 0%, transparent 10%),
+        linear-gradient(135deg, #a07050 0%, #d4a080 30%, #c09070 60%, #e0c0a0 100%);
+    }
+    /* Layered depth overlay */
+    .hero__left::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(61,28,30,0.1) 0%, transparent 30%, transparent 60%, rgba(61,28,30,0.2) 100%);
+    }
+    .hero__left-content {
+      position: absolute;
+      bottom: 80px;
+      left: 48px;
+      right: 48px;
+      z-index: 2;
+    }
+    .hero__title {
+      font-family: var(--serif);
+      font-size: 52px;
+      font-weight: 500;
+      line-height: 1.06;
+      color: var(--almond);
+      margin-bottom: 28px;
+      text-shadow: 0 2px 30px rgba(61,28,30,0.2);
+    }
+    .hero__right {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 3px;
+    }
+    .hero__tile {
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .hero__tile:hover { transform: scale(1.02); z-index: 2; }
+    .hero__tile::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.4s;
+      background: rgba(61,28,30,0.08);
+    }
+    .hero__tile:hover::after { opacity: 1; }
+    .hero__tile--1 {
+      background: radial-gradient(ellipse at 50% 50%, #e0b8a0 0%, #d0a890 40%, #c09880 100%);
+    }
+    .hero__tile--2 {
+      background: var(--pink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero__tile--3 {
+      background: radial-gradient(ellipse at 50% 55%, #d8a090 0%, #c89080 40%, #b88070 100%);
+    }
+    .hero__tile--4 {
+      background: radial-gradient(ellipse at 45% 50%, #e0c0a8 0%, #d0b098 50%, #c0a088 100%);
+    }
+    /* Floating product card in hero tile */
+    .hero__product {
+      background: white;
+      border-radius: 8px;
+      padding: 20px 16px 16px;
+      width: 75%;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(61,28,30,0.1);
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s;
+      animation: heroFloat 4s ease-in-out infinite;
+    }
+    .hero__tile--2:hover .hero__product {
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 16px 48px rgba(61,28,30,0.15);
+    }
+    @keyframes heroFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .hero__product-img {
+      width: 55%;
+      aspect-ratio: 3/4;
+      background: linear-gradient(180deg, var(--pink) 0%, #ecddd8 100%);
+      border-radius: 6px;
+      margin: 0 auto 12px;
+    }
+    .hero__product-name { font-family: var(--serif); font-size: 14px; margin-bottom: 3px; }
+    .hero__product-sub { font-size: 11px; color: var(--stone-400); margin-bottom: 3px; }
+    .hero__product-price { font-size: 12px; }
+
+    /* ============================
+       4. BRAND STATEMENT + MARQUEE
+       ============================ */
+    .statement {
+      padding: 100px 48px;
+      text-align: center;
+      background: var(--almond);
+      position: relative;
+    }
+    .statement h2 {
+      font-size: 44px;
+      font-style: italic;
+      line-height: 1.2;
+      max-width: 680px;
+      margin: 0 auto 24px;
+    }
+    .statement p {
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--stone-400);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    /* Soft glow behind statement */
+    .statement::before {
+      content: '';
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--glow-pink) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .marquee {
+      background: var(--rosewood);
+      height: 52px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+    .marquee__track {
+      display: flex;
+      animation: marquee 25s linear infinite;
+      white-space: nowrap;
+    }
+    .marquee__item {
+      font-size: 12px;
+      color: var(--almond);
+      padding: 0 28px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .marquee__item::before { content: '✦  '; opacity: 0.5; }
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ============================
+       5. PRODUCTS — Elevated Grid
+       ============================ */
+    .products {
+      padding: 80px 40px 100px;
+      background: var(--almond);
+    }
+    .products__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+    .products__view-all {
+      font-size: 13px;
+      color: var(--brown);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .products__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+    .product-card {
+      position: relative;
+      cursor: pointer;
+      perspective: 800px;
+    }
+    .product-card__inner {
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .product-card:hover .product-card__inner {
+      transform: translateY(-8px);
+    }
+    .product-card__image {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: var(--pink);
+      border-radius: 8px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: box-shadow 0.4s;
+    }
+    .product-card:hover .product-card__image {
+      box-shadow: 0 16px 48px rgba(196,160,167,0.3);
+    }
+    /* Shimmer overlay on hover */
+    .product-card__image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.2) 50%, transparent 60%);
+      transform: translateX(-100%);
+      transition: transform 0.6s;
+    }
+    .product-card:hover .product-card__image::after {
+      transform: translateX(100%);
+    }
+    .product-card__silhouette {
+      width: 40%;
+      height: 55%;
+      background: linear-gradient(180deg, rgba(253,248,245,0.6) 0%, rgba(253,248,245,0.9) 100%);
+      border-radius: 16px 16px 6px 6px;
+      box-shadow: 0 4px 20px rgba(61,28,30,0.06);
+    }
+    .product-card__name {
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+    .product-card__sub {
+      font-size: 12px;
+      color: var(--stone-400);
+      margin-bottom: 4px;
+    }
+    .product-card__row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .product-card__price { font-size: 13px; }
+    .product-card__rating { font-size: 11px; color: var(--stone-400); }
+    .product-card__rating span { color: var(--brown); }
+    /* Hover CTA */
+    .product-card__cta {
+      position: absolute;
+      bottom: 120px;
+      left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .product-card:hover .product-card__cta {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ============================
+       6. CHOOSE YOUR MOOD — Interactive
+       ============================ */
+    .mood {
+      padding: 100px 48px;
+      background: var(--pink);
+      position: relative;
+      overflow: hidden;
+    }
+    /* Soft glowing orbs in background */
+    .mood::before, .mood::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .mood::before {
+      width: 400px; height: 400px;
+      top: -100px; right: -100px;
+      background: var(--glow-pink);
+    }
+    .mood::after {
+      width: 300px; height: 300px;
+      bottom: -80px; left: -80px;
+      background: var(--glow-mauve);
+    }
+    .mood[data-mood="calm"]::before { background: rgba(184,160,184,0.2); }
+    .mood[data-mood="calm"]::after { background: rgba(184,208,232,0.15); }
+    .mood[data-mood="awake"]::before { background: rgba(196,207,160,0.2); }
+    .mood[data-mood="awake"]::after { background: rgba(184,208,232,0.15); }
+
+    .mood__inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      max-width: 1200px;
+      margin: 0 auto;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    .mood__left .subhead { color: var(--rosewood); margin-bottom: 16px; }
+    .mood__prompt {
+      font-family: var(--serif);
+      font-size: 40px;
+      line-height: 1.15;
+      margin-bottom: 36px;
+    }
+    .mood__prompt em {
+      font-style: italic;
+      position: relative;
+      cursor: pointer;
+      transition: color 0.4s;
+    }
+    .mood[data-mood="glowy"] .mood__prompt em { color: var(--vivid-pink); }
+    .mood[data-mood="calm"] .mood__prompt em { color: var(--mauve); }
+    .mood[data-mood="awake"] .mood__prompt em { color: #8aaa70; }
+    .mood__prompt em::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: currentColor;
+      border-radius: 1px;
+    }
+    .mood__options { display: flex; gap: 10px; margin-bottom: 36px; }
+    .mood__option {
+      padding: 10px 24px;
+      border-radius: 24px;
+      font-size: 13px;
+      cursor: pointer;
+      border: 1px solid var(--stone-300);
+      background: rgba(255,255,255,0.5);
+      font-family: var(--sans);
+      color: var(--brown);
+      backdrop-filter: blur(8px);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .mood__option.active {
+      background: var(--brown);
+      color: var(--almond);
+      border-color: var(--brown);
+      transform: scale(1.05);
+      box-shadow: 0 4px 16px rgba(61,28,30,0.15);
+    }
+    .mood__option:hover:not(.active) { border-color: var(--brown); transform: scale(1.03); }
+    .mood__product-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .mood__card {
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(12px);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s;
+      cursor: pointer;
+    }
+    .mood__card:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 12px 36px rgba(196,160,167,0.25);
+    }
+    .mood__card-image {
+      width: 100%;
+      aspect-ratio: 1;
+      transition: background 0.6s ease;
+    }
+    .mood__card-info { padding: 14px 16px; }
+    .mood__card-name { font-family: var(--serif); font-size: 14px; margin-bottom: 3px; }
+    .mood__card-sub { font-size: 11px; color: var(--stone-400); margin-bottom: 6px; }
+    .mood__card-price { font-size: 12px; }
+
+    /* Mood circle */
+    .mood__circle-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .mood__circle {
+      width: 90%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      position: relative;
+      transition: background 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 20px 60px rgba(196,160,167,0.3), inset 0 0 80px rgba(255,255,255,0.15);
+      cursor: pointer;
+    }
+    .mood__circle:hover { transform: scale(1.03); }
+    .mood[data-mood="glowy"] .mood__circle {
+      background: radial-gradient(circle at 38% 38%, rgba(255,255,255,0.4) 0%, #fce4d6 20%, var(--vivid-pink) 55%, var(--rosewood) 100%);
+    }
+    .mood[data-mood="calm"] .mood__circle {
+      background: radial-gradient(circle at 38% 38%, rgba(255,255,255,0.4) 0%, #e8e0f0 20%, var(--mauve) 55%, var(--rosewood) 100%);
+    }
+    .mood[data-mood="awake"] .mood__circle {
+      background: radial-gradient(circle at 38% 38%, rgba(255,255,255,0.4) 0%, #d6eaf0 20%, var(--baby-blue) 55%, var(--oat-matcha) 100%);
+    }
+    .mood__circle-label {
+      position: absolute;
+      bottom: 15%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--serif);
+      font-size: 20px;
+      font-style: italic;
+      color: var(--brown);
+      white-space: nowrap;
+      opacity: 0.8;
+      transition: opacity 0.4s;
+    }
+
+    /* Product colors by mood */
+    .mood[data-mood="glowy"] .mood__card:nth-child(1) .mood__card-image { background: linear-gradient(135deg, var(--vivid-pink) 0%, var(--pink) 100%); }
+    .mood[data-mood="glowy"] .mood__card:nth-child(2) .mood__card-image { background: linear-gradient(135deg, var(--rosewood) 0%, var(--pink) 100%); }
+    .mood[data-mood="glowy"] .mood__card:nth-child(3) .mood__card-image { background: linear-gradient(135deg, var(--pink) 0%, #fce4d6 100%); }
+    .mood[data-mood="glowy"] .mood__card:nth-child(4) .mood__card-image { background: linear-gradient(135deg, var(--rosewood) 0%, var(--vivid-pink) 100%); }
+    .mood[data-mood="calm"] .mood__card:nth-child(1) .mood__card-image { background: linear-gradient(135deg, var(--mauve) 0%, #e8e0f0 100%); }
+    .mood[data-mood="calm"] .mood__card:nth-child(2) .mood__card-image { background: linear-gradient(135deg, var(--rosewood) 0%, var(--mauve) 100%); }
+    .mood[data-mood="calm"] .mood__card:nth-child(3) .mood__card-image { background: linear-gradient(135deg, #e8e0f0 0%, var(--pink) 100%); }
+    .mood[data-mood="calm"] .mood__card:nth-child(4) .mood__card-image { background: linear-gradient(135deg, var(--mauve) 0%, var(--rosewood) 100%); }
+    .mood[data-mood="awake"] .mood__card:nth-child(1) .mood__card-image { background: linear-gradient(135deg, var(--oat-matcha) 0%, #d4deb8 100%); }
+    .mood[data-mood="awake"] .mood__card:nth-child(2) .mood__card-image { background: linear-gradient(135deg, var(--baby-blue) 0%, #d6eaf0 100%); }
+    .mood[data-mood="awake"] .mood__card:nth-child(3) .mood__card-image { background: linear-gradient(135deg, #d4deb8 0%, var(--oat-matcha) 100%); }
+    .mood[data-mood="awake"] .mood__card:nth-child(4) .mood__card-image { background: linear-gradient(135deg, var(--baby-blue) 0%, var(--oat-matcha) 100%); }
+
+    /* ============================
+       7. THE RITUAL — Layered Steps
+       ============================ */
+    .ritual {
+      padding: 100px 48px;
+      background: var(--almond);
+      position: relative;
+    }
+    .ritual__header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      max-width: 1200px;
+      margin: 0 auto 64px;
+      align-items: end;
+    }
+    .ritual__header .subhead { color: var(--rosewood); margin-bottom: 16px; }
+    .ritual__header h2 { font-size: 48px; line-height: 1.05; }
+    .ritual__header p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--stone-400);
+      max-width: 400px;
+    }
+    .ritual__steps {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .ritual__step {
+      text-align: center;
+      position: relative;
+    }
+    .ritual__step-image {
+      width: 100%;
+      aspect-ratio: 3/4;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.5s;
+    }
+    .ritual__step-image:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 48px rgba(196,160,167,0.3);
+    }
+    /* Layered depth effect */
+    .ritual__step-image::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 50%, rgba(61,28,30,0.15) 100%);
+      z-index: 1;
+    }
+    .ritual__step-image::after {
+      content: attr(data-step);
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--almond);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--serif);
+      font-size: 13px;
+      color: var(--brown);
+      z-index: 2;
+      box-shadow: 0 2px 8px rgba(61,28,30,0.1);
+    }
+    .ritual__step:nth-child(1) .ritual__step-image { background: linear-gradient(160deg, var(--oat-matcha) 20%, #b8c490 100%); }
+    .ritual__step:nth-child(2) .ritual__step-image { background: linear-gradient(160deg, #ede0d4 20%, var(--pink) 100%); }
+    .ritual__step:nth-child(3) .ritual__step-image { background: linear-gradient(160deg, var(--baby-blue) 10%, #a8c4d8 100%); }
+    .ritual__step:nth-child(4) .ritual__step-image { background: linear-gradient(160deg, var(--vivid-pink) 10%, var(--pink) 100%); }
+    .ritual__step:nth-child(5) .ritual__step-image { background: linear-gradient(160deg, var(--rosewood) 10%, var(--mauve) 100%); }
+    .ritual__step-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--rosewood); margin-bottom: 6px; }
+    .ritual__step-name { font-family: var(--serif); font-size: 16px; margin-bottom: 4px; }
+    .ritual__step-desc { font-size: 12px; color: var(--stone-400); line-height: 1.4; }
+    /* Glowy/Matte toggle */
+    .ritual__toggle {
+      display: inline-flex;
+      background: white;
+      border-radius: 20px;
+      padding: 3px;
+      margin-top: 10px;
+      box-shadow: 0 2px 8px rgba(61,28,30,0.06);
+    }
+    .ritual__toggle-btn {
+      padding: 6px 16px;
+      font-size: 11px;
+      border-radius: 17px;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      font-family: var(--sans);
+      color: var(--stone-400);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .ritual__toggle-btn.active {
+      background: var(--brown);
+      color: var(--almond);
+      transform: scale(1.05);
+    }
+    .ritual__cta { text-align: center; margin-top: 56px; }
+
+    /* ============================
+       8. TEXTURE STORY — Immersive
+       ============================ */
+    .texture {
+      padding: 100px 48px 120px;
+      background: linear-gradient(180deg, var(--pink) 0%, var(--almond) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .texture__header { text-align: center; margin-bottom: 80px; position: relative; z-index: 1; }
+    .texture__header .subhead { color: var(--rosewood); margin-bottom: 12px; }
+    .texture__header p { font-size: 15px; color: var(--stone-400); margin-top: 16px; }
+    .texture__canvas {
+      position: relative;
+      height: 520px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .texture__blob {
+      position: absolute;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    }
+    .texture__blob:hover {
+      transform: scale(1.12);
+      box-shadow: 0 16px 56px rgba(0,0,0,0.12);
+      z-index: 10;
+    }
+    .texture__blob::after {
+      content: attr(data-numeral);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 32px;
+      color: rgba(61,28,30,0.5);
+      transition: color 0.3s;
+    }
+    .texture__blob:hover::after { color: var(--brown); }
+    .texture__blob--1 {
+      width: 200px; height: 200px; top: 30px; left: 5%;
+      background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.3), var(--oat-matcha));
+      border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+      animation: blobFloat1 6s ease-in-out infinite;
+    }
+    .texture__blob--2 {
+      width: 170px; height: 170px; top: 100px; left: 28%;
+      background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.3), #e8dcd0);
+      border-radius: 50% 60% 40% 60% / 55% 45% 55% 45%;
+      animation: blobFloat2 7s ease-in-out infinite;
+    }
+    .texture__blob--3 {
+      width: 220px; height: 190px; top: 20px; left: 50%;
+      background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.3), var(--baby-blue));
+      border-radius: 45% 55% 50% 50% / 55% 45% 55% 45%;
+      animation: blobFloat1 8s ease-in-out infinite;
+    }
+    .texture__blob--4 {
+      width: 190px; height: 190px; top: 260px; left: 18%;
+      background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.3), var(--vivid-pink));
+      border-radius: 55% 45% 50% 50% / 45% 55% 45% 55%;
+      animation: blobFloat2 6.5s ease-in-out infinite;
+    }
+    .texture__blob--5 {
+      width: 160px; height: 160px; top: 280px; right: 12%;
+      background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.3), var(--mauve));
+      border-radius: 50% 50% 45% 55% / 55% 45% 50% 50%;
+      animation: blobFloat1 7.5s ease-in-out infinite;
+    }
+    @keyframes blobFloat1 {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(2deg); }
+    }
+    @keyframes blobFloat2 {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(-2deg); }
+    }
+    .texture__blob-tooltip {
+      position: absolute;
+      bottom: -12px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100%);
+      background: var(--brown);
+      color: var(--almond);
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 12px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      box-shadow: 0 4px 16px rgba(61,28,30,0.2);
+      z-index: 20;
+    }
+    .texture__blob:hover .texture__blob-tooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(calc(100% + 4px));
+    }
+
+    /* ============================
+       9. CRYSTAL BALL — Quiz CTA
+       ============================ */
+    .quiz {
+      padding: 120px 48px 140px;
+      text-align: center;
+      background: linear-gradient(180deg, var(--almond) 0%, var(--pink) 50%, var(--almond) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    /* Ambient floating particles */
+    .quiz__particle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.15;
+      animation: particleFloat 8s ease-in-out infinite;
+    }
+    .quiz__particle--1 { width: 8px; height: 8px; background: var(--vivid-pink); top: 20%; left: 15%; animation-delay: 0s; }
+    .quiz__particle--2 { width: 6px; height: 6px; background: var(--mauve); top: 30%; right: 20%; animation-delay: 2s; }
+    .quiz__particle--3 { width: 10px; height: 10px; background: var(--rosewood); bottom: 25%; left: 25%; animation-delay: 4s; }
+    .quiz__particle--4 { width: 5px; height: 5px; background: var(--baby-blue); top: 60%; right: 30%; animation-delay: 1s; }
+    .quiz__particle--5 { width: 7px; height: 7px; background: var(--oat-matcha); bottom: 35%; right: 15%; animation-delay: 3s; }
+    @keyframes particleFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.15; }
+      25% { transform: translate(20px, -30px) scale(1.5); opacity: 0.25; }
+      50% { transform: translate(-10px, -50px) scale(1); opacity: 0.1; }
+      75% { transform: translate(15px, -20px) scale(1.3); opacity: 0.2; }
+    }
+
+    .quiz__ball {
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      margin: 0 auto 48px;
+      position: relative;
+      cursor: pointer;
+      background: radial-gradient(circle at 35% 35%,
+        rgba(255,255,255,0.7) 0%,
+        rgba(196,160,167,0.25) 20%,
+        rgba(184,160,184,0.35) 40%,
+        rgba(231,130,169,0.2) 60%,
+        rgba(196,160,167,0.45) 80%,
+        rgba(61,28,30,0.1) 100%
+      );
+      box-shadow:
+        0 0 60px rgba(196,160,167,0.3),
+        0 0 120px rgba(184,160,184,0.12),
+        inset 0 0 60px rgba(255,255,255,0.2);
+      animation: ballFloat 5s ease-in-out infinite;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s;
+    }
+    @keyframes ballFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .quiz__ball:hover {
+      transform: scale(1.06);
+      box-shadow:
+        0 0 100px rgba(196,160,167,0.5),
+        0 0 200px rgba(184,160,184,0.2),
+        inset 0 0 80px rgba(255,255,255,0.3);
+    }
+    .quiz__ball-inner {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px;
+    }
+    .quiz__ball-text {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 17px;
+      color: var(--brown);
+      opacity: 0.6;
+      line-height: 1.4;
+    }
+    .quiz__ball-base {
+      width: 100px;
+      height: 20px;
+      background: linear-gradient(180deg, var(--rosewood) 0%, var(--brown) 100%);
+      border-radius: 50%;
+      margin: -10px auto 48px;
+      opacity: 0.3;
+    }
+    .quiz .subhead { color: var(--rosewood); margin-bottom: 12px; }
+    .quiz h2 { margin-bottom: 16px; }
+    .quiz__sub {
+      font-size: 15px;
+      color: var(--stone-400);
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    /* ============================
+       10. FOUNDER STORY
+       ============================ */
+    .founder {
+      padding: 100px 48px;
+      background: var(--almond);
+    }
+    .founder__inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      max-width: 1200px;
+      margin: 0 auto;
+      align-items: center;
+    }
+    .founder__image {
+      aspect-ratio: 4/5;
+      border-radius: 16px;
+      background: linear-gradient(160deg, var(--pink) 0%, var(--rosewood) 40%, var(--mauve) 70%, rgba(61,28,30,0.3) 100%);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(196,160,167,0.3);
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .founder__image:hover { transform: scale(1.02) rotate(-0.5deg); }
+    .founder__content .subhead { color: var(--rosewood); margin-bottom: 16px; }
+    .founder__content h2 { margin-bottom: 24px; font-size: 42px; line-height: 1.12; }
+    .founder__content p { font-size: 15px; line-height: 1.7; color: var(--stone-400); margin-bottom: 16px; max-width: 440px; }
+    .founder__content p:last-of-type {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 18px;
+      color: var(--brown);
+      line-height: 1.4;
+      margin-top: 24px;
+    }
+
+    /* ============================
+       11. COMMUNITY
+       ============================ */
+    .community {
+      padding: 80px 48px 100px;
+      background: var(--almond);
+    }
+    .community__header { text-align: center; margin-bottom: 48px; }
+    .community__header .subhead { color: var(--rosewood); margin-bottom: 12px; }
+    .community__header p { font-size: 15px; color: var(--stone-400); margin-top: 16px; max-width: 400px; margin-left: auto; margin-right: auto; line-height: 1.5; }
+    .community__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: 280px 200px;
+      gap: 12px;
+      max-width: 1200px;
+      margin: 0 auto 48px;
+    }
+    .community__item {
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .community__item:hover { transform: scale(1.03); z-index: 2; }
+    .community__item:nth-child(1) { grid-column: span 2; background: linear-gradient(135deg, var(--pink) 0%, var(--rosewood) 100%); }
+    .community__item:nth-child(2) { background: linear-gradient(135deg, var(--oat-matcha) 0%, #b8c490 100%); }
+    .community__item:nth-child(3) { background: linear-gradient(135deg, var(--mauve) 0%, #c8b8c8 100%); }
+    .community__item:nth-child(4) { background: linear-gradient(135deg, var(--baby-blue) 0%, #a8c4d8 100%); }
+    .community__item:nth-child(5) { background: linear-gradient(135deg, var(--vivid-pink) 0%, var(--pink) 100%); }
+    .community__item:nth-child(6) { background: linear-gradient(135deg, var(--rosewood) 0%, var(--mauve) 100%); }
+    .community__item:nth-child(7) { background: linear-gradient(135deg, var(--pink) 0%, var(--vivid-pink) 100%); }
+    .community__cta { text-align: center; }
+
+    /* ============================
+       12. FOOTER
+       ============================ */
+    .footer {
+      background: var(--brown);
+      color: var(--almond);
+    }
+    .footer__hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      height: 300px;
+    }
+    .footer__hero-img:nth-child(1) { background: radial-gradient(ellipse at 50% 45%, #a07868 0%, #704838 60%, var(--brown) 100%); }
+    .footer__hero-img:nth-child(2) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .footer__hero-logo {
+      font-family: var(--serif);
+      font-size: 100px;
+      font-weight: 600;
+      color: var(--almond);
+      letter-spacing: -0.03em;
+      opacity: 0.9;
+      transition: opacity 0.3s;
+    }
+    .footer__hero-logo:hover { opacity: 1; }
+    .footer__hero-logo sup { font-size: 14px; font-style: italic; font-weight: 400; opacity: 0.5; }
+    .footer__hero-img:nth-child(3) { background: radial-gradient(ellipse at 50% 50%, #b08878 0%, #806858 60%, var(--brown) 100%); }
+
+    .footer__main {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 64px 48px 40px;
+      gap: 64px;
+    }
+    .footer__newsletter .subhead { color: rgba(253,248,245,0.5); margin-bottom: 14px; }
+    .footer__newsletter h3 { font-size: 32px; color: var(--almond); margin-bottom: 28px; }
+    .footer__form { display: flex; flex-direction: column; gap: 14px; max-width: 340px; }
+    .footer__field { position: relative; }
+    .footer__field label { position: absolute; top: -7px; left: 12px; font-size: 10px; color: rgba(253,248,245,0.35); background: var(--brown); padding: 0 4px; }
+    .footer__input {
+      width: 100%;
+      background: transparent;
+      border: 1px solid rgba(253,248,245,0.2);
+      border-radius: 4px;
+      padding: 14px 16px;
+      color: var(--almond);
+      font-family: var(--sans);
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .footer__input:focus { border-color: var(--rosewood); box-shadow: 0 0 0 3px rgba(196,160,167,0.15); }
+    .footer__input::placeholder { color: rgba(253,248,245,0.2); }
+    .footer__consent { font-size: 10px; color: rgba(253,248,245,0.25); line-height: 1.5; }
+    .footer__consent a { color: var(--rosewood); text-decoration: underline; }
+    .footer__links {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      align-content: start;
+    }
+    .footer__col-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; }
+    .footer__col a { display: block; color: rgba(253,248,245,0.4); text-decoration: none; font-size: 13px; padding: 4px 0; transition: color 0.2s, transform 0.2s; }
+    .footer__col a:hover { color: var(--almond); transform: translateX(3px); }
+    .footer__bottom {
+      padding: 24px 48px;
+      border-top: 1px solid rgba(253,248,245,0.06);
+      font-size: 11px;
+      color: rgba(253,248,245,0.2);
+    }
+
+    /* ============================
+       EASTER EGG — Footer color
+       ============================ */
+    .easter-egg-trigger {
+      cursor: default;
+      transition: all 0.3s;
+      display: inline;
+    }
+    .easter-egg-trigger:hover {
+      color: var(--vivid-pink);
+      text-shadow: 0 0 20px rgba(231,130,169,0.4);
+    }
+    .easter-egg-toast {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--brown);
+      color: var(--almond);
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-size: 14px;
+      z-index: 1000;
+      box-shadow: 0 8px 32px rgba(61,28,30,0.3);
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      pointer-events: none;
+      text-align: center;
+    }
+    .easter-egg-toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+    .easter-egg-toast span {
+      display: block;
+      font-size: 11px;
+      color: var(--rosewood);
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- EASTER EGG TOAST -->
+  <div class="easter-egg-toast" id="easter-toast">
+    ✨ You found a secret room! ✨
+    <span>Use code HIKUHOUSE for 10% off your first ritual</span>
+  </div>
+
+  <!-- 1. BANNER -->
+  <div class="banner">
+    <span>Free standard shipping on orders $40+</span>
+    <div class="banner__controls">
+      <button>&#8592;</button>
+      <button>&#8594;</button>
+      <button>&#10074;&#10074;</button>
+    </div>
+  </div>
+
+  <!-- 2. NAVIGATION -->
+  <nav class="nav" id="nav">
+    <a href="#" class="nav__logo">hiku<sup>by harper</sup></a>
+    <div class="nav__right">
+      <a href="#" class="nav__link">Shop +</a>
+      <a href="#" class="nav__link">About</a>
+      <a href="#" class="nav__link">Community</a>
+      <a href="#" class="btn btn-outline nav__cta">Find My Ritual</a>
+      <div class="nav__icons">
+        <button class="nav__icon" aria-label="Search">&#9906;</button>
+        <button class="nav__icon" aria-label="Account">@</button>
+        <button class="nav__icon" aria-label="Bag">&#9776;</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 3. HERO -->
+  <section class="hero">
+    <div class="hero__left">
+      <div class="hero__left-content">
+        <h1 class="hero__title reveal">The coolest thing you can be is yourself.</h1>
+        <a href="#" class="hero__btn btn btn-primary reveal reveal-delay-1" style="background: var(--almond); color: var(--brown); box-shadow: 0 4px 20px rgba(0,0,0,0.15);">Shop Now</a>
+      </div>
+    </div>
+    <div class="hero__right">
+      <div class="hero__tile hero__tile--1"></div>
+      <div class="hero__tile hero__tile--2">
+        <div class="hero__product">
+          <div class="hero__product-img"></div>
+          <div class="hero__product-name">Guava Glow Moisturizer</div>
+          <div class="hero__product-sub">hydrating gel-cream</div>
+          <div class="hero__product-price">$34.00</div>
+        </div>
+      </div>
+      <div class="hero__tile hero__tile--3"></div>
+      <div class="hero__tile hero__tile--4"></div>
+    </div>
+  </section>
+
+  <!-- 4. BRAND STATEMENT + MARQUEE -->
+  <section class="statement">
+    <h2 class="reveal">"Skincare that supports who you already are, not who you're told to be."</h2>
+    <p class="reveal reveal-delay-1">Part beauty editor, part big sister, part science nerd — always kind, never preachy, endlessly curious.</p>
+  </section>
+
+  <div class="marquee">
+    <div class="marquee__track">
+      <span class="marquee__item">Fragrance-free</span>
+      <span class="marquee__item">Vegan</span>
+      <span class="marquee__item">Cruelty-free</span>
+      <span class="marquee__item">Non-comedogenic</span>
+      <span class="marquee__item">Alcohol-free</span>
+      <span class="marquee__item">Kind Calmplex™</span>
+      <span class="marquee__item">Fragrance-free</span>
+      <span class="marquee__item">Vegan</span>
+      <span class="marquee__item">Cruelty-free</span>
+      <span class="marquee__item">Non-comedogenic</span>
+      <span class="marquee__item">Alcohol-free</span>
+      <span class="marquee__item">Kind Calmplex™</span>
+    </div>
+  </div>
+
+  <!-- 5. PRODUCTS -->
+  <section class="products">
+    <div class="products__header">
+      <span class="subhead reveal">Shop Our Favourites</span>
+      <a href="#" class="products__view-all reveal">View All</a>
+    </div>
+    <div class="products__grid">
+      <div class="product-card reveal reveal-delay-1">
+        <div class="product-card__inner">
+          <div class="product-card__image" style="background: linear-gradient(160deg, #e8ddd0, #d0c4b4);">
+            <div class="product-card__silhouette"></div>
+          </div>
+          <div class="product-card__name">Guava Glow Moisturizer</div>
+          <div class="product-card__sub">hydrating gel-cream</div>
+          <div class="product-card__row"><span class="product-card__price">$34.00</span><span class="product-card__rating"><span>★</span> 4.8 (124)</span></div>
+        </div>
+        <a href="#" class="btn btn-primary product-card__cta">Add to Bag</a>
+      </div>
+      <div class="product-card reveal reveal-delay-2">
+        <div class="product-card__inner">
+          <div class="product-card__image" style="background: linear-gradient(160deg, var(--oat-matcha), #b0bc88);">
+            <div class="product-card__silhouette"></div>
+          </div>
+          <div class="product-card__name">Matcha Skin Cleanser</div>
+          <div class="product-card__sub">silky foaming gel</div>
+          <div class="product-card__row"><span class="product-card__price">$28.00</span><span class="product-card__rating"><span>★</span> 4.9 (89)</span></div>
+        </div>
+        <a href="#" class="btn btn-primary product-card__cta">Add to Bag</a>
+      </div>
+      <div class="product-card reveal reveal-delay-3">
+        <div class="product-card__inner">
+          <div class="product-card__image" style="background: linear-gradient(160deg, var(--baby-blue), #a0b8cc);">
+            <div class="product-card__silhouette"></div>
+          </div>
+          <div class="product-card__name">Green Juice Serum</div>
+          <div class="product-card__sub">brightening drops</div>
+          <div class="product-card__row"><span class="product-card__price">$38.00</span><span class="product-card__rating"><span>★</span> 4.7 (67)</span></div>
+        </div>
+        <a href="#" class="btn btn-primary product-card__cta">Add to Bag</a>
+      </div>
+      <div class="product-card reveal reveal-delay-4">
+        <div class="product-card__inner">
+          <div class="product-card__image" style="background: linear-gradient(160deg, var(--pink), #e0ccc4);">
+            <div class="product-card__silhouette"></div>
+          </div>
+          <div class="product-card__name">Oak Milk Toner</div>
+          <div class="product-card__sub">weightless balance</div>
+          <div class="product-card__row"><span class="product-card__price">$28.00</span><span class="product-card__rating"><span>★</span> 4.6 (92)</span></div>
+        </div>
+        <a href="#" class="btn btn-primary product-card__cta">Add to Bag</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. MOOD SELECTOR -->
+  <section class="mood" data-mood="glowy">
+    <div class="mood__inner">
+      <div class="mood__left">
+        <div class="subhead reveal">Discover</div>
+        <div class="mood__prompt reveal reveal-delay-1">I'm feeling <em id="mood-label">glowy</em> today.</div>
+        <div class="mood__options reveal reveal-delay-2">
+          <button class="mood__option active" data-mood="glowy">Glowy</button>
+          <button class="mood__option" data-mood="calm">Calm</button>
+          <button class="mood__option" data-mood="awake">Awake</button>
+        </div>
+        <div class="mood__product-grid" id="mood-products">
+          <div class="mood__card"><div class="mood__card-image"></div><div class="mood__card-info"><div class="mood__card-name">Guava Glow Moisturizer</div><div class="mood__card-sub">hydrating gel-cream</div><div class="mood__card-price">$34</div></div></div>
+          <div class="mood__card"><div class="mood__card-image"></div><div class="mood__card-info"><div class="mood__card-name">Green Juice Serum</div><div class="mood__card-sub">brightening treatment</div><div class="mood__card-price">$38</div></div></div>
+          <div class="mood__card"><div class="mood__card-image"></div><div class="mood__card-info"><div class="mood__card-name">Oak Milk Toner</div><div class="mood__card-sub">gentle prep</div><div class="mood__card-price">$28</div></div></div>
+          <div class="mood__card"><div class="mood__card-image"></div><div class="mood__card-info"><div class="mood__card-name">Glacé Kiss Balm</div><div class="mood__card-sub">glossy finish</div><div class="mood__card-price">$22</div></div></div>
+        </div>
+      </div>
+      <div class="mood__circle-wrap">
+        <div class="mood__circle reveal">
+          <div class="mood__circle-label">for glowy skin</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. THE RITUAL -->
+  <section class="ritual">
+    <div class="ritual__header">
+      <div>
+        <div class="subhead reveal">The Ritual</div>
+        <h2 class="reveal reveal-delay-1">Your daily foundation</h2>
+      </div>
+      <p class="reveal reveal-delay-2">Four steps that do exactly what your skin needs — nothing more, nothing less.</p>
+    </div>
+    <div class="ritual__steps">
+      <div class="ritual__step reveal reveal-delay-1">
+        <div class="ritual__step-image" data-step="1"></div>
+        <div class="ritual__step-label">Cleanse</div>
+        <div class="ritual__step-name">Matcha Skin Cleanser</div>
+        <div class="ritual__step-desc">A green juice for your face.</div>
+      </div>
+      <div class="ritual__step reveal reveal-delay-2">
+        <div class="ritual__step-image" data-step="2"></div>
+        <div class="ritual__step-label">Tone</div>
+        <div class="ritual__step-name">Oak Milk Toner</div>
+        <div class="ritual__step-desc">Balances without stripping.</div>
+      </div>
+      <div class="ritual__step reveal reveal-delay-3">
+        <div class="ritual__step-image" data-step="3"></div>
+        <div class="ritual__step-label">Treat</div>
+        <div class="ritual__step-name">Green Juice Serum</div>
+        <div class="ritual__step-desc">The quiet worker.</div>
+      </div>
+      <div class="ritual__step reveal reveal-delay-4">
+        <div class="ritual__step-image" data-step="4"></div>
+        <div class="ritual__step-label">Seal</div>
+        <div class="ritual__step-name" id="seal-name">Guava Glow Moisturizer</div>
+        <div class="ritual__step-desc" id="seal-desc">Leaves you glowing.</div>
+        <div class="ritual__toggle">
+          <button class="ritual__toggle-btn active" data-finish="glowy">Glowy</button>
+          <button class="ritual__toggle-btn" data-finish="matte">Matte</button>
+        </div>
+      </div>
+      <div class="ritual__step reveal reveal-delay-4">
+        <div class="ritual__step-image" data-step="5"></div>
+        <div class="ritual__step-label">Lip</div>
+        <div class="ritual__step-name">Glacé Kiss Balm</div>
+        <div class="ritual__step-desc">Glossy, kind, kissable.</div>
+      </div>
+    </div>
+    <div class="ritual__cta reveal">
+      <a href="#" class="btn btn-primary">Add the ritual — $149</a>
+    </div>
+  </section>
+
+  <!-- 8. TEXTURE STORY -->
+  <section class="texture">
+    <div class="texture__header">
+      <div class="subhead reveal">Feel Before You Try</div>
+      <h2 class="reveal reveal-delay-1">Skincare you can feel before you try it</h2>
+      <p class="reveal reveal-delay-2">Each texture tells a story. Hover to discover.</p>
+    </div>
+    <div class="texture__canvas reveal">
+      <div class="texture__blob texture__blob--1" data-numeral="I"><div class="texture__blob-tooltip">Matcha Skin Cleanser — Silky foaming gel</div></div>
+      <div class="texture__blob texture__blob--2" data-numeral="II"><div class="texture__blob-tooltip">Oak Milk Toner — Weightless milky liquid</div></div>
+      <div class="texture__blob texture__blob--3" data-numeral="III"><div class="texture__blob-tooltip">Green Juice Serum — Fast-absorbing drops</div></div>
+      <div class="texture__blob texture__blob--4" data-numeral="IV"><div class="texture__blob-tooltip">Guava Glow Moisturizer — Bouncy gel-cream</div></div>
+      <div class="texture__blob texture__blob--5" data-numeral="V"><div class="texture__blob-tooltip">Rice Water Clay Mask — Smooth velvety clay</div></div>
+    </div>
+  </section>
+
+  <!-- 9. CRYSTAL BALL -->
+  <section class="quiz">
+    <div class="quiz__particle quiz__particle--1"></div>
+    <div class="quiz__particle quiz__particle--2"></div>
+    <div class="quiz__particle quiz__particle--3"></div>
+    <div class="quiz__particle quiz__particle--4"></div>
+    <div class="quiz__particle quiz__particle--5"></div>
+    <div class="quiz__ball reveal" id="crystal-ball">
+      <div class="quiz__ball-inner">
+        <div class="quiz__ball-text">How do you want your skin to greet the morning?</div>
+      </div>
+    </div>
+    <div class="quiz__ball-base"></div>
+    <div class="subhead reveal">The Crystal Ball</div>
+    <h2 class="reveal reveal-delay-1">Discover your skin mood.</h2>
+    <p class="quiz__sub reveal reveal-delay-2">Gently explore to find your ritual. No prescriptions — just curiosity.</p>
+    <a href="#" class="btn btn-primary reveal reveal-delay-3">Begin the discovery</a>
+  </section>
+
+  <!-- 10. FOUNDER -->
+  <section class="founder">
+    <div class="founder__inner">
+      <div class="founder__image reveal"></div>
+      <div class="founder__content">
+        <div class="subhead reveal">Our Story</div>
+        <h2 class="reveal reveal-delay-1">Why hiku exists</h2>
+        <p class="reveal reveal-delay-2">Harper started hiku at 15 because she couldn't find skincare that got it. Every clinical brand felt like medicine. Every fun brand burned her face. The gap between "works for you" and "feels like you" shouldn't exist.</p>
+        <p class="reveal reveal-delay-3">So she closed it — with real dermatologists, real ingredients, and a belief that your skin doesn't need to be fixed. It needs to be understood.</p>
+        <p class="reveal reveal-delay-4">"It's what she wishes she'd had from the start."</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. COMMUNITY -->
+  <section class="community">
+    <div class="community__header">
+      <div class="subhead reveal">Made With You</div>
+      <h2 class="reveal reveal-delay-1">Being part of hiku means having a say.</h2>
+      <p class="reveal reveal-delay-2">Real skin, real stories. You're not just a customer — you're a co-creator.</p>
+    </div>
+    <div class="community__grid">
+      <div class="community__item reveal"></div>
+      <div class="community__item reveal reveal-delay-1"></div>
+      <div class="community__item reveal reveal-delay-2"></div>
+      <div class="community__item reveal reveal-delay-1"></div>
+      <div class="community__item reveal reveal-delay-2"></div>
+      <div class="community__item reveal reveal-delay-3"></div>
+      <div class="community__item reveal reveal-delay-4"></div>
+    </div>
+    <div class="community__cta reveal">
+      <a href="#" class="btn btn-primary">Join the house</a>
+    </div>
+  </section>
+
+  <!-- 12. FOOTER -->
+  <footer class="footer">
+    <div class="footer__hero">
+      <div class="footer__hero-img"></div>
+      <div class="footer__hero-img">
+        <div class="footer__hero-logo"><span class="easter-egg-trigger" id="easter-egg">hiku</span><sup>by harper</sup></div>
+      </div>
+      <div class="footer__hero-img"></div>
+    </div>
+    <div class="footer__main">
+      <div class="footer__newsletter">
+        <div class="subhead">Newsletter</div>
+        <h3>Connect with Us</h3>
+        <form class="footer__form" onsubmit="return false;">
+          <div class="footer__field"><label>Email Address</label><input type="email" class="footer__input" placeholder="Email Address"></div>
+          <div class="footer__field"><label>Phone Number</label><input type="tel" class="footer__input" placeholder="Phone Number"></div>
+          <p class="footer__consent">By providing your number and clicking the button, you agree to receive recurring auto-dialed marketing SMS and our <a href="#">Terms of Service</a>. Consent is not required to purchase. <a href="#">Privacy Policy</a>.</p>
+          <button type="submit" class="btn btn-outline">Subscribe</button>
+        </form>
+      </div>
+      <div class="footer__links">
+        <div class="footer__col"><div class="footer__col-title">Shop</div><a href="#">Shop All</a><a href="#">Cleanser & Toner</a><a href="#">Serum</a><a href="#">Moisturizer</a><a href="#">Mask & Scrub</a><a href="#">Lip Care</a><a href="#">Sets</a></div>
+        <div class="footer__col"><div class="footer__col-title">About</div><a href="#">Our Story</a><a href="#">Find Your Ritual</a><a href="#">Ingredient Index</a><a href="#">Community</a></div>
+        <div class="footer__col"><div class="footer__col-title">Help</div><a href="#">Contact Us</a><a href="#">FAQs</a><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Shipping & Returns</a></div>
+        <div class="footer__col"><div class="footer__col-title">Social</div><a href="#">Instagram</a><a href="#">TikTok</a><a href="#">Pinterest</a><a href="#">Facebook</a></div>
+      </div>
+    </div>
+    <div class="footer__bottom">&copy; 2026 Hiku Beauty. All Rights Reserved.</div>
+  </footer>
+
+  <script>
+    // --- Scroll Reveal ---
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // --- Nav shadow on scroll ---
+    window.addEventListener('scroll', () => {
+      document.getElementById('nav').classList.toggle('nav--scrolled', window.scrollY > 100);
+    });
+
+    // --- Ritual toggle ---
+    document.querySelectorAll('.ritual__toggle-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.ritual__toggle-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const n = document.getElementById('seal-name');
+        const d = document.getElementById('seal-desc');
+        if (btn.dataset.finish === 'glowy') { n.textContent = 'Guava Glow Moisturizer'; d.textContent = 'Leaves you glowing.'; }
+        else { n.textContent = 'Soft Matte Moisturizer'; d.textContent = 'All-day calm finish.'; }
+      });
+    });
+
+    // --- Mood Selector ---
+    const moodData = {
+      glowy: { label: 'glowy', circle: 'for glowy skin', products: [
+        { name: 'Guava Glow Moisturizer', sub: 'hydrating gel-cream', price: '$34' },
+        { name: 'Green Juice Serum', sub: 'brightening treatment', price: '$38' },
+        { name: 'Oak Milk Toner', sub: 'gentle prep', price: '$28' },
+        { name: 'Glacé Kiss Balm', sub: 'glossy finish', price: '$22' },
+      ]},
+      calm: { label: 'calm', circle: 'for calm skin', products: [
+        { name: 'Soft Matte Moisturizer', sub: 'soothing finish', price: '$34' },
+        { name: 'Oak Milk Toner', sub: 'balancing calm', price: '$28' },
+        { name: 'Rice Water Clay Mask', sub: 'weekly reset', price: '$32' },
+        { name: 'Glacé Kiss Balm', sub: 'gentle nourish', price: '$22' },
+      ]},
+      awake: { label: 'awake', circle: 'for awake skin', products: [
+        { name: 'Matcha Skin Cleanser', sub: 'energizing cleanse', price: '$28' },
+        { name: 'Green Juice Serum', sub: 'wake-up treatment', price: '$38' },
+        { name: 'Smooth Skin Face Scrub', sub: 'fresh start', price: '$26' },
+        { name: 'Guava Glow Moisturizer', sub: 'bright finish', price: '$34' },
+      ]}
+    };
+    document.querySelectorAll('.mood__option').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const mood = btn.dataset.mood;
+        const section = document.querySelector('.mood');
+        const data = moodData[mood];
+        document.querySelectorAll('.mood__option').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        section.dataset.mood = mood;
+        document.getElementById('mood-label').textContent = data.label;
+        document.querySelector('.mood__circle-label').textContent = data.circle;
+        document.querySelectorAll('.mood__card').forEach((card, i) => {
+          const p = data.products[i];
+          card.querySelector('.mood__card-name').textContent = p.name;
+          card.querySelector('.mood__card-sub').textContent = p.sub;
+          card.querySelector('.mood__card-price').textContent = p.price;
+        });
+      });
+    });
+
+    // --- Crystal Ball shimmer ---
+    const ball = document.getElementById('crystal-ball');
+    ball.addEventListener('mousemove', (e) => {
+      const r = ball.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / r.width) * 100;
+      const y = ((e.clientY - r.top) / r.height) * 100;
+      ball.style.background = `radial-gradient(circle at ${x}% ${y}%,
+        rgba(255,255,255,0.8) 0%,
+        rgba(196,160,167,0.3) 20%,
+        rgba(184,160,184,0.4) 40%,
+        rgba(231,130,169,0.25) 60%,
+        rgba(196,160,167,0.5) 80%,
+        rgba(61,28,30,0.12) 100%)`;
+    });
+    ball.addEventListener('mouseleave', () => { ball.style.background = ''; });
+
+    // --- Easter Egg: Triple-click the footer logo ---
+    let eggClicks = 0;
+    let eggTimer;
+    document.getElementById('easter-egg').addEventListener('click', () => {
+      eggClicks++;
+      clearTimeout(eggTimer);
+      eggTimer = setTimeout(() => { eggClicks = 0; }, 800);
+      if (eggClicks >= 3) {
+        eggClicks = 0;
+        const toast = document.getElementById('easter-toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 4000);
+      }
+    });
+  </script>
+
+</body>
+</html>

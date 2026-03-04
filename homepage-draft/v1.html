@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hiku by harper — Skincare that supports who you already are</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       HIKU BY HARPER — Homepage Rough Draft
+       ======================================== */
+
+    /* --- Reset & Base --- */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      /* Primary */
+      --pink: #F5E6E0;
+      --brown: #3D1C1E;
+      --rosewood: #C4A0A7;
+      --almond: #FDF8F5;
+      --mauve: #B8A0B8;
+
+      /* Secondary */
+      --vivid-pink: #E782A9;
+      --baby-blue: #B8D4E8;
+      --oat-matcha: #C4CFA0;
+      --stone-300: #D6D3D1;
+      --stone-400: #A6A09B;
+
+      /* Typography */
+      --serif: 'Playfair Display', 'Big Caslon', Georgia, serif;
+      --sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 1.2;
+      color: var(--brown);
+      background: var(--almond);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* --- Utility --- */
+    .container { max-width: 1440px; margin: 0 auto; }
+    .subhead {
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 1.2;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3, h4 { font-family: var(--serif); font-weight: 500; line-height: 1.1; }
+    h1 { font-size: 56px; }
+    h2 { font-size: 36px; }
+    h3 { font-size: 24px; }
+    h4 { font-size: 16px; }
+
+    .btn {
+      display: inline-block;
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 1;
+      padding: 13px 24px;
+      border-radius: 4px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+    }
+    .btn-primary {
+      background: var(--brown);
+      color: var(--almond);
+    }
+    .btn-primary:hover {
+      background: #5a2e31;
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--almond);
+      border: 1px solid var(--almond);
+    }
+    .btn-outline:hover {
+      background: rgba(253, 248, 245, 0.1);
+    }
+    .btn-outline-dark {
+      background: transparent;
+      color: var(--brown);
+      border: 1px solid var(--brown);
+    }
+    .btn-outline-dark:hover {
+      background: rgba(61, 28, 30, 0.05);
+    }
+
+    /* ============================
+       1. ANNOUNCEMENT BANNER
+       ============================ */
+    .announcement {
+      background: var(--pink);
+      height: 41px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      font-size: 12px;
+      letter-spacing: 0.02em;
+    }
+    .announcement__text { text-align: center; }
+    .announcement__controls {
+      position: absolute;
+      right: 24px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .announcement__controls button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--brown);
+      font-size: 14px;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+    .announcement__controls button:hover { opacity: 1; }
+
+    /* ============================
+       2. NAVIGATION
+       ============================ */
+    .nav {
+      background: var(--brown);
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav__logo {
+      font-family: var(--serif);
+      font-size: 22px;
+      color: var(--almond);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+    .nav__logo span { font-size: 13px; font-style: italic; opacity: 0.8; margin-left: 4px; }
+    .nav__links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    .nav__links a {
+      color: var(--almond);
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 0.02em;
+      opacity: 0.9;
+      transition: opacity 0.2s;
+    }
+    .nav__links a:hover { opacity: 1; }
+    .nav__right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .nav__icon {
+      color: var(--almond);
+      font-size: 16px;
+      opacity: 0.8;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      background: none;
+      border: none;
+    }
+    .nav__icon:hover { opacity: 1; }
+
+    /* ============================
+       3. HERO — THE FOYER
+       ============================ */
+    .hero {
+      min-height: calc(100vh - 121px);
+      padding: 64px 48px 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: center;
+      background: var(--almond);
+      overflow: hidden;
+    }
+    .hero__content {
+      max-width: 560px;
+    }
+    .hero__content h1 {
+      margin-bottom: 24px;
+      line-height: 1.08;
+    }
+    .hero__content p {
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--stone-400);
+      margin-bottom: 40px;
+      max-width: 420px;
+    }
+    .hero__ctas { display: flex; gap: 16px; align-items: center; }
+    .hero__bento {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 280px 200px 180px;
+      gap: 12px;
+      height: 100%;
+    }
+    .hero__bento-item {
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+    .hero__bento-item:nth-child(1) {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, var(--pink) 0%, var(--rosewood) 60%, var(--mauve) 100%);
+    }
+    .hero__bento-item:nth-child(1)::after {
+      content: 'Matcha Skin Cleanser';
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+      font-family: var(--serif);
+      font-size: 20px;
+      color: var(--brown);
+    }
+    .hero__bento-item:nth-child(2) {
+      background: linear-gradient(160deg, var(--oat-matcha) 0%, #a8b880 100%);
+    }
+    .hero__bento-item:nth-child(3) {
+      background: linear-gradient(140deg, var(--baby-blue) 0%, #9fc0d8 100%);
+    }
+    .hero__bento-item:nth-child(4) {
+      background: linear-gradient(150deg, var(--vivid-pink) 0%, var(--rosewood) 100%);
+    }
+    .hero__bento-item:nth-child(5) {
+      background: linear-gradient(135deg, var(--mauve) 0%, var(--rosewood) 100%);
+    }
+    .hero__scroll-indicator {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding-top: 32px;
+    }
+    .hero__scroll-indicator span {
+      display: inline-block;
+      width: 1px;
+      height: 48px;
+      background: var(--stone-300);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
+      50% { opacity: 1; transform: scaleY(1); }
+    }
+
+    /* ============================
+       4. BRAND STATEMENT
+       ============================ */
+    .brand-statement {
+      padding: 120px 48px;
+      text-align: center;
+      background: var(--almond);
+    }
+    .brand-statement__tagline {
+      font-family: var(--serif);
+      font-size: 42px;
+      font-style: italic;
+      line-height: 1.15;
+      margin-bottom: 32px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .brand-statement__body {
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--stone-400);
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    /* ============================
+       5. THE RITUAL
+       ============================ */
+    .ritual {
+      padding: 80px 48px 100px;
+      background: var(--pink);
+    }
+    .ritual__header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    .ritual__header .subhead {
+      color: var(--rosewood);
+      margin-bottom: 12px;
+    }
+    .ritual__steps {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .ritual__step {
+      text-align: center;
+    }
+    .ritual__step-number {
+      font-family: var(--serif);
+      font-size: 13px;
+      color: var(--rosewood);
+      margin-bottom: 8px;
+    }
+    .ritual__step-image {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .ritual__step:nth-child(1) .ritual__step-image {
+      background: linear-gradient(160deg, var(--oat-matcha) 30%, #d4deb8 100%);
+    }
+    .ritual__step:nth-child(2) .ritual__step-image {
+      background: linear-gradient(160deg, #e8dcd0 30%, var(--pink) 100%);
+    }
+    .ritual__step:nth-child(3) .ritual__step-image {
+      background: linear-gradient(160deg, var(--baby-blue) 20%, #cce0ee 100%);
+    }
+    .ritual__step:nth-child(4) .ritual__step-image {
+      background: linear-gradient(160deg, var(--vivid-pink) 20%, var(--pink) 100%);
+    }
+    .ritual__step:nth-child(5) .ritual__step-image {
+      background: linear-gradient(160deg, var(--rosewood) 20%, var(--mauve) 100%);
+    }
+    .ritual__step-label {
+      font-family: var(--sans);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--stone-400);
+      margin-bottom: 8px;
+    }
+    .ritual__step-name {
+      font-family: var(--serif);
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+    .ritual__step-desc {
+      font-size: 12px;
+      color: var(--stone-400);
+      line-height: 1.4;
+    }
+    .ritual__toggle {
+      display: inline-flex;
+      background: var(--almond);
+      border-radius: 20px;
+      padding: 3px;
+      margin-top: 12px;
+      border: 1px solid var(--stone-300);
+    }
+    .ritual__toggle-option {
+      padding: 6px 16px;
+      font-size: 11px;
+      border-radius: 17px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      background: transparent;
+      font-family: var(--sans);
+      color: var(--stone-400);
+    }
+    .ritual__toggle-option.active {
+      background: var(--brown);
+      color: var(--almond);
+    }
+    .ritual__cta {
+      text-align: center;
+      margin-top: 56px;
+    }
+
+    /* ============================
+       6. CHOOSE YOUR MOOD
+       ============================ */
+    .mood {
+      padding: 100px 48px;
+      background: var(--almond);
+    }
+    .mood__inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      max-width: 1200px;
+      margin: 0 auto;
+      align-items: center;
+    }
+    .mood__left .subhead {
+      color: var(--rosewood);
+      margin-bottom: 16px;
+    }
+    .mood__prompt {
+      font-family: var(--serif);
+      font-size: 36px;
+      line-height: 1.15;
+      margin-bottom: 40px;
+    }
+    .mood__prompt em {
+      color: var(--vivid-pink);
+      font-style: italic;
+      text-decoration: underline;
+      text-decoration-color: var(--vivid-pink);
+      text-underline-offset: 4px;
+      cursor: pointer;
+    }
+    .mood__options {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+    .mood__option {
+      padding: 10px 24px;
+      border-radius: 24px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid var(--stone-300);
+      background: transparent;
+      font-family: var(--sans);
+      color: var(--brown);
+    }
+    .mood__option.active {
+      background: var(--brown);
+      color: var(--almond);
+      border-color: var(--brown);
+    }
+    .mood__option:hover:not(.active) {
+      border-color: var(--brown);
+    }
+    .mood__products {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .mood__product-card {
+      background: var(--pink);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+    .mood__product-card:hover { transform: translateY(-4px); }
+    .mood__product-image {
+      width: 100%;
+      aspect-ratio: 1;
+      transition: background 0.5s ease;
+    }
+    .mood__product-info {
+      padding: 16px;
+    }
+    .mood__product-name {
+      font-family: var(--serif);
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .mood__product-sub {
+      font-size: 12px;
+      color: var(--stone-400);
+      margin-bottom: 8px;
+    }
+    .mood__product-price {
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .mood__circle {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      overflow: hidden;
+      transition: background 0.6s ease;
+    }
+    .mood__circle-label {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--serif);
+      font-size: 20px;
+      font-style: italic;
+      color: var(--brown);
+      white-space: nowrap;
+    }
+    /* Mood states */
+    .mood[data-mood="glowy"] .mood__circle {
+      background: radial-gradient(circle at 40% 40%, #fce4d6 0%, var(--vivid-pink) 50%, var(--rosewood) 100%);
+    }
+    .mood[data-mood="calm"] .mood__circle {
+      background: radial-gradient(circle at 40% 40%, #e8e0f0 0%, var(--mauve) 50%, var(--rosewood) 100%);
+    }
+    .mood[data-mood="awake"] .mood__circle {
+      background: radial-gradient(circle at 40% 40%, #d6eaf0 0%, var(--baby-blue) 50%, var(--oat-matcha) 100%);
+    }
+    /* Product image backgrounds per mood */
+    .mood[data-mood="glowy"] .mood__product-image:nth-child(1),
+    .mood[data-mood="glowy"] .mood__product-card:nth-child(1) .mood__product-image {
+      background: linear-gradient(135deg, var(--vivid-pink) 0%, var(--pink) 100%);
+    }
+    .mood[data-mood="glowy"] .mood__product-card:nth-child(2) .mood__product-image {
+      background: linear-gradient(135deg, var(--rosewood) 0%, var(--pink) 100%);
+    }
+    .mood[data-mood="glowy"] .mood__product-card:nth-child(3) .mood__product-image {
+      background: linear-gradient(135deg, var(--pink) 0%, #fce4d6 100%);
+    }
+    .mood[data-mood="glowy"] .mood__product-card:nth-child(4) .mood__product-image {
+      background: linear-gradient(135deg, var(--rosewood) 0%, var(--vivid-pink) 100%);
+    }
+    .mood[data-mood="calm"] .mood__product-card:nth-child(1) .mood__product-image {
+      background: linear-gradient(135deg, var(--mauve) 0%, #e8e0f0 100%);
+    }
+    .mood[data-mood="calm"] .mood__product-card:nth-child(2) .mood__product-image {
+      background: linear-gradient(135deg, var(--rosewood) 0%, var(--mauve) 100%);
+    }
+    .mood[data-mood="calm"] .mood__product-card:nth-child(3) .mood__product-image {
+      background: linear-gradient(135deg, #e8e0f0 0%, var(--pink) 100%);
+    }
+    .mood[data-mood="calm"] .mood__product-card:nth-child(4) .mood__product-image {
+      background: linear-gradient(135deg, var(--mauve) 0%, var(--rosewood) 100%);
+    }
+    .mood[data-mood="awake"] .mood__product-card:nth-child(1) .mood__product-image {
+      background: linear-gradient(135deg, var(--oat-matcha) 0%, #d4deb8 100%);
+    }
+    .mood[data-mood="awake"] .mood__product-card:nth-child(2) .mood__product-image {
+      background: linear-gradient(135deg, var(--baby-blue) 0%, #d6eaf0 100%);
+    }
+    .mood[data-mood="awake"] .mood__product-card:nth-child(3) .mood__product-image {
+      background: linear-gradient(135deg, #d4deb8 0%, var(--oat-matcha) 100%);
+    }
+    .mood[data-mood="awake"] .mood__product-card:nth-child(4) .mood__product-image {
+      background: linear-gradient(135deg, var(--baby-blue) 0%, var(--oat-matcha) 100%);
+    }
+
+    /* ============================
+       7. TEXTURE STORY
+       ============================ */
+    .texture {
+      padding: 100px 48px;
+      background: var(--pink);
+      position: relative;
+      overflow: hidden;
+    }
+    .texture__header {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+    .texture__header .subhead {
+      color: var(--rosewood);
+      margin-bottom: 12px;
+    }
+    .texture__header p {
+      font-size: 15px;
+      color: var(--stone-400);
+      margin-top: 16px;
+    }
+    .texture__grid {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 48px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .texture__index { padding-top: 24px; }
+    .texture__index-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--rosewood);
+      cursor: pointer;
+      transition: opacity 0.3s;
+      opacity: 0.5;
+    }
+    .texture__index-item:hover,
+    .texture__index-item.active { opacity: 1; }
+    .texture__index-item .numeral {
+      font-family: var(--serif);
+      font-size: 13px;
+      font-style: italic;
+      color: var(--rosewood);
+      display: block;
+      margin-bottom: 4px;
+    }
+    .texture__index-item .name {
+      font-family: var(--serif);
+      font-size: 18px;
+    }
+    .texture__canvas {
+      position: relative;
+      min-height: 500px;
+    }
+    .texture__blob {
+      position: absolute;
+      border-radius: 50%;
+      transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      cursor: pointer;
+    }
+    .texture__blob:hover {
+      transform: scale(1.08);
+    }
+    .texture__blob::after {
+      content: attr(data-numeral);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 28px;
+      color: var(--brown);
+      opacity: 0.7;
+    }
+    .texture__blob--1 {
+      width: 220px; height: 220px;
+      top: 20px; left: 10%;
+      background: radial-gradient(circle at 30% 30%, #d4deb8, var(--oat-matcha));
+      border-radius: 60% 40% 50% 50% / 50% 60% 40% 50%;
+    }
+    .texture__blob--2 {
+      width: 180px; height: 180px;
+      top: 80px; left: 45%;
+      background: radial-gradient(circle at 30% 30%, #f0e8d8, #e8dcd0);
+      border-radius: 50% 60% 40% 60% / 60% 40% 60% 40%;
+    }
+    .texture__blob--3 {
+      width: 240px; height: 200px;
+      top: 10px; right: 5%;
+      background: radial-gradient(circle at 40% 30%, #cce0ee, var(--baby-blue));
+      border-radius: 40% 60% 50% 50% / 60% 40% 50% 50%;
+    }
+    .texture__blob--4 {
+      width: 200px; height: 200px;
+      top: 280px; left: 25%;
+      background: radial-gradient(circle at 30% 40%, #fce4d6, var(--vivid-pink));
+      border-radius: 50% 40% 60% 40% / 40% 60% 40% 60%;
+    }
+    .texture__blob--5 {
+      width: 160px; height: 160px;
+      top: 300px; right: 20%;
+      background: radial-gradient(circle at 30% 30%, #e8e0f0, var(--mauve));
+      border-radius: 55% 45% 55% 45% / 45% 55% 45% 55%;
+    }
+    .texture__blob-tooltip {
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100%);
+      background: var(--brown);
+      color: var(--almond);
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .texture__blob:hover .texture__blob-tooltip { opacity: 1; }
+
+    /* ============================
+       8. FOUNDER STORY
+       ============================ */
+    .founder {
+      padding: 100px 48px;
+      background: var(--almond);
+    }
+    .founder__inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      max-width: 1200px;
+      margin: 0 auto;
+      align-items: center;
+    }
+    .founder__image {
+      aspect-ratio: 4 / 5;
+      border-radius: 12px;
+      background: linear-gradient(160deg, var(--pink) 0%, var(--rosewood) 40%, var(--mauve) 80%, var(--brown) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .founder__image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 40%, transparent 30%, rgba(61,28,30,0.15) 100%);
+    }
+    .founder__content .subhead {
+      color: var(--rosewood);
+      margin-bottom: 16px;
+    }
+    .founder__content h2 {
+      margin-bottom: 24px;
+      line-height: 1.15;
+    }
+    .founder__content p {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--stone-400);
+      margin-bottom: 16px;
+      max-width: 480px;
+    }
+    .founder__content p:last-of-type {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 18px;
+      color: var(--brown);
+      line-height: 1.4;
+      margin-top: 24px;
+    }
+
+    /* ============================
+       9. CRYSTAL BALL QUIZ CTA
+       ============================ */
+    .quiz {
+      padding: 120px 48px;
+      background: linear-gradient(180deg, var(--almond) 0%, var(--pink) 100%);
+      text-align: center;
+    }
+    .quiz__ball {
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      margin: 0 auto 48px;
+      position: relative;
+      cursor: pointer;
+      background: radial-gradient(circle at 35% 35%,
+        rgba(255,255,255,0.6) 0%,
+        rgba(196,160,167,0.3) 20%,
+        rgba(184,160,184,0.4) 40%,
+        rgba(231,130,169,0.2) 60%,
+        rgba(196,160,167,0.5) 80%,
+        rgba(61,28,30,0.15) 100%
+      );
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow:
+        0 0 60px rgba(196,160,167,0.3),
+        0 0 120px rgba(184,160,184,0.15),
+        inset 0 0 80px rgba(255,255,255,0.2);
+      transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s ease;
+      animation: ballFloat 4s ease-in-out infinite;
+    }
+    @keyframes ballFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .quiz__ball:hover {
+      transform: scale(1.05);
+      box-shadow:
+        0 0 80px rgba(196,160,167,0.5),
+        0 0 160px rgba(184,160,184,0.25),
+        inset 0 0 100px rgba(255,255,255,0.3);
+    }
+    .quiz__ball-inner {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 48px;
+    }
+    .quiz__ball-text {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 18px;
+      color: var(--brown);
+      opacity: 0.7;
+      line-height: 1.4;
+    }
+    .quiz__ball-base {
+      width: 120px;
+      height: 24px;
+      background: linear-gradient(180deg, var(--rosewood) 0%, var(--brown) 100%);
+      border-radius: 50%;
+      margin: -12px auto 48px;
+      opacity: 0.4;
+    }
+    .quiz .subhead {
+      color: var(--rosewood);
+      margin-bottom: 12px;
+    }
+    .quiz h2 {
+      margin-bottom: 16px;
+    }
+    .quiz__sub {
+      font-size: 15px;
+      color: var(--stone-400);
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    /* ============================
+       10. COMMUNITY
+       ============================ */
+    .community {
+      padding: 80px 48px 100px;
+      background: var(--almond);
+    }
+    .community__header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .community__header .subhead {
+      color: var(--rosewood);
+      margin-bottom: 12px;
+    }
+    .community__header p {
+      font-size: 15px;
+      color: var(--stone-400);
+      margin-top: 16px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.5;
+    }
+    .community__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: 280px 200px;
+      gap: 12px;
+      max-width: 1200px;
+      margin: 0 auto 48px;
+    }
+    .community__item {
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .community__item:nth-child(1) {
+      grid-column: span 2;
+      background: linear-gradient(135deg, var(--pink) 0%, var(--rosewood) 100%);
+    }
+    .community__item:nth-child(2) {
+      background: linear-gradient(135deg, var(--oat-matcha) 0%, #d4deb8 100%);
+    }
+    .community__item:nth-child(3) {
+      background: linear-gradient(135deg, var(--mauve) 0%, #d8c8d8 100%);
+    }
+    .community__item:nth-child(4) {
+      background: linear-gradient(135deg, var(--baby-blue) 0%, #cce0ee 100%);
+    }
+    .community__item:nth-child(5) {
+      background: linear-gradient(135deg, var(--vivid-pink) 0%, var(--pink) 100%);
+    }
+    .community__item:nth-child(6) {
+      background: linear-gradient(135deg, var(--rosewood) 0%, var(--mauve) 100%);
+    }
+    .community__item:nth-child(7) {
+      background: linear-gradient(135deg, var(--pink) 0%, var(--vivid-pink) 100%);
+    }
+    .community__cta {
+      text-align: center;
+    }
+
+    /* ============================
+       11. FOOTER
+       ============================ */
+    .footer {
+      background: var(--brown);
+      color: var(--almond);
+      padding: 80px 48px 40px;
+    }
+    .footer__newsletter {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      max-width: 1200px;
+      margin: 0 auto 80px;
+      align-items: center;
+    }
+    .footer__newsletter .subhead {
+      color: var(--rosewood);
+      margin-bottom: 12px;
+    }
+    .footer__newsletter h2 {
+      color: var(--almond);
+      margin-bottom: 24px;
+    }
+    .footer__form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 360px;
+    }
+    .footer__input {
+      background: transparent;
+      border: 1px solid rgba(253,248,245,0.3);
+      border-radius: 4px;
+      padding: 12px 16px;
+      color: var(--almond);
+      font-family: var(--sans);
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .footer__input::placeholder { color: rgba(253,248,245,0.4); }
+    .footer__input:focus { border-color: var(--rosewood); }
+    .footer__consent {
+      font-size: 11px;
+      color: rgba(253,248,245,0.4);
+      line-height: 1.5;
+    }
+    .footer__consent a { color: var(--rosewood); }
+    .footer__newsletter-image {
+      aspect-ratio: 4 / 3;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--rosewood) 0%, var(--mauve) 50%, var(--vivid-pink) 100%);
+      opacity: 0.6;
+    }
+    .footer__links {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 48px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-top: 64px;
+      border-top: 1px solid rgba(253,248,245,0.1);
+    }
+    .footer__col-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--rosewood);
+      margin-bottom: 20px;
+    }
+    .footer__col a {
+      display: block;
+      color: rgba(253,248,245,0.6);
+      text-decoration: none;
+      font-size: 13px;
+      padding: 6px 0;
+      transition: color 0.2s;
+    }
+    .footer__col a:hover { color: var(--almond); }
+    .footer__bottom {
+      max-width: 1200px;
+      margin: 64px auto 0;
+      padding-top: 24px;
+      border-top: 1px solid rgba(253,248,245,0.1);
+      text-align: center;
+      font-size: 11px;
+      color: rgba(253,248,245,0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. ANNOUNCEMENT BANNER -->
+  <div class="announcement">
+    <div class="announcement__text">Free standard shipping on orders $40+</div>
+    <div class="announcement__controls">
+      <button aria-label="Previous">&#8592;</button>
+      <button aria-label="Next">&#8594;</button>
+      <button aria-label="Pause">&#10074;&#10074;</button>
+    </div>
+  </div>
+
+  <!-- 2. NAVIGATION -->
+  <nav class="nav">
+    <a href="#" class="nav__logo">hiku <span>by harper</span></a>
+    <div class="nav__links">
+      <a href="#">Shop +</a>
+      <a href="#">About</a>
+      <a href="#">Community</a>
+      <a href="#" class="btn btn-outline" style="margin-left: 8px;">Find My Ritual</a>
+    </div>
+    <div class="nav__right">
+      <button class="nav__icon" aria-label="Search">&#9906;</button>
+      <button class="nav__icon" aria-label="Account">&#64;</button>
+      <button class="nav__icon" aria-label="Bag">&#9776;</button>
+    </div>
+  </nav>
+
+  <!-- 3. HERO — THE FOYER -->
+  <section class="hero">
+    <div class="hero__content">
+      <h1>Born from real journeys and real skin.</h1>
+      <p>Skincare that supports who you already are — not who you're told to be.</p>
+      <div class="hero__ctas">
+        <a href="#" class="btn btn-primary">Explore the house</a>
+        <a href="#" class="btn btn-outline-dark">Shop all</a>
+      </div>
+    </div>
+    <div class="hero__bento">
+      <div class="hero__bento-item"></div>
+      <div class="hero__bento-item"></div>
+      <div class="hero__bento-item"></div>
+      <div class="hero__bento-item"></div>
+      <div class="hero__bento-item"></div>
+    </div>
+    <div class="hero__scroll-indicator">
+      <span></span>
+    </div>
+  </section>
+
+  <!-- 4. BRAND STATEMENT -->
+  <section class="brand-statement">
+    <div class="brand-statement__tagline">"The coolest thing you can be is yourself."</div>
+    <p class="brand-statement__body">Hiku is the friend who knows the good stuff but never makes you feel bad for not knowing it yet. Part beauty editor, part big sister, part science nerd — always kind, never preachy, endlessly curious.</p>
+  </section>
+
+  <!-- 5. THE RITUAL -->
+  <section class="ritual">
+    <div class="ritual__header">
+      <div class="subhead">The Ritual</div>
+      <h2>Your daily foundation</h2>
+    </div>
+    <div class="ritual__steps">
+
+      <div class="ritual__step">
+        <div class="ritual__step-number">Step 1</div>
+        <div class="ritual__step-image"></div>
+        <div class="ritual__step-label">Cleanse</div>
+        <div class="ritual__step-name">Matcha Skin Cleanser</div>
+        <div class="ritual__step-desc">A green juice for your face — but gentler.</div>
+      </div>
+
+      <div class="ritual__step">
+        <div class="ritual__step-number">Step 2</div>
+        <div class="ritual__step-image"></div>
+        <div class="ritual__step-label">Tone</div>
+        <div class="ritual__step-name">Oak Milk Toner</div>
+        <div class="ritual__step-desc">Balances and preps without stripping.</div>
+      </div>
+
+      <div class="ritual__step">
+        <div class="ritual__step-number">Step 3</div>
+        <div class="ritual__step-image"></div>
+        <div class="ritual__step-label">Treat</div>
+        <div class="ritual__step-name">Green Juice Serum</div>
+        <div class="ritual__step-desc">The quiet worker. Let it do its thing.</div>
+      </div>
+
+      <div class="ritual__step">
+        <div class="ritual__step-number">Step 4</div>
+        <div class="ritual__step-image"></div>
+        <div class="ritual__step-label">Seal</div>
+        <div class="ritual__step-name" id="seal-product-name">Guava Glow Moisturizer</div>
+        <div class="ritual__step-desc" id="seal-product-desc">Hydrating gel-cream that leaves you glowing.</div>
+        <div class="ritual__toggle">
+          <button class="ritual__toggle-option active" data-finish="glowy">Glowy</button>
+          <button class="ritual__toggle-option" data-finish="matte">Matte</button>
+        </div>
+      </div>
+
+      <div class="ritual__step">
+        <div class="ritual__step-number">Step 5</div>
+        <div class="ritual__step-image"></div>
+        <div class="ritual__step-label">Lip</div>
+        <div class="ritual__step-name">Glacé Kiss Balm</div>
+        <div class="ritual__step-desc">The finishing touch. Glossy, kind, kissable.</div>
+      </div>
+
+    </div>
+    <div class="ritual__cta">
+      <a href="#" class="btn btn-primary">Add the ritual — $149</a>
+    </div>
+  </section>
+
+  <!-- 6. CHOOSE YOUR MOOD -->
+  <section class="mood" data-mood="glowy">
+    <div class="mood__inner">
+      <div class="mood__left">
+        <div class="subhead">Discover</div>
+        <div class="mood__prompt">I'm feeling <em id="mood-label">glowy</em> today.</div>
+        <div class="mood__options">
+          <button class="mood__option active" data-mood="glowy">Glowy</button>
+          <button class="mood__option" data-mood="calm">Calm</button>
+          <button class="mood__option" data-mood="awake">Awake</button>
+        </div>
+        <div class="mood__products" id="mood-products">
+          <!-- Glowy products (default) -->
+          <div class="mood__product-card">
+            <div class="mood__product-image"></div>
+            <div class="mood__product-info">
+              <div class="mood__product-name">Guava Glow Moisturizer</div>
+              <div class="mood__product-sub">Hydrating gel-cream</div>
+              <div class="mood__product-price">$34</div>
+            </div>
+          </div>
+          <div class="mood__product-card">
+            <div class="mood__product-image"></div>
+            <div class="mood__product-info">
+              <div class="mood__product-name">Green Juice Serum</div>
+              <div class="mood__product-sub">Brightening treatment</div>
+              <div class="mood__product-price">$38</div>
+            </div>
+          </div>
+          <div class="mood__product-card">
+            <div class="mood__product-image"></div>
+            <div class="mood__product-info">
+              <div class="mood__product-name">Oak Milk Toner</div>
+              <div class="mood__product-sub">Gentle prep</div>
+              <div class="mood__product-price">$28</div>
+            </div>
+          </div>
+          <div class="mood__product-card">
+            <div class="mood__product-image"></div>
+            <div class="mood__product-info">
+              <div class="mood__product-name">Glacé Kiss Balm</div>
+              <div class="mood__product-sub">Glossy finish</div>
+              <div class="mood__product-price">$22</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mood__right">
+        <div class="mood__circle">
+          <div class="mood__circle-label">for glowy skin</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. TEXTURE STORY -->
+  <section class="texture">
+    <div class="texture__header">
+      <div class="subhead">Feel Before You Try</div>
+      <h2>Skincare you can feel before you try it</h2>
+      <p>Each texture tells a story. Hover to discover what's inside.</p>
+    </div>
+    <div class="texture__grid">
+      <div class="texture__index">
+        <div class="texture__index-item active" data-index="1">
+          <span class="numeral">I</span>
+          <span class="name">Matcha Skin Cleanser</span>
+        </div>
+        <div class="texture__index-item" data-index="2">
+          <span class="numeral">II</span>
+          <span class="name">Oak Milk Toner</span>
+        </div>
+        <div class="texture__index-item" data-index="3">
+          <span class="numeral">III</span>
+          <span class="name">Green Juice Serum</span>
+        </div>
+        <div class="texture__index-item" data-index="4">
+          <span class="numeral">IV</span>
+          <span class="name">Guava Glow Moisturizer</span>
+        </div>
+        <div class="texture__index-item" data-index="5">
+          <span class="numeral">V</span>
+          <span class="name">Rice Water Clay Mask</span>
+        </div>
+      </div>
+      <div class="texture__canvas">
+        <div class="texture__blob texture__blob--1" data-numeral="I">
+          <div class="texture__blob-tooltip">Matcha Skin Cleanser — Silky, foaming gel</div>
+        </div>
+        <div class="texture__blob texture__blob--2" data-numeral="II">
+          <div class="texture__blob-tooltip">Oak Milk Toner — Weightless, milky liquid</div>
+        </div>
+        <div class="texture__blob texture__blob--3" data-numeral="III">
+          <div class="texture__blob-tooltip">Green Juice Serum — Light, fast-absorbing drops</div>
+        </div>
+        <div class="texture__blob texture__blob--4" data-numeral="IV">
+          <div class="texture__blob-tooltip">Guava Glow Moisturizer — Dewy, bouncy gel-cream</div>
+        </div>
+        <div class="texture__blob texture__blob--5" data-numeral="V">
+          <div class="texture__blob-tooltip">Rice Water Clay Mask — Smooth, velvety clay</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. FOUNDER STORY -->
+  <section class="founder">
+    <div class="founder__inner">
+      <div class="founder__image"></div>
+      <div class="founder__content">
+        <div class="subhead">Our Story</div>
+        <h2>Why hiku exists</h2>
+        <p>Harper started hiku at 15 because she couldn't find skincare that got it. Every clinical brand felt like medicine. Every fun brand burned her face. The gap between "works for you" and "feels like you" shouldn't exist.</p>
+        <p>So she closed it. With real dermatologists, real ingredients, and a belief that your skin doesn't need to be fixed — it needs to be understood.</p>
+        <p>"It's what she wishes she'd had from the start."</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. CRYSTAL BALL QUIZ CTA -->
+  <section class="quiz">
+    <div class="quiz__ball" id="crystal-ball">
+      <div class="quiz__ball-inner">
+        <div class="quiz__ball-text">How do you want your skin to greet the morning?</div>
+      </div>
+    </div>
+    <div class="quiz__ball-base"></div>
+    <div class="subhead">The Crystal Ball</div>
+    <h2>Discover your skin mood.</h2>
+    <p class="quiz__sub">Gently explore to find your ritual. No prescriptions — just curiosity.</p>
+    <a href="#" class="btn btn-primary">Begin the discovery</a>
+  </section>
+
+  <!-- 10. COMMUNITY -->
+  <section class="community">
+    <div class="community__header">
+      <div class="subhead">Made With You</div>
+      <h2>Being part of hiku means having a say.</h2>
+      <p>Real skin, real stories, real community. You're not just a customer — you're a co-creator.</p>
+    </div>
+    <div class="community__grid">
+      <div class="community__item"></div>
+      <div class="community__item"></div>
+      <div class="community__item"></div>
+      <div class="community__item"></div>
+      <div class="community__item"></div>
+      <div class="community__item"></div>
+      <div class="community__item"></div>
+    </div>
+    <div class="community__cta">
+      <a href="#" class="btn btn-primary">Join the house</a>
+    </div>
+  </section>
+
+  <!-- 11. FOOTER -->
+  <footer class="footer">
+    <div class="footer__newsletter">
+      <div>
+        <div class="subhead">Newsletter</div>
+        <h2>Connect with us</h2>
+        <form class="footer__form" onsubmit="return false;">
+          <input type="email" class="footer__input" placeholder="Email address">
+          <input type="tel" class="footer__input" placeholder="Phone number">
+          <p class="footer__consent">By signing up, you agree to receive marketing texts. Consent is not a condition of purchase. Msg & data rates may apply. View <a href="#">Terms</a> & <a href="#">Privacy</a>.</p>
+          <button type="submit" class="btn btn-outline">Subscribe</button>
+        </form>
+      </div>
+      <div class="footer__newsletter-image"></div>
+    </div>
+
+    <div class="footer__links">
+      <div class="footer__col">
+        <div class="footer__col-title">Shop</div>
+        <a href="#">Shop All</a>
+        <a href="#">Cleanser & Toner</a>
+        <a href="#">Serum</a>
+        <a href="#">Moisturizer</a>
+        <a href="#">Mask & Scrub</a>
+        <a href="#">Lip Care</a>
+        <a href="#">Sets</a>
+      </div>
+      <div class="footer__col">
+        <div class="footer__col-title">About</div>
+        <a href="#">Our Story</a>
+        <a href="#">Find Your Routine</a>
+        <a href="#">Ingredient Index</a>
+        <a href="#">Community</a>
+      </div>
+      <div class="footer__col">
+        <div class="footer__col-title">Help</div>
+        <a href="#">Contact Us</a>
+        <a href="#">FAQs</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Shipping & Returns</a>
+      </div>
+      <div class="footer__col">
+        <div class="footer__col-title">Social</div>
+        <a href="#">Instagram</a>
+        <a href="#">TikTok</a>
+        <a href="#">Pinterest</a>
+        <a href="#">Facebook</a>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      &copy; 2026 Hiku Beauty. All Rights Reserved.
+    </div>
+  </footer>
+
+  <!-- ============================
+       JAVASCRIPT
+       ============================ -->
+  <script>
+    // --- Ritual Step 4 Toggle (Glowy / Matte) ---
+    document.querySelectorAll('.ritual__toggle-option').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.ritual__toggle-option').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const nameEl = document.getElementById('seal-product-name');
+        const descEl = document.getElementById('seal-product-desc');
+        if (btn.dataset.finish === 'glowy') {
+          nameEl.textContent = 'Guava Glow Moisturizer';
+          descEl.textContent = 'Hydrating gel-cream that leaves you glowing.';
+        } else {
+          nameEl.textContent = 'Soft Matte Moisturizer';
+          descEl.textContent = 'Lightweight matte finish for all-day calm.';
+        }
+      });
+    });
+
+    // --- Mood Selector ---
+    const moodData = {
+      glowy: {
+        label: 'glowy',
+        circleLabel: 'for glowy skin',
+        products: [
+          { name: 'Guava Glow Moisturizer', sub: 'Hydrating gel-cream', price: '$34' },
+          { name: 'Green Juice Serum', sub: 'Brightening treatment', price: '$38' },
+          { name: 'Oak Milk Toner', sub: 'Gentle prep', price: '$28' },
+          { name: 'Glacé Kiss Balm', sub: 'Glossy finish', price: '$22' },
+        ]
+      },
+      calm: {
+        label: 'calm',
+        circleLabel: 'for calm skin',
+        products: [
+          { name: 'Soft Matte Moisturizer', sub: 'Soothing matte finish', price: '$34' },
+          { name: 'Oak Milk Toner', sub: 'Balancing calm', price: '$28' },
+          { name: 'Rice Water Clay Mask', sub: 'Weekly reset', price: '$32' },
+          { name: 'Glacé Kiss Balm', sub: 'Gentle nourish', price: '$22' },
+        ]
+      },
+      awake: {
+        label: 'awake',
+        circleLabel: 'for awake skin',
+        products: [
+          { name: 'Matcha Skin Cleanser', sub: 'Energizing cleanse', price: '$28' },
+          { name: 'Green Juice Serum', sub: 'Wake-up treatment', price: '$38' },
+          { name: 'Smooth Skin Face Scrub', sub: 'Fresh start', price: '$26' },
+          { name: 'Guava Glow Moisturizer', sub: 'Bright finish', price: '$34' },
+        ]
+      }
+    };
+
+    document.querySelectorAll('.mood__option').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const mood = btn.dataset.mood;
+        const section = document.querySelector('.mood');
+        const data = moodData[mood];
+
+        // Update active state
+        document.querySelectorAll('.mood__option').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        // Update mood data attribute (drives CSS)
+        section.dataset.mood = mood;
+
+        // Update prompt label
+        document.getElementById('mood-label').textContent = data.label;
+
+        // Update circle label
+        document.querySelector('.mood__circle-label').textContent = data.circleLabel;
+
+        // Update product cards
+        const cards = document.querySelectorAll('.mood__product-card');
+        cards.forEach((card, i) => {
+          const p = data.products[i];
+          card.querySelector('.mood__product-name').textContent = p.name;
+          card.querySelector('.mood__product-sub').textContent = p.sub;
+          card.querySelector('.mood__product-price').textContent = p.price;
+        });
+      });
+    });
+
+    // --- Crystal Ball hover shimmer ---
+    const ball = document.getElementById('crystal-ball');
+    ball.addEventListener('mousemove', (e) => {
+      const rect = ball.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      ball.style.background = `radial-gradient(circle at ${x}% ${y}%,
+        rgba(255,255,255,0.7) 0%,
+        rgba(196,160,167,0.3) 20%,
+        rgba(184,160,184,0.4) 40%,
+        rgba(231,130,169,0.25) 60%,
+        rgba(196,160,167,0.5) 80%,
+        rgba(61,28,30,0.15) 100%
+      )`;
+    });
+    ball.addEventListener('mouseleave', () => {
+      ball.style.background = '';
+    });
+
+    // --- Texture index hover sync ---
+    document.querySelectorAll('.texture__index-item').forEach(item => {
+      item.addEventListener('mouseenter', () => {
+        document.querySelectorAll('.texture__index-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        const idx = item.dataset.index;
+        document.querySelectorAll('.texture__blob').forEach(blob => {
+          blob.style.opacity = '0.3';
+          blob.style.transform = 'scale(0.95)';
+        });
+        const activeBlob = document.querySelector(`.texture__blob--${idx}`);
+        if (activeBlob) {
+          activeBlob.style.opacity = '1';
+          activeBlob.style.transform = 'scale(1.1)';
+        }
+      });
+    });
+    document.querySelector('.texture__index')?.addEventListener('mouseleave', () => {
+      document.querySelectorAll('.texture__blob').forEach(blob => {
+        blob.style.opacity = '1';
+        blob.style.transform = '';
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hiku — Homepage Prototypes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --pink: #F5E6E0;
+      --brown: #3D1C1E;
+      --rosewood: #C4A0A7;
+      --almond: #FDF8F5;
+      --stone-400: #A6A09B;
+      --serif: 'Playfair Display', 'Big Caslon', Georgia, serif;
+      --sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+    body {
+      font-family: var(--sans);
+      background: var(--almond);
+      color: var(--brown);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 40px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .logo {
+      font-family: var(--serif);
+      font-size: 32px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+    .logo sup {
+      font-size: 11px;
+      font-style: italic;
+      font-weight: 400;
+      opacity: 0.6;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: var(--stone-400);
+      margin-bottom: 60px;
+      letter-spacing: 0.02em;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 32px;
+      width: 100%;
+      max-width: 1280px;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(61,28,30,0.06);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-decoration: none;
+      color: var(--brown);
+      display: block;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(61,28,30,0.08);
+    }
+    .card__preview {
+      height: 240px;
+      overflow: hidden;
+      position: relative;
+      border-bottom: 1px solid rgba(61,28,30,0.04);
+    }
+    .card__preview iframe {
+      width: 1440px;
+      height: 900px;
+      border: none;
+      transform: scale(0.28);
+      transform-origin: top left;
+      pointer-events: none;
+    }
+    .card__preview-overlay {
+      position: absolute;
+      inset: 0;
+      cursor: pointer;
+    }
+    .card__info {
+      padding: 24px;
+    }
+    .card__badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 4px 10px;
+      border-radius: 3px;
+      margin-bottom: 12px;
+    }
+    .card__badge--v1 {
+      background: var(--pink);
+      color: var(--brown);
+    }
+    .card__badge--v2 {
+      background: var(--brown);
+      color: var(--almond);
+    }
+    .card__badge--v3 {
+      background: var(--rosewood);
+      color: white;
+    }
+    .card__badge--v4 {
+      background: linear-gradient(135deg, var(--brown) 0%, #5a2e31 100%);
+      color: var(--almond);
+      box-shadow: 0 2px 8px rgba(61,28,30,0.2);
+    }
+    .card__badge--v5 {
+      background: linear-gradient(135deg, #E782A9 0%, #B8A0B8 50%, #B8D4E8 100%);
+      color: white;
+      box-shadow: 0 2px 8px rgba(231,130,169,0.3);
+    }
+    .card__title {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+    .card__desc {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--stone-400);
+      margin-bottom: 16px;
+    }
+    .card__meta {
+      font-size: 11px;
+      color: var(--rosewood);
+      display: flex;
+      gap: 16px;
+    }
+    .footer-note {
+      margin-top: 60px;
+      font-size: 11px;
+      color: var(--stone-400);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="logo">hiku<sup>by harper</sup></div>
+  <div class="subtitle">Homepage Prototypes</div>
+
+  <div class="grid">
+
+    <a href="v1.html" class="card">
+      <div class="card__preview">
+        <iframe src="v1.html" loading="lazy" tabindex="-1"></iframe>
+        <div class="card__preview-overlay"></div>
+      </div>
+      <div class="card__info">
+        <span class="card__badge card__badge--v1">V1</span>
+        <div class="card__title">Brand Soul Synthesis</div>
+        <div class="card__desc">Original rough draft prototype synthesizing all 4 design playground directions + brand soul work. Features mood selector, ritual builder, crystal ball quiz, texture story blobs, and editorial scroll.</div>
+        <div class="card__meta">
+          <span>11 sections</span>
+          <span>Interactive mood + ritual toggle</span>
+          <span>Mar 3, 2026</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="v2-figma-option1.html" class="card">
+      <div class="card__preview">
+        <iframe src="v2-figma-option1.html" loading="lazy" tabindex="-1"></iframe>
+        <div class="card__preview-overlay"></div>
+      </div>
+      <div class="card__info">
+        <span class="card__badge card__badge--v2">V2</span>
+        <div class="card__title">Figma Option 1</div>
+        <div class="card__desc">Faithful translation of the Figma "Homepage (Option 1)" design. Full-bleed skin hero, product carousels, Daily Foundation 4-step grid, Kind Calmplex ingredient map, tea set flatlay, and community tagline.</div>
+        <div class="card__meta">
+          <span>14 sections</span>
+          <span>Carousel + hotspot interactions</span>
+          <span>Mar 4, 2026</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="v3-figma-option2.html" class="card">
+      <div class="card__preview">
+        <iframe src="v3-figma-option2.html" loading="lazy" tabindex="-1"></iframe>
+        <div class="card__preview-overlay"></div>
+      </div>
+      <div class="card__info">
+        <span class="card__badge card__badge--v3">V3</span>
+        <div class="card__title">Figma Option 2</div>
+        <div class="card__desc">Bento-grid hero with embedded product card, structured product grid with face close-up sidebar, ritual finder step cards, Glow Babies kit section, and large "hiku" footer logo. More grid-forward and modular.</div>
+        <div class="card__meta">
+          <span>10 sections</span>
+          <span>Step cards + hotspot interactions</span>
+          <span>Mar 4, 2026</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="v4-immersive.html" class="card">
+      <div class="card__preview">
+        <iframe src="v4-immersive.html" loading="lazy" tabindex="-1"></iframe>
+        <div class="card__preview-overlay"></div>
+      </div>
+      <div class="card__info">
+        <span class="card__badge card__badge--v4">V4</span>
+        <div class="card__title">Immersive Synthesis</div>
+        <div class="card__desc">Client feedback iteration: more playful, more layered, more immersive. Scroll-reveal animations, floating product cards, mood selector with glowing orbs, animated texture blobs, crystal ball with light-tracking shimmer, bouncy micro-interactions, and a hidden easter egg.</div>
+        <div class="card__meta">
+          <span>12 sections</span>
+          <span>Scroll reveals + mood + crystal ball + easter egg</span>
+          <span>Mar 4, 2026</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="v5-interactive.html" class="card">
+      <div class="card__preview">
+        <iframe src="v5-interactive.html" loading="lazy" tabindex="-1"></iframe>
+        <div class="card__preview-overlay"></div>
+      </div>
+      <div class="card__info">
+        <span class="card__badge card__badge--v5">V5</span>
+        <div class="card__title">Award-Winning Interactive</div>
+        <div class="card__desc">Door-opening entrance animation, split-text hero reveals, 3D rotating bottle product showcase, stacking images from right on scroll (About section), draggable otter easter egg in footer (drag them together to unlock TYB loyalty code), text/image expansion animations, clip-path mask reveals, and premium easing throughout.</div>
+        <div class="card__meta">
+          <span>13 sections</span>
+          <span>Door open + 3D bottle + otters + mask reveals</span>
+          <span>Mar 4, 2026</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="footer-note">&copy; 2026 Willa Creative &mdash; Hiku by Harper project</div>
+
+</body>
+</html>

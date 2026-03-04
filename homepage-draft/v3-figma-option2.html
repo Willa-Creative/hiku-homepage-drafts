@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hiku by harper — Homepage Option 2 (Figma)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       HIKU — Homepage Option 2 (Figma Faithful)
+       Bento-grid hero, structured editorial flow
+       ======================================== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --pink: #F5E6E0;
+      --brown: #3D1C1E;
+      --rosewood: #C4A0A7;
+      --almond: #FDF8F5;
+      --mauve: #B8A0B8;
+      --vivid-pink: #E782A9;
+      --baby-blue: #B8D4E8;
+      --oat-matcha: #C4CFA0;
+      --stone-300: #D6D3D1;
+      --stone-400: #A6A09B;
+      --serif: 'Playfair Display', 'Big Caslon', Georgia, serif;
+      --sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 1.2;
+      color: var(--brown);
+      background: var(--almond);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 { font-family: var(--serif); font-weight: 500; line-height: 1.1; }
+    h1 { font-size: 56px; }
+    h2 { font-size: 36px; }
+    h3 { font-size: 24px; }
+    h4 { font-size: 16px; }
+
+    .subhead {
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 12px;
+      line-height: 1.2;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .btn {
+      display: inline-block;
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 1;
+      padding: 13px 24px;
+      border-radius: 4px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+    }
+    .btn-primary { background: var(--brown); color: var(--almond); }
+    .btn-primary:hover { background: #5a2e31; }
+    .btn-outline { background: transparent; color: var(--almond); border: 1px solid var(--almond); }
+    .btn-outline:hover { background: rgba(253,248,245,0.1); }
+    .btn-outline-dark { background: transparent; color: var(--brown); border: 1px solid var(--brown); }
+    .btn-outline-dark:hover { background: rgba(61,28,30,0.05); }
+
+    /* ============================
+       1. ANNOUNCEMENT BANNER
+       ============================ */
+    .banner {
+      background: var(--brown);
+      height: 41px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: var(--almond);
+      letter-spacing: 0.02em;
+      position: relative;
+    }
+    .banner__controls {
+      position: absolute;
+      right: 24px;
+      display: flex;
+      gap: 8px;
+    }
+    .banner__controls button {
+      background: none; border: none; cursor: pointer;
+      color: var(--almond); font-size: 12px; opacity: 0.4;
+      width: 16px; height: 16px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .banner__controls button:hover { opacity: 0.8; }
+
+    /* ============================
+       2. NAVIGATION
+       ============================ */
+    .nav {
+      background: var(--brown);
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav__logo {
+      font-family: var(--serif);
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--almond);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .nav__logo sup {
+      font-size: 9px;
+      font-style: italic;
+      font-weight: 400;
+      opacity: 0.7;
+      vertical-align: super;
+      margin-left: 2px;
+    }
+    .nav__right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .nav__link {
+      color: var(--almond);
+      text-decoration: none;
+      font-size: 13px;
+      padding: 10px 12px;
+      opacity: 0.9;
+      transition: opacity 0.2s;
+    }
+    .nav__link:hover { opacity: 1; }
+    .nav__cta { margin-left: 8px; }
+    .nav__icons {
+      display: flex;
+      gap: 16px;
+      margin-left: 20px;
+    }
+    .nav__icon {
+      color: var(--almond);
+      opacity: 0.7;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-size: 14px;
+    }
+    .nav__icon:hover { opacity: 1; }
+
+    /* ============================
+       3. HERO — Bento Grid
+       ============================ */
+    .hero {
+      height: 900px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+    }
+    .hero__left {
+      position: relative;
+      /* Close-up skin/freckles photo */
+      background:
+        radial-gradient(ellipse at 65% 40%, #d4a574 0%, transparent 50%),
+        radial-gradient(ellipse at 55% 50%, #c9947a 0%, transparent 45%),
+        radial-gradient(circle at 68% 38%, #8bb4c4 0%, transparent 8%),
+        linear-gradient(135deg, #a07050 0%, #d4a080 30%, #c09070 60%, #e0c0a0 100%);
+    }
+    .hero__left-content {
+      position: absolute;
+      bottom: 80px;
+      left: 40px;
+      right: 40px;
+      z-index: 2;
+    }
+    .hero__title {
+      font-family: var(--serif);
+      font-size: 48px;
+      font-weight: 500;
+      line-height: 1.08;
+      color: var(--almond);
+      margin-bottom: 32px;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.15);
+    }
+    .hero__btn {
+      background: var(--almond);
+      color: var(--brown);
+      padding: 12px 20px;
+      font-size: 12px;
+      font-family: var(--sans);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .hero__btn:hover { background: #fff; }
+    .hero__right {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 2px;
+    }
+    .hero__tile {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero__tile--face {
+      /* Close-up face / skin texture */
+      background: radial-gradient(ellipse at 50% 50%, #e0b8a0 0%, #d0a890 40%, #c09880 80%);
+    }
+    .hero__tile--product {
+      background: var(--pink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero__tile--lips {
+      /* Close-up lips */
+      background: radial-gradient(ellipse at 50% 55%, #d8a090 0%, #c89080 40%, #b88070 80%);
+    }
+    .hero__tile--skin {
+      /* Another skin close-up */
+      background: radial-gradient(ellipse at 45% 50%, #e0c0a8 0%, #d0b098 40%, #c0a088 80%);
+    }
+    .hero__tile-product-card {
+      background: var(--almond);
+      border-radius: 6px;
+      padding: 16px;
+      width: 80%;
+      text-align: center;
+    }
+    .hero__tile-product-img {
+      width: 60%;
+      aspect-ratio: 3/4;
+      background: linear-gradient(180deg, var(--pink) 0%, #ecddd8 100%);
+      border-radius: 8px;
+      margin: 0 auto 12px;
+    }
+    .hero__tile-product-name {
+      font-family: var(--serif);
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    .hero__tile-product-sub {
+      font-size: 11px;
+      color: var(--stone-400);
+      margin-bottom: 4px;
+    }
+    .hero__tile-product-price {
+      font-size: 12px;
+    }
+
+    /* ============================
+       4. ABOUT
+       ============================ */
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      height: 900px;
+      background: var(--pink);
+    }
+    .about__image {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 2px;
+    }
+    .about__image-tile {
+      overflow: hidden;
+    }
+    .about__image-tile:nth-child(1) {
+      /* Product shot */
+      background: linear-gradient(135deg, #e8dcd0 0%, #d8cec0 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .about__image-tile:nth-child(2) {
+      /* Close-up face */
+      background: radial-gradient(ellipse at 50% 45%, #d4a080 0%, #c09070 60%);
+    }
+    .about__image-tile:nth-child(3) {
+      /* Skin texture */
+      background: radial-gradient(ellipse at 50% 50%, #e0c8b0 0%, #d0b8a0 60%);
+    }
+    .about__image-tile:nth-child(4) {
+      /* Product application */
+      background: radial-gradient(ellipse at 50% 50%, #ddb8a0 0%, #c8a890 60%);
+    }
+    .about__product-placeholder {
+      width: 55%;
+      height: 50%;
+      background: linear-gradient(180deg, var(--pink) 0%, #ecddd8 100%);
+      border-radius: 12px;
+    }
+    .about__content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 80px 80px 64px;
+    }
+    .about__content .subhead {
+      margin-bottom: 24px;
+    }
+    .about__content h2 {
+      font-size: 42px;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      max-width: 420px;
+    }
+    .about__content p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--stone-400);
+      max-width: 420px;
+      margin-bottom: 32px;
+    }
+    .about__link {
+      font-size: 13px;
+      color: var(--brown);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* ============================
+       5. PRODUCTS
+       ============================ */
+    .products {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      height: 900px;
+      background: var(--almond);
+      gap: 0;
+    }
+    .products__main {
+      padding: 60px 0 60px 40px;
+      display: flex;
+      flex-direction: column;
+    }
+    .products__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      padding-right: 24px;
+    }
+    .products__header .subhead { color: var(--brown); }
+    .products__view-all {
+      font-size: 13px;
+      color: var(--brown);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .products__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      padding-right: 24px;
+      flex: 1;
+    }
+    .products__card {
+      display: flex;
+      flex-direction: column;
+    }
+    .products__card-image {
+      flex: 1;
+      background: var(--pink);
+      border-radius: 0;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 220px;
+      position: relative;
+      overflow: hidden;
+    }
+    .products__card-silhouette {
+      width: 40%;
+      height: 60%;
+      background: linear-gradient(180deg, rgba(253,248,245,0.7) 0%, rgba(253,248,245,0.95) 100%);
+      border-radius: 16px 16px 6px 6px;
+      position: relative;
+    }
+    .products__card-silhouette::after {
+      content: 'hiku';
+      font-family: var(--serif);
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--brown);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-90deg);
+    }
+    .products__card-info { padding: 0 2px; }
+    .products__card-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 4px;
+    }
+    .products__card-name {
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .products__card-price {
+      font-size: 12px;
+      color: var(--stone-400);
+    }
+    .products__card-desc {
+      font-size: 12px;
+      color: var(--stone-400);
+      margin-bottom: 6px;
+    }
+    .products__card-rating {
+      font-size: 11px;
+      color: var(--stone-400);
+    }
+    .products__card-rating span { color: var(--brown); }
+    .products__face {
+      /* Large close-up face image */
+      background: radial-gradient(ellipse at 45% 45%, #d8a898 0%, #c89888 30%, #b88878 60%, #e8d8c8 100%);
+    }
+
+    /* ============================
+       6. THE DAILY FOUNDATION
+       ============================ */
+    .foundation {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      height: 900px;
+      background: var(--almond);
+    }
+    .foundation__image {
+      position: relative;
+      overflow: hidden;
+      /* Vanity / flatlay — products, mirror, clock */
+      background:
+        radial-gradient(ellipse at 40% 50%, #c8d8e0 0%, transparent 50%),
+        radial-gradient(ellipse at 60% 40%, #d0dce4 0%, transparent 40%),
+        linear-gradient(160deg, #b0c8d4 0%, #c0d0dc 30%, #d0dce4 60%, #e0e8ec 100%);
+    }
+    /* Circular mirror shape */
+    .foundation__image::before {
+      content: '';
+      position: absolute;
+      width: 50%;
+      height: 48%;
+      top: 15%;
+      left: 25%;
+      border-radius: 50%;
+      background: radial-gradient(circle, #e8e4e0 0%, #d8d4d0 60%, #c8c4c0 100%);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+    }
+    /* Product on vanity */
+    .foundation__image::after {
+      content: '';
+      position: absolute;
+      width: 15%;
+      height: 35%;
+      bottom: 20%;
+      right: 25%;
+      background: linear-gradient(180deg, var(--pink) 0%, #ecddd8 100%);
+      border-radius: 8px 8px 4px 4px;
+    }
+    .foundation__content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px 64px;
+    }
+    .foundation__content .subhead {
+      color: var(--rosewood);
+      margin-bottom: 20px;
+    }
+    .foundation__content h2 {
+      font-size: 48px;
+      line-height: 1.05;
+      margin-bottom: 16px;
+    }
+    .foundation__content > p {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--stone-400);
+      max-width: 420px;
+      margin-bottom: 40px;
+    }
+    .foundation__step-card {
+      background: var(--almond);
+      border: 1px solid var(--stone-300);
+      border-radius: 6px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .foundation__step-card:hover {
+      border-color: var(--brown);
+    }
+    .foundation__step-card.active {
+      border-color: var(--brown);
+      background: white;
+    }
+    .foundation__step-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--rosewood);
+      min-width: 70px;
+    }
+    .foundation__step-info {
+      flex: 1;
+    }
+    .foundation__step-name {
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 2px;
+    }
+    .foundation__step-product {
+      font-size: 12px;
+      color: var(--stone-400);
+    }
+    .foundation__step-price {
+      font-size: 12px;
+      color: var(--stone-400);
+    }
+    .foundation__step-add {
+      font-size: 11px;
+      color: var(--brown);
+      text-decoration: underline;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: var(--sans);
+    }
+
+    /* ============================
+       7. GLOW BABIES DELUXE KIT
+       ============================ */
+    .kit {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      height: 900px;
+      background: var(--almond);
+    }
+    .kit__left {
+      position: relative;
+      /* Stacked products image */
+      background:
+        radial-gradient(ellipse at 50% 55%, var(--pink) 0%, #ecddd8 40%, #e0d0c8 80%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .kit__stack {
+      width: 50%;
+      height: 55%;
+      position: relative;
+    }
+    .kit__stack-item {
+      position: absolute;
+      width: 80%;
+      height: 25%;
+      background: linear-gradient(180deg, var(--pink) 0%, #ecddd8 100%);
+      border-radius: 6px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .kit__stack-item:nth-child(1) { bottom: 0; left: 10%; }
+    .kit__stack-item:nth-child(2) { bottom: 20%; left: 5%; transform: rotate(-3deg); }
+    .kit__stack-item:nth-child(3) { bottom: 40%; left: 15%; transform: rotate(2deg); }
+    .kit__right {
+      position: relative;
+      overflow: hidden;
+      /* Tea set / silver tray */
+      background:
+        radial-gradient(ellipse at 50% 50%, #d8d0c8 0%, #c8c0b8 40%, #b8b0a8 80%);
+    }
+    .kit__right::before {
+      content: '';
+      position: absolute;
+      width: 60%;
+      height: 60%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, #e8e0d8 0%, #d0c8c0 60%);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    }
+    .kit__overlay {
+      position: absolute;
+      bottom: 60px;
+      left: 40px;
+      right: 40px;
+      z-index: 2;
+    }
+    .kit__overlay .subhead {
+      color: var(--rosewood);
+      margin-bottom: 12px;
+    }
+    .kit__overlay h2 {
+      font-size: 42px;
+      font-style: italic;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .kit__overlay p {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--stone-400);
+      max-width: 380px;
+      margin-bottom: 24px;
+    }
+
+    /* ============================
+       8. CERAMIDES / INGREDIENTS
+       ============================ */
+    .ingredients {
+      width: 100%;
+      height: 800px;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 30% 60%, #8aacb8 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 40%, #98b8c4 0%, transparent 40%),
+        linear-gradient(135deg, #7a9caa 0%, #8aacb8 25%, #a0c0cc 50%, #90b0bc 75%, #80a0ac 100%);
+    }
+    .ingredients::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 160%;
+      height: 160%;
+      transform: translate(-50%, -50%);
+      background: repeating-radial-gradient(
+        circle at 40% 55%,
+        transparent 0px,
+        transparent 28px,
+        rgba(255,255,255,0.08) 29px,
+        rgba(255,255,255,0.08) 30px,
+        transparent 31px
+      );
+    }
+    .ingredients__content {
+      position: absolute;
+      top: 60px;
+      left: 40px;
+      z-index: 2;
+      max-width: 500px;
+    }
+    .ingredients__title {
+      font-family: var(--serif);
+      font-size: 56px;
+      font-style: italic;
+      font-weight: 500;
+      color: var(--almond);
+      margin-bottom: 20px;
+    }
+    .ingredients__desc {
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(253,248,245,0.8);
+      max-width: 380px;
+    }
+    .ingredients__hotspot {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .ingredients__hotspot:hover { transform: scale(1.15); }
+    .ingredients__hotspot-inner {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--almond);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--serif);
+      font-size: 13px;
+      color: var(--brown);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    }
+    .ingredients__hotspot--active .ingredients__hotspot-inner {
+      background: var(--brown);
+      color: var(--almond);
+    }
+    .ingredients__hotspot--1 { top: 50%; left: 40%; }
+    .ingredients__hotspot--2 { top: 30%; left: 58%; }
+    .ingredients__hotspot--3 { top: 38%; right: 18%; }
+    .ingredients__tooltip {
+      position: absolute;
+      bottom: 80px;
+      left: 40px;
+      background: var(--almond);
+      border-radius: 8px;
+      padding: 20px 24px;
+      width: 320px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .ingredients__tooltip-product {
+      width: 60px;
+      height: 80px;
+      background: linear-gradient(180deg, var(--pink) 0%, #ecddd8 100%);
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+    .ingredients__tooltip-info { flex: 1; }
+    .ingredients__tooltip-name {
+      font-family: var(--serif);
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .ingredients__tooltip-sub {
+      font-size: 12px;
+      color: var(--stone-400);
+      margin-bottom: 2px;
+    }
+    .ingredients__tooltip-price {
+      font-size: 12px;
+    }
+
+    /* ============================
+       9. COMMUNITY
+       ============================ */
+    .community {
+      padding: 90px 40px 100px;
+      background: var(--almond);
+    }
+    .community__header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .community__header .subhead {
+      color: var(--rosewood);
+      margin-bottom: 12px;
+    }
+    .community__header h2 {
+      font-size: 42px;
+    }
+    .community__grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: 320px 240px;
+      gap: 12px;
+      max-width: 1360px;
+      margin: 0 auto;
+    }
+    .community__item {
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+    .community__item:nth-child(1) {
+      grid-column: span 2;
+      background: radial-gradient(ellipse at 50% 40%, #d4a080 0%, #c09070 50%, #e0d0c0 100%);
+    }
+    .community__item:nth-child(2) {
+      background: var(--pink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .community__item:nth-child(3) {
+      background: radial-gradient(ellipse at 50% 45%, #c8a898 0%, #b89888 50%);
+    }
+    .community__item:nth-child(4) {
+      background: radial-gradient(ellipse at 50% 50%, #d0b8a0 0%, #c0a890 50%);
+    }
+    .community__item:nth-child(5) {
+      background: radial-gradient(ellipse at 50% 50%, #e0c8b0 0%, #d0b8a0 50%);
+    }
+    .community__item:nth-child(6) {
+      background: radial-gradient(ellipse at 50% 45%, #d8a898 0%, #c89888 50%);
+    }
+    .community__item:nth-child(7) {
+      grid-column: span 2;
+      background: linear-gradient(135deg, var(--pink) 0%, var(--rosewood) 100%);
+    }
+    .community__item:nth-child(8) {
+      background: radial-gradient(ellipse at 50% 50%, #e0c0a8 0%, #d0b098 50%);
+    }
+    .community__item--text {
+      font-family: var(--serif);
+      font-size: 20px;
+      font-style: italic;
+      color: var(--brown);
+      padding: 24px;
+      line-height: 1.3;
+    }
+
+    /* ============================
+       10. FOOTER
+       ============================ */
+    .footer {
+      background: var(--brown);
+      color: var(--almond);
+      padding: 0;
+    }
+    .footer__hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      height: 400px;
+      gap: 0;
+    }
+    .footer__hero-image {
+      overflow: hidden;
+    }
+    .footer__hero-image:nth-child(1) {
+      background: radial-gradient(ellipse at 50% 45%, #c09080 0%, #a07060 50%, #503030 100%);
+    }
+    .footer__hero-image:nth-child(2) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .footer__hero-logo {
+      font-family: var(--serif);
+      font-size: 120px;
+      font-weight: 600;
+      color: var(--almond);
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+    .footer__hero-logo sup {
+      font-size: 16px;
+      font-style: italic;
+      font-weight: 400;
+      opacity: 0.6;
+    }
+    .footer__hero-image:nth-child(3) {
+      background: radial-gradient(ellipse at 50% 50%, #d0a890 0%, #b08870 50%, #503030 100%);
+    }
+    .footer__main {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 64px 40px 40px;
+      gap: 64px;
+    }
+    .footer__newsletter .subhead {
+      color: var(--almond);
+      margin-bottom: 16px;
+    }
+    .footer__newsletter h3 {
+      font-size: 32px;
+      color: var(--almond);
+      margin-bottom: 28px;
+    }
+    .footer__form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      max-width: 340px;
+    }
+    .footer__field { position: relative; }
+    .footer__field label {
+      position: absolute;
+      top: -7px;
+      left: 12px;
+      font-size: 10px;
+      color: rgba(253,248,245,0.4);
+      background: var(--brown);
+      padding: 0 4px;
+    }
+    .footer__input {
+      width: 100%;
+      background: transparent;
+      border: 1px solid rgba(253,248,245,0.25);
+      border-radius: 4px;
+      padding: 14px 16px;
+      color: var(--almond);
+      font-family: var(--sans);
+      font-size: 13px;
+      outline: none;
+    }
+    .footer__input::placeholder { color: rgba(253,248,245,0.25); }
+    .footer__input:focus { border-color: var(--rosewood); }
+    .footer__consent {
+      font-size: 10px;
+      color: rgba(253,248,245,0.3);
+      line-height: 1.5;
+    }
+    .footer__consent a { color: var(--rosewood); text-decoration: underline; }
+    .footer__links {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      align-content: start;
+      padding-top: 8px;
+    }
+    .footer__col-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+    }
+    .footer__col a {
+      display: block;
+      color: rgba(253,248,245,0.45);
+      text-decoration: none;
+      font-size: 13px;
+      padding: 4px 0;
+      transition: color 0.2s;
+    }
+    .footer__col a:hover { color: var(--almond); }
+    .footer__bottom {
+      padding: 24px 40px;
+      border-top: 1px solid rgba(253,248,245,0.06);
+      font-size: 11px;
+      color: rgba(253,248,245,0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. BANNER -->
+  <div class="banner">
+    <span>Free standard shipping on orders $40+</span>
+    <div class="banner__controls">
+      <button>&#9664;</button>
+      <button>&#9654;</button>
+      <button>&#10074;&#10074;</button>
+    </div>
+  </div>
+
+  <!-- 2. NAVIGATION -->
+  <nav class="nav">
+    <a href="#" class="nav__logo">hiku<sup>by harper</sup></a>
+    <div class="nav__right">
+      <a href="#" class="nav__link">Shop +</a>
+      <a href="#" class="nav__link">About</a>
+      <a href="#" class="nav__link">Community</a>
+      <a href="#" class="btn btn-outline nav__cta">Find Your Ritual</a>
+      <div class="nav__icons">
+        <button class="nav__icon" aria-label="Search">&#9906;</button>
+        <button class="nav__icon" aria-label="Account">@</button>
+        <button class="nav__icon" aria-label="Bag">&#9776;</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 3. HERO — Bento Grid -->
+  <section class="hero">
+    <div class="hero__left">
+      <div class="hero__left-content">
+        <h1 class="hero__title">The coolest thing you can be is yourself.</h1>
+        <a href="#" class="hero__btn">Shop Now</a>
+      </div>
+    </div>
+    <div class="hero__right">
+      <div class="hero__tile hero__tile--face"></div>
+      <div class="hero__tile hero__tile--product">
+        <div class="hero__tile-product-card">
+          <div class="hero__tile-product-img"></div>
+          <div class="hero__tile-product-name">Guava Glow Moisturizer</div>
+          <div class="hero__tile-product-sub">hydrating gel-cream</div>
+          <div class="hero__tile-product-price">$34.00</div>
+        </div>
+      </div>
+      <div class="hero__tile hero__tile--lips"></div>
+      <div class="hero__tile hero__tile--skin"></div>
+    </div>
+  </section>
+
+  <!-- 4. ABOUT -->
+  <section class="about">
+    <div class="about__image">
+      <div class="about__image-tile">
+        <div class="about__product-placeholder"></div>
+      </div>
+      <div class="about__image-tile"></div>
+      <div class="about__image-tile"></div>
+      <div class="about__image-tile"></div>
+    </div>
+    <div class="about__content">
+      <div class="subhead">About</div>
+      <h2>Born from real journeys and real skin.</h2>
+      <p>Hiku rethinks skincare for the next generation. Our formulas are built with hydrating, calming, and nourishing ingredients that support the skin barrier and help maintain balance — so skin can function at its best, without being overworked.</p>
+      <a href="#" class="about__link">Read Our Story</a>
+    </div>
+  </section>
+
+  <!-- 5. PRODUCTS -->
+  <section class="products">
+    <div class="products__main">
+      <div class="products__header">
+        <span class="subhead">Shop Our Products</span>
+        <a href="#" class="products__view-all">View All</a>
+      </div>
+      <div class="products__grid">
+        <div class="products__card">
+          <div class="products__card-image">
+            <div class="products__card-silhouette"></div>
+          </div>
+          <div class="products__card-info">
+            <div class="products__card-row">
+              <span class="products__card-name">Guava Glow Moisturizer</span>
+              <span class="products__card-price">$00.00</span>
+            </div>
+            <div class="products__card-desc">hydrating gel-cream</div>
+            <div class="products__card-rating"><span>★</span> 0.0 (00)</div>
+          </div>
+        </div>
+        <div class="products__card">
+          <div class="products__card-image">
+            <div class="products__card-silhouette"></div>
+          </div>
+          <div class="products__card-info">
+            <div class="products__card-row">
+              <span class="products__card-name">Guava Glow Moisturizer</span>
+              <span class="products__card-price">$00.00</span>
+            </div>
+            <div class="products__card-desc">hydrating gel-cream</div>
+            <div class="products__card-rating"><span>★</span> 0.0 (00)</div>
+          </div>
+        </div>
+        <div class="products__card">
+          <div class="products__card-image">
+            <div class="products__card-silhouette"></div>
+          </div>
+          <div class="products__card-info">
+            <div class="products__card-row">
+              <span class="products__card-name">Guava Glow Moisturizer</span>
+              <span class="products__card-price">$00.00</span>
+            </div>
+            <div class="products__card-desc">hydrating gel-cream</div>
+            <div class="products__card-rating"><span>★</span> 0.0 (00)</div>
+          </div>
+        </div>
+        <div class="products__card">
+          <div class="products__card-image">
+            <div class="products__card-silhouette"></div>
+          </div>
+          <div class="products__card-info">
+            <div class="products__card-row">
+              <span class="products__card-name">Guava Glow Moisturizer</span>
+              <span class="products__card-price">$00.00</span>
+            </div>
+            <div class="products__card-desc">hydrating gel-cream</div>
+            <div class="products__card-rating"><span>★</span> 0.0 (00)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="products__face"></div>
+  </section>
+
+  <!-- 6. THE DAILY FOUNDATION -->
+  <section class="foundation">
+    <div class="foundation__image"></div>
+    <div class="foundation__content">
+      <div class="subhead">Ritual Finder</div>
+      <h2>The Daily Foundation</h2>
+      <p>Lorem ipsum dolor sit amet consectetur. Sed enim faucibus in euismod elit maecenas et integer. Semper dui sapien molestie.</p>
+
+      <div class="foundation__step-card active" data-step="1">
+        <div class="foundation__step-label">Cleanse</div>
+        <div class="foundation__step-info">
+          <div class="foundation__step-name">Matcha Skin Cleanser</div>
+          <div class="foundation__step-product">Lorem ipsum dolor sit amet.</div>
+        </div>
+        <div class="foundation__step-price">$00.00</div>
+        <button class="foundation__step-add">Add to Bag</button>
+      </div>
+
+      <div class="foundation__step-card" data-step="2">
+        <div class="foundation__step-label">Tone</div>
+        <div class="foundation__step-info">
+          <div class="foundation__step-name">Oak Milk Toner</div>
+          <div class="foundation__step-product">Lorem ipsum dolor sit amet.</div>
+        </div>
+        <div class="foundation__step-price">$00.00</div>
+        <button class="foundation__step-add">Add to Bag</button>
+      </div>
+
+      <div class="foundation__step-card" data-step="3">
+        <div class="foundation__step-label">Treat</div>
+        <div class="foundation__step-info">
+          <div class="foundation__step-name">Green Juice Serum</div>
+          <div class="foundation__step-product">Lorem ipsum dolor sit amet.</div>
+        </div>
+        <div class="foundation__step-price">$00.00</div>
+        <button class="foundation__step-add">Add to Bag</button>
+      </div>
+
+      <div class="foundation__step-card" data-step="4">
+        <div class="foundation__step-label">Seal</div>
+        <div class="foundation__step-info">
+          <div class="foundation__step-name">Guava Glow Moisturizer</div>
+          <div class="foundation__step-product">Lorem ipsum dolor sit amet.</div>
+        </div>
+        <div class="foundation__step-price">$00.00</div>
+        <button class="foundation__step-add">Add to Bag</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. GLOW BABIES DELUXE KIT -->
+  <section class="kit">
+    <div class="kit__left">
+      <div class="kit__stack">
+        <div class="kit__stack-item"></div>
+        <div class="kit__stack-item"></div>
+        <div class="kit__stack-item"></div>
+      </div>
+      <div class="kit__overlay">
+        <div class="subhead">Kits</div>
+        <h2>Glow Babies Deluxe Kit</h2>
+        <p>Lorem ipsum dolor sit amet consectetur. Sed enim faucibus in euismod elit maecenas et integer. Semper dui sapien molestie ultricies lorem lobortis sit felis auctor.</p>
+        <a href="#" class="btn btn-outline-dark">Shop the Bundle</a>
+      </div>
+    </div>
+    <div class="kit__right"></div>
+  </section>
+
+  <!-- 8. CERAMIDES / INGREDIENTS -->
+  <section class="ingredients">
+    <div class="ingredients__content">
+      <h2 class="ingredients__title">Ceramides</h2>
+      <p class="ingredients__desc">Ceramides support and reinforce the skin's natural barrier.</p>
+    </div>
+    <div class="ingredients__hotspot ingredients__hotspot--1 ingredients__hotspot--active">
+      <div class="ingredients__hotspot-inner">1</div>
+    </div>
+    <div class="ingredients__hotspot ingredients__hotspot--2">
+      <div class="ingredients__hotspot-inner">2</div>
+    </div>
+    <div class="ingredients__hotspot ingredients__hotspot--3">
+      <div class="ingredients__hotspot-inner">3</div>
+    </div>
+    <div class="ingredients__tooltip" id="ing-tooltip">
+      <div class="ingredients__tooltip-product"></div>
+      <div class="ingredients__tooltip-info">
+        <div class="ingredients__tooltip-name">Guava Glow Moisturizer</div>
+        <div class="ingredients__tooltip-sub">hydrating gel-cream</div>
+        <div class="ingredients__tooltip-price">$00.00</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. COMMUNITY -->
+  <section class="community">
+    <div class="community__header">
+      <div class="subhead">hiku + you</div>
+      <h2>Join the community</h2>
+    </div>
+    <div class="community__grid">
+      <div class="community__item"></div>
+      <div class="community__item community__item--text">Being part of hiku means having a say in what comes next.</div>
+      <div class="community__item"></div>
+      <div class="community__item"></div>
+      <div class="community__item"></div>
+      <div class="community__item"></div>
+      <div class="community__item"></div>
+      <div class="community__item"></div>
+    </div>
+  </section>
+
+  <!-- 10. FOOTER -->
+  <footer class="footer">
+    <div class="footer__hero">
+      <div class="footer__hero-image"></div>
+      <div class="footer__hero-image">
+        <div class="footer__hero-logo">hiku<sup>by harper</sup></div>
+      </div>
+      <div class="footer__hero-image"></div>
+    </div>
+    <div class="footer__main">
+      <div class="footer__newsletter">
+        <div class="subhead">Newsletter</div>
+        <h3>Connect with Us</h3>
+        <form class="footer__form" onsubmit="return false;">
+          <div class="footer__field">
+            <label>Email Address</label>
+            <input type="email" class="footer__input" placeholder="Email Address">
+          </div>
+          <div class="footer__field">
+            <label>Phone Number</label>
+            <input type="tel" class="footer__input" placeholder="Phone Number">
+          </div>
+          <p class="footer__consent">By providing your number and clicking the button, you agree to receive recurring auto-dialed marketing SMS (including cart reminders) and our <a href="#">Terms of Service</a> (including arbitration). Consent is not required to purchase. Msg & data rates may apply. Msg frequency varies. Reply HELP for help; STOP to opt-out. View <a href="#">Privacy Policy</a>.</p>
+          <button type="submit" class="btn btn-outline">Subscribe</button>
+        </form>
+      </div>
+      <div class="footer__links">
+        <div class="footer__col">
+          <div class="footer__col-title">Shop</div>
+          <a href="#">Shop All</a>
+          <a href="#">Cleanser & Toner</a>
+          <a href="#">Serum</a>
+          <a href="#">Moisturizer</a>
+          <a href="#">Mask & Scrub</a>
+          <a href="#">Lip Care</a>
+          <a href="#">Sets</a>
+        </div>
+        <div class="footer__col">
+          <div class="footer__col-title">About</div>
+          <a href="#">Our Story</a>
+          <a href="#">Find Your Ritual</a>
+          <a href="#">Ingredient Index</a>
+          <a href="#">Journal</a>
+        </div>
+        <div class="footer__col">
+          <div class="footer__col-title">Help</div>
+          <a href="#">Contact Us</a>
+          <a href="#">FAQs</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Shipping & Returns</a>
+        </div>
+        <div class="footer__col">
+          <div class="footer__col-title">Social</div>
+          <a href="#">Instagram</a>
+          <a href="#">Pinterest</a>
+          <a href="#">TikTok</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      &copy; 2026 Hiku Beauty. All Rights Reserved.
+    </div>
+  </footer>
+
+  <script>
+    // --- Foundation step card interaction ---
+    document.querySelectorAll('.foundation__step-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.foundation__step-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+      });
+    });
+
+    // --- Ingredients hotspot interaction ---
+    const ingData = [
+      { name: 'Guava Glow Moisturizer', sub: 'hydrating gel-cream', price: '$34.00', title: 'Ceramides', desc: 'Ceramides support and reinforce the skin\'s natural barrier.' },
+      { name: 'Green Juice Serum', sub: 'brightening treatment', price: '$38.00', title: 'Niacinamide', desc: 'Niacinamide helps calm redness and even out skin tone.' },
+      { name: 'Oak Milk Toner', sub: 'balancing prep', price: '$28.00', title: 'Hyaluronic Acid', desc: 'Hyaluronic acid draws moisture in and keeps skin hydrated.' },
+    ];
+    document.querySelectorAll('.ingredients__hotspot').forEach((btn, i) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.ingredients__hotspot').forEach(b => b.classList.remove('ingredients__hotspot--active'));
+        btn.classList.add('ingredients__hotspot--active');
+        const d = ingData[i];
+        const title = document.querySelector('.ingredients__title');
+        const desc = document.querySelector('.ingredients__desc');
+        const tooltip = document.getElementById('ing-tooltip');
+        title.textContent = d.title;
+        desc.textContent = d.desc;
+        tooltip.querySelector('.ingredients__tooltip-name').textContent = d.name;
+        tooltip.querySelector('.ingredients__tooltip-sub').textContent = d.sub;
+        tooltip.querySelector('.ingredients__tooltip-price').textContent = d.price;
+      });
+    });
+  </script>
+
+</body>
+</html>
