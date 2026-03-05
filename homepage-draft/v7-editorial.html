@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hiku by harper — The Editorial</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       HIKU V7 — The Editorial
+       Magazine-style, room-to-room experience
+       JW Anderson + Lori Rugs inspired
+       ======================================== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --pink: #F5E6E0;
+      --brown: #3D1C1E;
+      --rosewood: #C4A0A7;
+      --almond: #FDF8F5;
+      --mauve: #B8A0B8;
+      --vivid-pink: #E782A9;
+      --baby-blue: #B8D4E8;
+      --oat-matcha: #C4CFA0;
+      --stone-300: #D6D3D1;
+      --stone-400: #A6A09B;
+      --serif: 'Playfair Display', 'Big Caslon', Georgia, serif;
+      --sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --ease-premium: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 1.2;
+      color: var(--brown);
+      background: var(--almond);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    body.door-locked { overflow: hidden; }
+    h1, h2, h3, h4 { font-family: var(--serif); font-weight: 500; line-height: 1.1; }
+    .subhead { font-family: var(--sans); font-weight: 700; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; }
+    .btn {
+      display: inline-block; font-family: var(--sans); font-weight: 500; font-size: 12px;
+      line-height: 1; padding: 14px 28px; border-radius: 4px; text-decoration: none;
+      cursor: pointer; border: none; position: relative; overflow: hidden;
+      transition: transform 0.3s var(--ease-spring), box-shadow 0.3s ease;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { background: var(--brown); color: var(--almond); box-shadow: 0 4px 16px rgba(61,28,30,0.2); }
+    .btn-primary:hover { box-shadow: 0 8px 28px rgba(61,28,30,0.3); }
+    .btn-outline { background: transparent; color: var(--almond); border: 1px solid rgba(253,248,245,0.5); }
+    .btn-outline:hover { border-color: var(--almond); background: rgba(253,248,245,0.08); }
+    .btn-outline-dark { background: transparent; color: var(--brown); border: 1px solid rgba(61,28,30,0.2); }
+    .btn-outline-dark:hover { border-color: var(--brown); background: rgba(61,28,30,0.04); }
+
+    /* Scroll Reveal */
+    .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-left { opacity: 0; transform: translateX(-60px); transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo); }
+    .reveal-left.visible { opacity: 1; transform: translateX(0); }
+    .reveal-right { opacity: 0; transform: translateX(60px); transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo); }
+    .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+    /* ============================
+       DOOR OPENING
+       ============================ */
+    .door-overlay { position: fixed; inset: 0; z-index: 9999; pointer-events: none; display: flex; }
+    .door-panel { width: 50%; height: 100%; background: var(--brown); display: flex; align-items: center; justify-content: center; transition: transform 1.4s var(--ease-out-expo); will-change: transform; }
+    .door-panel--left { transform: translateX(0); justify-content: flex-end; padding-right: 8px; }
+    .door-panel--right { transform: translateX(0); justify-content: flex-start; padding-left: 8px; }
+    .door-overlay.open .door-panel--left { transform: translateX(-100%); }
+    .door-overlay.open .door-panel--right { transform: translateX(100%); }
+    .door-logo { font-family: var(--serif); font-size: 72px; font-weight: 600; color: var(--almond); letter-spacing: -0.03em; transition: opacity 0.3s ease; }
+    .door-overlay.open .door-logo { opacity: 0; }
+    .door-logo sup { font-size: 12px; font-style: italic; font-weight: 400; opacity: 0.5; }
+    .door-overlay::after { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: rgba(253,248,245,0.1); transform: translateX(-50%); transition: opacity 0.4s; }
+    .door-overlay.open::after { opacity: 0; }
+    .door-panel::before { content: ''; position: absolute; inset: 0; background: linear-gradient(45deg, transparent 40%, rgba(253,248,245,0.03) 50%, transparent 60%); animation: doorShimmer 2s ease-in-out infinite; }
+    @keyframes doorShimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+    /* ============================
+       1. BANNER
+       ============================ */
+    .banner { background: var(--brown); height: 41px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--almond); letter-spacing: 0.02em; }
+
+    /* ============================
+       2. NAV
+       ============================ */
+    .nav { background: var(--brown); height: 80px; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; position: sticky; top: 0; z-index: 100; transition: box-shadow 0.3s; }
+    .nav--scrolled { box-shadow: 0 4px 30px rgba(61,28,30,0.15); }
+    .nav__logo-wrap { position: relative; display: inline-flex; align-items: center; }
+    .nav__logo { font-family: var(--serif); font-size: 28px; font-weight: 600; color: var(--almond); text-decoration: none; letter-spacing: -0.02em; }
+    .nav__logo sup { font-size: 9px; font-style: italic; font-weight: 400; opacity: 0.6; vertical-align: super; margin-left: 2px; }
+    /* Otter paw on logo hover */
+    .nav__otter-paw { position: absolute; right: -36px; top: 50%; transform: translateY(-50%) translateX(10px) rotate(-15deg); opacity: 0; transition: opacity 0.3s, transform 0.5s var(--ease-spring); pointer-events: none; }
+    .nav__logo-wrap:hover .nav__otter-paw { opacity: 1; transform: translateY(-50%) translateX(0) rotate(0deg); animation: pawWiggle 0.6s ease-in-out 0.3s; }
+    .paw { width: 28px; height: 28px; position: relative; }
+    .paw__pad { position: absolute; background: #C4A882; border-radius: 50%; }
+    .paw__pad--main { width: 16px; height: 14px; bottom: 0; left: 50%; transform: translateX(-50%); border-radius: 50% 50% 40% 40%; }
+    .paw__pad--1 { width: 7px; height: 7px; top: 2px; left: 1px; }
+    .paw__pad--2 { width: 8px; height: 7px; top: 0; left: 10px; }
+    .paw__pad--3 { width: 7px; height: 7px; top: 4px; right: 0; }
+    @keyframes pawWiggle { 0%, 100% { transform: translateY(-50%) rotate(0deg); } 25% { transform: translateY(-50%) rotate(8deg); } 75% { transform: translateY(-50%) rotate(-5deg); } }
+    .nav__right { display: flex; align-items: center; gap: 8px; }
+    .nav__link { color: var(--almond); text-decoration: none; font-size: 13px; padding: 10px 14px; opacity: 0.85; transition: opacity 0.2s; position: relative; }
+    .nav__link:hover { opacity: 1; }
+    .nav__link::after { content: ''; position: absolute; bottom: 4px; left: 14px; right: 14px; height: 1px; background: var(--almond); transform: scaleX(0); transform-origin: right; transition: transform 0.4s var(--ease-premium); }
+    .nav__link:hover::after { transform: scaleX(1); transform-origin: left; }
+    .nav__cta { margin-left: 12px; }
+    .nav__icons { display: flex; gap: 18px; margin-left: 24px; }
+    .nav__icon { color: var(--almond); opacity: 0.65; cursor: pointer; background: none; border: none; font-size: 15px; transition: opacity 0.2s, transform 0.2s; }
+    .nav__icon:hover { opacity: 1; transform: scale(1.1); }
+
+    /* ============================
+       3. HERO — Full-bleed Editorial
+       Cinematic typography, split layout
+       ============================ */
+    .hero {
+      min-height: 100vh;
+      max-height: 960px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero__left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 64px 80px 80px;
+      position: relative;
+      background: var(--almond);
+      z-index: 2;
+    }
+    .hero__tagline {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--rosewood);
+      margin-bottom: 32px;
+    }
+    .hero__title {
+      font-family: var(--serif);
+      font-size: 72px;
+      font-weight: 500;
+      line-height: 1.02;
+      margin-bottom: 32px;
+      color: var(--brown);
+    }
+    .hero__title .word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(100%);
+      transition: opacity 0.7s var(--ease-premium), transform 0.7s var(--ease-premium);
+    }
+    .hero__title.animate .word { opacity: 1; transform: translateY(0); }
+    .hero__subtitle {
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--stone-400);
+      margin-bottom: 40px;
+      max-width: 420px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease 0.6s, transform 0.6s ease 0.6s;
+    }
+    .hero__subtitle.animate { opacity: 1; transform: translateY(0); }
+    .hero__ctas {
+      display: flex;
+      gap: 16px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease 0.8s, transform 0.6s ease 0.8s;
+    }
+    .hero__ctas.animate { opacity: 1; transform: translateY(0); }
+    .hero__right {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero__image-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      height: 100%;
+      gap: 3px;
+    }
+    .hero__image-cell {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero__image-cell-inner {
+      width: 100%;
+      height: 100%;
+      transition: transform 0.8s var(--ease-premium);
+    }
+    .hero__image-cell:hover .hero__image-cell-inner { transform: scale(1.06); }
+    .hero__image-cell--1 .hero__image-cell-inner { background: linear-gradient(160deg, var(--pink) 20%, var(--rosewood)); }
+    .hero__image-cell--2 .hero__image-cell-inner { background: linear-gradient(160deg, var(--oat-matcha) 20%, #a8b880); }
+    .hero__image-cell--3 .hero__image-cell-inner { background: linear-gradient(160deg, var(--baby-blue) 10%, #90b4cc); }
+    .hero__image-cell--4 .hero__image-cell-inner { background: linear-gradient(160deg, var(--mauve) 20%, #a090a0); }
+    /* Clip path entrance */
+    .hero__image-cell { clip-path: inset(100% 0 0 0); transition: clip-path 0.8s var(--ease-out-expo); }
+    .hero__image-cell.visible { clip-path: inset(0); }
+    /* Editorial label on hero cells */
+    .hero__image-label {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      font-family: var(--serif);
+      font-size: 14px;
+      font-style: italic;
+      color: rgba(61,28,30,0.6);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.3s, transform 0.3s var(--ease-spring);
+    }
+    .hero__image-cell:hover .hero__image-label { opacity: 1; transform: translateY(0); }
+
+    /* Otter peeking from between hero halves */
+    .hero__otter-peek {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(30px);
+      z-index: 5;
+      transition: transform 0.5s var(--ease-spring);
+      cursor: pointer;
+    }
+    .hero__otter-peek:hover { transform: translateX(-50%) translateY(10px); }
+    .otter-mini { width: 50px; height: 45px; position: relative; }
+    .otter-mini__head { width: 36px; height: 30px; background: #8B6F5E; border-radius: 50%; position: absolute; top: 0; left: 7px; }
+    .otter-mini__ear { width: 8px; height: 8px; background: #7A5F4E; border-radius: 50%; position: absolute; top: -2px; }
+    .otter-mini__ear--l { left: 3px; }
+    .otter-mini__ear--r { right: 3px; }
+    .otter-mini__eye { width: 4px; height: 4px; background: #2A1A10; border-radius: 50%; position: absolute; top: 12px; animation: otterBlink 4s ease-in-out infinite; }
+    .otter-mini__eye--l { left: 9px; }
+    .otter-mini__eye--r { right: 9px; }
+    .otter-mini__nose { width: 10px; height: 6px; background: #5A4535; border-radius: 50%; position: absolute; bottom: 6px; left: 13px; }
+    .otter-mini__paws { position: absolute; bottom: 0; left: 5px; right: 5px; height: 18px; }
+    .otter-mini__paw { width: 14px; height: 12px; background: #8B6F5E; border-radius: 50%; position: absolute; bottom: 0; }
+    .otter-mini__paw--l { left: 0; }
+    .otter-mini__paw--r { right: 0; }
+    @keyframes otterBlink { 0%, 45%, 55%, 100% { transform: scaleY(1); } 50% { transform: scaleY(0.1); } }
+
+    /* ============================
+       MARQUEE TICKER
+       ============================ */
+    .ticker {
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 18px 0;
+      border-top: 1px solid rgba(61,28,30,0.06);
+      border-bottom: 1px solid rgba(61,28,30,0.06);
+    }
+    .ticker--dark { background: var(--brown); border-color: rgba(253,248,245,0.06); }
+    .ticker__track {
+      display: inline-flex;
+      animation: tickerScroll 30s linear infinite;
+    }
+    .ticker--dark .ticker__item { color: var(--almond); }
+    .ticker__item {
+      font-family: var(--serif);
+      font-size: 18px;
+      font-style: italic;
+      color: var(--brown);
+      padding: 0 40px;
+      opacity: 0.5;
+    }
+    .ticker__item span {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--rosewood);
+      margin-right: 40px;
+      vertical-align: middle;
+    }
+    @keyframes tickerScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+    /* ============================
+       4. PRODUCT EDITORIAL GRID — "The Room"
+       Large hero product + supporting grid
+       ============================ */
+    .room {
+      position: relative;
+      transition: background 0.6s;
+    }
+    .room--products {
+      padding: 100px 48px 80px;
+      background: var(--almond);
+    }
+    .room__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 56px;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .room__header-left .subhead { color: var(--rosewood); margin-bottom: 12px; }
+    .room__header-left h2 { font-size: 48px; line-height: 1.05; }
+    .room__header-right { display: flex; gap: 12px; align-items: center; }
+
+    /* Product grid — editorial magazine layout */
+    .product-editorial {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      grid-template-rows: 420px 320px;
+      gap: 16px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .product-editorial__card {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.5s var(--ease-spring);
+    }
+    .product-editorial__card:hover { transform: scale(0.98); }
+    .product-editorial__card--hero { grid-row: span 2; }
+    .product-editorial__bg {
+      position: absolute;
+      inset: 0;
+      transition: transform 0.8s var(--ease-premium);
+    }
+    .product-editorial__card:hover .product-editorial__bg { transform: scale(1.05); }
+
+    /* JW Anderson-style overlay on hover */
+    .product-editorial__overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 28px;
+      background: linear-gradient(180deg, transparent 40%, rgba(61,28,30,0.5));
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .product-editorial__card:hover .product-editorial__overlay { opacity: 1; }
+    .product-editorial__overlay-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(253,248,245,0.6); margin-bottom: 4px; }
+    .product-editorial__overlay-name { font-family: var(--serif); font-size: 24px; color: var(--almond); margin-bottom: 6px; }
+    .product-editorial__overlay-price { font-size: 14px; color: rgba(253,248,245,0.8); margin-bottom: 12px; }
+    .product-editorial__overlay-quote { font-family: var(--serif); font-style: italic; font-size: 14px; color: rgba(253,248,245,0.7); line-height: 1.4; }
+    .product-editorial__card--hero .product-editorial__overlay-name { font-size: 36px; }
+
+    /* Persistent name under card */
+    .product-editorial__info { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px 24px; }
+    .product-editorial__name { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--brown); }
+    .product-editorial__price { font-size: 12px; color: var(--stone-400); margin-top: 2px; }
+    /* All view link */
+    .room__view-all { display: block; text-align: center; margin-top: 48px; }
+    .room__view-all a { font-size: 13px; color: var(--brown); text-decoration: none; position: relative; }
+    .room__view-all a::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 1px; background: var(--brown); transform: scaleX(0); transform-origin: right; transition: transform 0.4s var(--ease-premium); }
+    .room__view-all a:hover::after { transform: scaleX(1); transform-origin: left; }
+
+    /* ============================
+       5. PULL QUOTE — Full width editorial moment
+       ============================ */
+    .pull-quote {
+      padding: 100px 80px;
+      text-align: center;
+      background: var(--pink);
+      position: relative;
+    }
+    .pull-quote__text {
+      font-family: var(--serif);
+      font-size: 56px;
+      font-weight: 400;
+      line-height: 1.12;
+      color: var(--brown);
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .pull-quote__attr {
+      font-size: 13px;
+      color: var(--rosewood);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 28px;
+    }
+
+    /* ============================
+       6. HORIZONTAL LOOKBOOK — Scrolling editorial images
+       ============================ */
+    .lookbook {
+      padding: 80px 0 80px 80px;
+      background: var(--almond);
+      overflow: hidden;
+    }
+    .lookbook__header { margin-bottom: 48px; }
+    .lookbook__header .subhead { color: var(--rosewood); margin-bottom: 12px; }
+    .lookbook__header h2 { font-size: 42px; }
+    .lookbook__scroll {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 20px;
+      padding-right: 80px;
+      scrollbar-width: none;
+      cursor: grab;
+    }
+    .lookbook__scroll::-webkit-scrollbar { display: none; }
+    .lookbook__scroll:active { cursor: grabbing; }
+    .lookbook__item {
+      flex: 0 0 380px;
+      scroll-snap-align: start;
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.4s var(--ease-spring);
+    }
+    .lookbook__item:hover { transform: scale(0.97); }
+    .lookbook__item-image {
+      width: 100%;
+      height: 480px;
+      transition: transform 0.8s var(--ease-premium);
+    }
+    .lookbook__item:hover .lookbook__item-image { transform: scale(1.05); }
+    .lookbook__item-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 60px 24px 24px;
+      background: linear-gradient(180deg, transparent, rgba(61,28,30,0.6));
+      color: var(--almond);
+    }
+    .lookbook__item-title { font-family: var(--serif); font-size: 20px; margin-bottom: 4px; }
+    .lookbook__item-sub { font-size: 12px; opacity: 0.7; }
+    .lookbook__item-tag {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: rgba(253,248,245,0.85);
+      backdrop-filter: blur(8px);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--brown);
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity 0.3s, transform 0.3s var(--ease-spring);
+    }
+    .lookbook__item:hover .lookbook__item-tag { opacity: 1; transform: translateY(0); }
+
+    /* ============================
+       7. BRAND STORY — Magazine Spread
+       ============================ */
+    .spread {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 600px;
+    }
+    .spread__image {
+      position: relative;
+      overflow: hidden;
+    }
+    .spread__image-inner {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(160deg, var(--pink), var(--rosewood) 50%, var(--mauve) 90%);
+      transition: transform 0.8s var(--ease-premium);
+    }
+    .spread:hover .spread__image-inner { transform: scale(1.03); }
+    /* Large editorial issue number */
+    .spread__issue {
+      position: absolute;
+      bottom: 24px;
+      left: 28px;
+      font-family: var(--serif);
+      font-size: 120px;
+      font-weight: 600;
+      color: rgba(253,248,245,0.08);
+      line-height: 1;
+    }
+    .spread__text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 80px;
+      background: var(--almond);
+    }
+    .spread__text .subhead { color: var(--rosewood); margin-bottom: 20px; }
+    .spread__text h2 { font-size: 48px; margin-bottom: 28px; line-height: 1.05; }
+    .spread__text p { font-size: 15px; line-height: 1.7; color: var(--stone-400); margin-bottom: 16px; max-width: 440px; }
+    .spread__text p:last-of-type { font-family: var(--serif); font-style: italic; font-size: 20px; color: var(--brown); margin-top: 16px; }
+
+    /* ============================
+       8. RITUAL — Vertical Steps with large numbering
+       ============================ */
+    .ritual {
+      padding: 100px 48px;
+      background: var(--pink);
+    }
+    .ritual__header {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 72px;
+    }
+    .ritual__header .subhead { color: var(--rosewood); margin-bottom: 12px; }
+    .ritual__header h2 { font-size: 48px; margin-bottom: 16px; }
+    .ritual__header p { font-size: 15px; color: var(--stone-400); line-height: 1.6; }
+    .ritual__steps {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .ritual__step { text-align: center; position: relative; }
+    .ritual__step-num {
+      font-family: var(--serif);
+      font-size: 80px;
+      font-weight: 600;
+      color: rgba(61,28,30,0.04);
+      line-height: 1;
+      margin-bottom: -16px;
+      position: relative;
+      z-index: 0;
+      transition: color 0.3s;
+    }
+    .ritual__step:hover .ritual__step-num { color: rgba(61,28,30,0.08); }
+    .ritual__step-image {
+      width: 100%;
+      aspect-ratio: 3/4;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.5s var(--ease-spring), box-shadow 0.5s;
+    }
+    .ritual__step-image:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 48px rgba(196,160,167,0.3); }
+    .ritual__step:nth-child(1) .ritual__step-image { background: linear-gradient(160deg, var(--oat-matcha) 20%, #b8c490); }
+    .ritual__step:nth-child(2) .ritual__step-image { background: linear-gradient(160deg, #ede0d4 20%, var(--pink)); }
+    .ritual__step:nth-child(3) .ritual__step-image { background: linear-gradient(160deg, var(--baby-blue) 10%, #a8c4d8); }
+    .ritual__step:nth-child(4) .ritual__step-image { background: linear-gradient(160deg, var(--vivid-pink) 10%, var(--pink)); }
+    .ritual__step:nth-child(5) .ritual__step-image { background: linear-gradient(160deg, var(--rosewood) 10%, var(--mauve)); }
+    .ritual__step-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--rosewood); margin-bottom: 6px; }
+    .ritual__step-name { font-family: var(--serif); font-size: 16px; margin-bottom: 4px; }
+    .ritual__step-desc { font-size: 12px; color: var(--stone-400); line-height: 1.4; }
+    .ritual__cta { text-align: center; margin-top: 56px; }
+
+    /* ============================
+       9. DIFFERENTIATOR BANNER
+       ============================ */
+    .diff-banner {
+      background: var(--brown);
+      padding: 48px;
+    }
+    .diff-banner__inner {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+    .diff-banner__item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--almond);
+      font-size: 13px;
+      letter-spacing: 0.03em;
+    }
+    .diff-banner__icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(253,248,245,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    /* ============================
+       10. SOCIAL STORIES — Editorial UGC
+       ============================ */
+    .stories {
+      padding: 80px 48px;
+      background: var(--almond);
+      overflow: hidden;
+    }
+    .stories__header { text-align: center; margin-bottom: 48px; }
+    .stories__header .subhead { color: var(--rosewood); margin-bottom: 12px; }
+    .stories__header p { font-size: 15px; color: var(--stone-400); margin-top: 12px; }
+    .stories__carousel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      height: 520px;
+      position: relative;
+    }
+    .stories__card {
+      width: 240px;
+      height: 420px;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: all 0.5s var(--ease-spring);
+    }
+    .stories__card--center { width: 300px; height: 500px; z-index: 2; }
+    .stories__card:hover { transform: scale(1.03); box-shadow: 0 20px 60px rgba(61,28,30,0.15); }
+    .stories__card-progress { position: absolute; top: 12px; left: 12px; right: 12px; display: flex; gap: 4px; z-index: 3; }
+    .stories__card-progress-seg { flex: 1; height: 2px; background: rgba(255,255,255,0.3); border-radius: 1px; overflow: hidden; }
+    .stories__card-progress-seg.active { background: rgba(255,255,255,0.9); }
+    .stories__card-progress-seg.active::after { content: ''; display: block; height: 100%; background: white; animation: storyProgress 5s linear forwards; }
+    @keyframes storyProgress { 0% { width: 0; } 100% { width: 100%; } }
+    .stories__card-user { position: absolute; top: 24px; left: 12px; display: flex; align-items: center; gap: 8px; z-index: 3; }
+    .stories__card-avatar { width: 28px; height: 28px; border-radius: 50%; border: 2px solid white; background: rgba(255,255,255,0.3); }
+    .stories__card-username { font-size: 11px; color: white; font-weight: 600; text-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+    .stories__card-tag {
+      position: absolute; bottom: 16px; left: 12px; right: 12px;
+      background: rgba(255,255,255,0.9); backdrop-filter: blur(8px);
+      border-radius: 8px; padding: 10px 14px;
+      display: flex; align-items: center; gap: 10px; z-index: 3;
+      opacity: 0; transform: translateY(8px);
+      transition: opacity 0.3s, transform 0.3s var(--ease-spring);
+    }
+    .stories__card:hover .stories__card-tag { opacity: 1; transform: translateY(0); }
+    .stories__card-tag-thumb { width: 32px; height: 32px; border-radius: 6px; background: var(--pink); flex-shrink: 0; }
+    .stories__card-tag-name { font-size: 11px; font-weight: 600; }
+    .stories__card-tag-price { font-size: 11px; color: var(--stone-400); }
+
+    /* ============================
+       11. CRYSTAL BALL
+       ============================ */
+    .quiz {
+      padding: 120px 48px;
+      text-align: center;
+      background: linear-gradient(180deg, var(--almond) 0%, var(--pink) 50%, var(--almond) 100%);
+    }
+    .quiz__ball {
+      width: 280px; height: 280px; border-radius: 50%; margin: 0 auto 40px;
+      cursor: pointer;
+      background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.7), rgba(196,160,167,0.25) 20%, rgba(184,160,184,0.35) 40%, rgba(231,130,169,0.2) 60%, rgba(196,160,167,0.45) 80%, rgba(61,28,30,0.1));
+      box-shadow: 0 0 60px rgba(196,160,167,0.3), inset 0 0 60px rgba(255,255,255,0.2);
+      animation: ballFloat 5s ease-in-out infinite;
+      transition: transform 0.5s var(--ease-out-expo), box-shadow 0.5s;
+      display: flex; align-items: center; justify-content: center; padding: 48px;
+    }
+    .quiz__ball:hover { transform: scale(1.06); box-shadow: 0 0 100px rgba(196,160,167,0.5), inset 0 0 80px rgba(255,255,255,0.3); }
+    @keyframes ballFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    .quiz__ball-text { font-family: var(--serif); font-style: italic; font-size: 16px; color: var(--brown); opacity: 0.6; line-height: 1.4; }
+    .quiz .subhead { color: var(--rosewood); margin-bottom: 12px; }
+    .quiz h2 { font-size: 36px; margin-bottom: 16px; }
+    .quiz__sub { font-size: 15px; color: var(--stone-400); margin-bottom: 32px; }
+
+    /* ============================
+       12. COMMUNITY
+       ============================ */
+    .community { padding: 80px 48px; background: var(--almond); }
+    .community__header { text-align: center; margin-bottom: 48px; }
+    .community__header .subhead { color: var(--rosewood); margin-bottom: 12px; }
+    .community__header p { font-size: 15px; color: var(--stone-400); margin-top: 16px; max-width: 400px; margin-left: auto; margin-right: auto; }
+    .community__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: 280px 200px;
+      gap: 12px;
+      max-width: 1200px;
+      margin: 0 auto 48px;
+    }
+    .community__item {
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.4s var(--ease-spring);
+      clip-path: inset(0 0 100% 0);
+    }
+    .community__item.visible { clip-path: inset(0); transition: clip-path 0.8s var(--ease-premium), transform 0.4s var(--ease-spring); }
+    .community__item:hover { transform: scale(1.03); z-index: 2; }
+    .community__item:nth-child(1) { grid-column: span 2; background: linear-gradient(135deg, var(--pink), var(--rosewood)); }
+    .community__item:nth-child(2) { background: linear-gradient(135deg, var(--oat-matcha), #b8c490); }
+    .community__item:nth-child(3) { background: linear-gradient(135deg, var(--mauve), #c8b8c8); }
+    .community__item:nth-child(4) { background: linear-gradient(135deg, var(--baby-blue), #a8c4d8); }
+    .community__item:nth-child(5) { background: linear-gradient(135deg, var(--vivid-pink), var(--pink)); }
+    .community__item:nth-child(6) { background: linear-gradient(135deg, var(--rosewood), var(--mauve)); }
+    .community__item:nth-child(7) { background: linear-gradient(135deg, var(--pink), var(--vivid-pink)); }
+    .community__cta { text-align: center; }
+
+    /* ============================
+       13. FOOTER + OTTERS
+       ============================ */
+    .footer { background: var(--brown); color: var(--almond); }
+    .footer__hero { display: grid; grid-template-columns: 1fr 1fr 1fr; height: 300px; }
+    .footer__hero-img:nth-child(1) { background: radial-gradient(ellipse at 50% 45%, #a07868, #704838 60%, var(--brown)); }
+    .footer__hero-img:nth-child(2) { display: flex; align-items: center; justify-content: center; }
+    .footer__hero-logo { font-family: var(--serif); font-size: 100px; font-weight: 600; color: var(--almond); letter-spacing: -0.03em; opacity: 0.9; }
+    .footer__hero-logo sup { font-size: 14px; font-style: italic; font-weight: 400; opacity: 0.5; }
+    .footer__hero-img:nth-child(3) { background: radial-gradient(ellipse at 50% 50%, #b08878, #806858 60%, var(--brown)); }
+    .footer__main { display: grid; grid-template-columns: 1fr 1fr; padding: 64px 48px 40px; gap: 64px; }
+    .footer__newsletter .subhead { color: rgba(253,248,245,0.5); margin-bottom: 14px; }
+    .footer__newsletter h3 { font-size: 32px; color: var(--almond); margin-bottom: 28px; }
+    .footer__form { display: flex; flex-direction: column; gap: 14px; max-width: 340px; }
+    .footer__field { position: relative; }
+    .footer__field label { position: absolute; top: -7px; left: 12px; font-size: 10px; color: rgba(253,248,245,0.35); background: var(--brown); padding: 0 4px; }
+    .footer__input { width: 100%; background: transparent; border: 1px solid rgba(253,248,245,0.2); border-radius: 4px; padding: 14px 16px; color: var(--almond); font-family: var(--sans); font-size: 13px; outline: none; transition: border-color 0.3s; }
+    .footer__input:focus { border-color: var(--rosewood); }
+    .footer__input::placeholder { color: rgba(253,248,245,0.2); }
+    .footer__consent { font-size: 10px; color: rgba(253,248,245,0.25); line-height: 1.5; }
+    .footer__consent a { color: var(--rosewood); text-decoration: underline; }
+    .footer__links { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; align-content: start; }
+    .footer__col-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; }
+    .footer__col a { display: block; color: rgba(253,248,245,0.4); text-decoration: none; font-size: 13px; padding: 4px 0; transition: color 0.2s, transform 0.2s; }
+    .footer__col a:hover { color: var(--almond); transform: translateX(3px); }
+
+    /* Otter zone */
+    .otter-zone { position: relative; height: 120px; margin: 0 48px; border-top: 1px solid rgba(253,248,245,0.06); overflow: hidden; }
+    .otter { position: absolute; width: 60px; height: 60px; cursor: grab; user-select: none; top: 30px; z-index: 10; }
+    .otter:active { cursor: grabbing; }
+    .otter--left { left: 15%; animation: otterBob1 3s ease-in-out infinite; }
+    .otter--right { right: 15%; animation: otterBob2 3.5s ease-in-out infinite; }
+    @keyframes otterBob1 { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-8px) rotate(3deg); } }
+    @keyframes otterBob2 { 0%, 100% { transform: translateY(-5px) rotate(3deg); } 50% { transform: translateY(3px) rotate(-3deg); } }
+    .otter.dragging { animation: none !important; z-index: 20; }
+    .otter__body { width: 60px; height: 60px; position: relative; }
+    .otter__torso { width: 40px; height: 50px; background: #8B6F5E; border-radius: 20px 20px 16px 16px; position: absolute; top: 5px; left: 10px; }
+    .otter__belly { width: 28px; height: 32px; background: #C4A882; border-radius: 14px 14px 12px 12px; position: absolute; top: 14px; left: 16px; }
+    .otter__head { width: 32px; height: 28px; background: #8B6F5E; border-radius: 50%; position: absolute; top: -4px; left: 14px; }
+    .otter__ear { width: 8px; height: 8px; background: #7A5F4E; border-radius: 50%; position: absolute; top: -2px; }
+    .otter__ear--l { left: 2px; }
+    .otter__ear--r { right: 2px; }
+    .otter__nose { width: 10px; height: 7px; background: #5A4535; border-radius: 50%; position: absolute; bottom: 6px; left: 11px; }
+    .otter__eye { width: 4px; height: 4px; background: #2A1A10; border-radius: 50%; position: absolute; top: 10px; }
+    .otter__eye--l { left: 8px; }
+    .otter__eye--r { right: 8px; }
+    .otter__paw { width: 12px; height: 10px; background: #8B6F5E; border-radius: 50%; position: absolute; bottom: 2px; }
+    .otter__paw--l { left: 6px; }
+    .otter__paw--r { right: 6px; }
+    .otter__reach { position: absolute; width: 14px; height: 6px; background: #8B6F5E; border-radius: 50%; top: 30px; opacity: 0; transition: opacity 0.3s; }
+    .otter--left .otter__reach { right: -8px; }
+    .otter--right .otter__reach { left: -8px; }
+    .otter.reaching .otter__reach { opacity: 1; }
+    .otter-hearts { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 30; opacity: 0; transition: opacity 0.4s; }
+    .otter-hearts.show { opacity: 1; }
+    .otter-hearts span { position: absolute; font-size: 20px; animation: heartPop 1.5s ease-out forwards; }
+    .otter-hearts span:nth-child(1) { left: -10px; top: -20px; }
+    .otter-hearts span:nth-child(2) { left: 10px; top: -30px; animation-delay: 0.2s; }
+    .otter-hearts span:nth-child(3) { left: 0; top: -25px; animation-delay: 0.4s; }
+    @keyframes heartPop { 0% { transform: scale(0) translateY(0); opacity: 0; } 30% { transform: scale(1.2) translateY(-10px); opacity: 1; } 100% { transform: scale(0.8) translateY(-40px); opacity: 0; } }
+    .otter-secret { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(253,248,245,0.95); color: var(--brown); padding: 20px 32px; border-radius: 12px; text-align: center; font-size: 13px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); opacity: 0; pointer-events: none; transition: opacity 0.5s; z-index: 40; white-space: nowrap; }
+    .otter-secret.show { opacity: 1; pointer-events: auto; }
+    .otter-secret__title { font-family: var(--serif); font-size: 18px; margin-bottom: 6px; }
+    .otter-secret__code { display: inline-block; background: var(--brown); color: var(--almond); padding: 6px 16px; border-radius: 4px; font-weight: 700; letter-spacing: 0.1em; margin-top: 8px; }
+    .otter-secret__sub { font-size: 11px; color: var(--stone-400); margin-top: 6px; }
+    .otter-zone__hint { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); font-size: 10px; color: rgba(253,248,245,0.15); }
+
+    .footer__bottom { padding: 24px 48px; border-top: 1px solid rgba(253,248,245,0.06); font-size: 11px; color: rgba(253,248,245,0.2); }
+  </style>
+</head>
+<body class="door-locked">
+
+  <!-- DOOR OPENING -->
+  <div class="door-overlay" id="door-overlay">
+    <div class="door-panel door-panel--left"><span class="door-logo">hiku</span></div>
+    <div class="door-panel door-panel--right"><span class="door-logo"><sup>by harper</sup></span></div>
+  </div>
+
+  <!-- 1. BANNER -->
+  <div class="banner"><span>Free standard shipping on orders $40+</span></div>
+
+  <!-- 2. NAV -->
+  <nav class="nav" id="nav">
+    <div class="nav__logo-wrap">
+      <a href="#" class="nav__logo">hiku<sup>by harper</sup></a>
+      <div class="nav__otter-paw"><div class="paw"><div class="paw__pad paw__pad--1"></div><div class="paw__pad paw__pad--2"></div><div class="paw__pad paw__pad--3"></div><div class="paw__pad paw__pad--main"></div></div></div>
+    </div>
+    <div class="nav__right">
+      <a href="#" class="nav__link">Shop +</a>
+      <a href="#" class="nav__link">About</a>
+      <a href="#" class="nav__link">Community</a>
+      <a href="#" class="btn btn-outline nav__cta">Find My Ritual</a>
+      <div class="nav__icons">
+        <button class="nav__icon" aria-label="Search">&#9906;</button>
+        <button class="nav__icon" aria-label="Account">@</button>
+        <button class="nav__icon" aria-label="Bag">&#9776;</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 3. HERO — Editorial Split -->
+  <section class="hero" id="hero">
+    <div class="hero__left">
+      <div class="hero__tagline">Issue No. 01 — Spring 2026</div>
+      <h1 class="hero__title" id="hero-title">Born from real journeys and real skin.</h1>
+      <p class="hero__subtitle" id="hero-subtitle">Skincare that supports who you already are — not who you're told to be. Created by Harper, age 15, for skin that deserves to be understood.</p>
+      <div class="hero__ctas" id="hero-ctas">
+        <a href="#" class="btn btn-primary">Shop the Ritual</a>
+        <a href="#" class="btn btn-outline-dark">Our Story</a>
+      </div>
+    </div>
+    <div class="hero__right">
+      <div class="hero__image-grid">
+        <div class="hero__image-cell hero__image-cell--1" id="hero-cell-1">
+          <div class="hero__image-cell-inner"></div>
+          <div class="hero__image-label">Skin textures</div>
+        </div>
+        <div class="hero__image-cell hero__image-cell--2" id="hero-cell-2">
+          <div class="hero__image-cell-inner"></div>
+          <div class="hero__image-label">Matcha Cleanser</div>
+        </div>
+        <div class="hero__image-cell hero__image-cell--3" id="hero-cell-3">
+          <div class="hero__image-cell-inner"></div>
+          <div class="hero__image-label">Green Juice Serum</div>
+        </div>
+        <div class="hero__image-cell hero__image-cell--4" id="hero-cell-4">
+          <div class="hero__image-cell-inner"></div>
+          <div class="hero__image-label">The ritual</div>
+        </div>
+      </div>
+    </div>
+    <!-- Otter peek -->
+    <div class="hero__otter-peek" id="hero-otter">
+      <div class="otter-mini">
+        <div class="otter-mini__head">
+          <div class="otter-mini__ear otter-mini__ear--l"></div>
+          <div class="otter-mini__ear otter-mini__ear--r"></div>
+          <div class="otter-mini__eye otter-mini__eye--l"></div>
+          <div class="otter-mini__eye otter-mini__eye--r"></div>
+          <div class="otter-mini__nose"></div>
+        </div>
+        <div class="otter-mini__paws">
+          <div class="otter-mini__paw otter-mini__paw--l"></div>
+          <div class="otter-mini__paw otter-mini__paw--r"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="ticker__track">
+      <div class="ticker__item"><span></span>Fragrance-free</div>
+      <div class="ticker__item"><span></span>Vegan &amp; Cruelty-free</div>
+      <div class="ticker__item"><span></span>Non-comedogenic</div>
+      <div class="ticker__item"><span></span>Kind Calmplex&#8482;</div>
+      <div class="ticker__item"><span></span>Alcohol-free</div>
+      <div class="ticker__item"><span></span>Dermatologist-tested</div>
+      <div class="ticker__item"><span></span>Made for real skin</div>
+      <div class="ticker__item"><span></span>Fragrance-free</div>
+      <div class="ticker__item"><span></span>Vegan &amp; Cruelty-free</div>
+      <div class="ticker__item"><span></span>Non-comedogenic</div>
+      <div class="ticker__item"><span></span>Kind Calmplex&#8482;</div>
+      <div class="ticker__item"><span></span>Alcohol-free</div>
+      <div class="ticker__item"><span></span>Dermatologist-tested</div>
+      <div class="ticker__item"><span></span>Made for real skin</div>
+    </div>
+  </div>
+
+  <!-- 4. PRODUCT EDITORIAL GRID — "The Room" -->
+  <section class="room room--products">
+    <div class="room__header">
+      <div class="room__header-left">
+        <div class="subhead reveal">The Collection</div>
+        <h2 class="reveal reveal-delay-1">Shop our favourites</h2>
+      </div>
+      <div class="room__header-right">
+        <a href="#" class="btn btn-outline-dark reveal reveal-delay-2">View All</a>
+      </div>
+    </div>
+    <div class="product-editorial" id="product-grid">
+      <!-- Hero product — large -->
+      <div class="product-editorial__card product-editorial__card--hero reveal">
+        <div class="product-editorial__bg" style="background: linear-gradient(160deg, #e8ddd0 10%, #d0c4b4 40%, var(--pink));"></div>
+        <div class="product-editorial__overlay">
+          <div class="product-editorial__overlay-label">Hero Product</div>
+          <div class="product-editorial__overlay-name">Skincare Discovery Set</div>
+          <div class="product-editorial__overlay-price">$49.00</div>
+          <div class="product-editorial__overlay-quote">"Everything your skin needs in one beautiful box."</div>
+        </div>
+      </div>
+      <!-- Supporting products -->
+      <div class="product-editorial__card reveal reveal-delay-1">
+        <div class="product-editorial__bg" style="background: linear-gradient(160deg, var(--oat-matcha) 20%, #b0bc88);"></div>
+        <div class="product-editorial__overlay">
+          <div class="product-editorial__overlay-label">Cleanse</div>
+          <div class="product-editorial__overlay-name">Matcha Skin Cleanser</div>
+          <div class="product-editorial__overlay-price">$28.00</div>
+          <div class="product-editorial__overlay-quote">"Like a green juice for your face"</div>
+        </div>
+      </div>
+      <div class="product-editorial__card reveal reveal-delay-2">
+        <div class="product-editorial__bg" style="background: linear-gradient(160deg, var(--pink) 20%, #e0ccc4);"></div>
+        <div class="product-editorial__overlay">
+          <div class="product-editorial__overlay-label">Tone</div>
+          <div class="product-editorial__overlay-name">Oak Milk Toner</div>
+          <div class="product-editorial__overlay-price">$28.00</div>
+          <div class="product-editorial__overlay-quote">"Balances without stripping"</div>
+        </div>
+      </div>
+      <div class="product-editorial__card reveal reveal-delay-2">
+        <div class="product-editorial__bg" style="background: linear-gradient(160deg, var(--baby-blue) 10%, #a0b8cc);"></div>
+        <div class="product-editorial__overlay">
+          <div class="product-editorial__overlay-label">Treat</div>
+          <div class="product-editorial__overlay-name">Green Juice Serum</div>
+          <div class="product-editorial__overlay-price">$38.00</div>
+          <div class="product-editorial__overlay-quote">"The quiet worker your skin needs"</div>
+        </div>
+      </div>
+      <div class="product-editorial__card reveal reveal-delay-3">
+        <div class="product-editorial__bg" style="background: linear-gradient(160deg, var(--vivid-pink) 10%, var(--pink));"></div>
+        <div class="product-editorial__overlay">
+          <div class="product-editorial__overlay-label">Seal</div>
+          <div class="product-editorial__overlay-name">Guava Glow Moisturizer</div>
+          <div class="product-editorial__overlay-price">$34.00</div>
+          <div class="product-editorial__overlay-quote">"My skin has never felt this good"</div>
+        </div>
+      </div>
+    </div>
+    <div class="room__view-all reveal"><a href="#">Explore the full collection &#8594;</a></div>
+  </section>
+
+  <!-- 5. PULL QUOTE -->
+  <section class="pull-quote">
+    <div class="pull-quote__text reveal">&#8220;The coolest thing you can be is yourself.&#8221;</div>
+    <div class="pull-quote__attr reveal reveal-delay-1">&#8212; Hiku by Harper</div>
+  </section>
+
+  <!-- 6. HORIZONTAL LOOKBOOK -->
+  <section class="lookbook">
+    <div class="lookbook__header">
+      <div class="subhead reveal">The Lookbook</div>
+      <h2 class="reveal reveal-delay-1">Skin stories</h2>
+    </div>
+    <div class="lookbook__scroll" id="lookbook-scroll">
+      <div class="lookbook__item">
+        <div class="lookbook__item-image" style="background: linear-gradient(160deg, var(--pink) 20%, var(--rosewood) 70%, var(--mauve));"></div>
+        <div class="lookbook__item-caption">
+          <div class="lookbook__item-title">Morning ritual</div>
+          <div class="lookbook__item-sub">Cleanse, tone, treat, seal</div>
+        </div>
+        <div class="lookbook__item-tag">Shop this look</div>
+      </div>
+      <div class="lookbook__item">
+        <div class="lookbook__item-image" style="background: linear-gradient(160deg, var(--oat-matcha) 20%, #98a870 70%, #788850);"></div>
+        <div class="lookbook__item-caption">
+          <div class="lookbook__item-title">The green juice moment</div>
+          <div class="lookbook__item-sub">Matcha Cleanser + Serum</div>
+        </div>
+        <div class="lookbook__item-tag">Matcha Skin Cleanser</div>
+      </div>
+      <div class="lookbook__item">
+        <div class="lookbook__item-image" style="background: linear-gradient(160deg, var(--baby-blue) 10%, #8aa8c0 50%, #6890a8);"></div>
+        <div class="lookbook__item-caption">
+          <div class="lookbook__item-title">The quiet worker</div>
+          <div class="lookbook__item-sub">Serum + Moisturizer</div>
+        </div>
+        <div class="lookbook__item-tag">Green Juice Serum</div>
+      </div>
+      <div class="lookbook__item">
+        <div class="lookbook__item-image" style="background: linear-gradient(160deg, var(--vivid-pink) 10%, var(--rosewood) 60%, var(--brown));"></div>
+        <div class="lookbook__item-caption">
+          <div class="lookbook__item-title">Glow state</div>
+          <div class="lookbook__item-sub">Guava Glow + Glac&#233; Kiss</div>
+        </div>
+        <div class="lookbook__item-tag">Guava Glow Moisturizer</div>
+      </div>
+      <div class="lookbook__item">
+        <div class="lookbook__item-image" style="background: linear-gradient(160deg, var(--mauve) 20%, #a090a0 60%, #806878);"></div>
+        <div class="lookbook__item-caption">
+          <div class="lookbook__item-title">Sunday reset</div>
+          <div class="lookbook__item-sub">Mask + Scrub ritual</div>
+        </div>
+        <div class="lookbook__item-tag">Rice Water Clay Mask</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TICKER — Dark -->
+  <div class="ticker ticker--dark">
+    <div class="ticker__track">
+      <div class="ticker__item"><span></span>Born from real journeys</div>
+      <div class="ticker__item"><span></span>Backed by science</div>
+      <div class="ticker__item"><span></span>Made with you</div>
+      <div class="ticker__item"><span></span>Skincare for real skin</div>
+      <div class="ticker__item"><span></span>Born from real journeys</div>
+      <div class="ticker__item"><span></span>Backed by science</div>
+      <div class="ticker__item"><span></span>Made with you</div>
+      <div class="ticker__item"><span></span>Skincare for real skin</div>
+      <div class="ticker__item"><span></span>Born from real journeys</div>
+      <div class="ticker__item"><span></span>Backed by science</div>
+      <div class="ticker__item"><span></span>Made with you</div>
+      <div class="ticker__item"><span></span>Skincare for real skin</div>
+    </div>
+  </div>
+
+  <!-- 7. BRAND STORY — Magazine Spread -->
+  <section class="spread">
+    <div class="spread__image">
+      <div class="spread__image-inner reveal-left"></div>
+      <div class="spread__issue">01</div>
+    </div>
+    <div class="spread__text">
+      <div class="subhead reveal">Our Story</div>
+      <h2 class="reveal reveal-delay-1">Why hiku exists</h2>
+      <p class="reveal reveal-delay-2">Harper started hiku at 15 because she couldn't find skincare that got it. Every clinical brand felt like medicine. Every fun brand burned her face.</p>
+      <p class="reveal reveal-delay-3">So she closed the gap — with real dermatologists, real ingredients, and a belief that your skin doesn't need to be fixed. It needs to be understood.</p>
+      <p class="reveal reveal-delay-4">"It's what she wishes she'd had from the start."</p>
+    </div>
+  </section>
+
+  <!-- 8. RITUAL -->
+  <section class="ritual">
+    <div class="ritual__header">
+      <div class="subhead reveal">The Ritual</div>
+      <h2 class="reveal reveal-delay-1">Your daily foundation</h2>
+      <p class="reveal reveal-delay-2">Five steps that do exactly what your skin needs — nothing more, nothing less.</p>
+    </div>
+    <div class="ritual__steps">
+      <div class="ritual__step reveal reveal-delay-1"><div class="ritual__step-num">01</div><div class="ritual__step-image"></div><div class="ritual__step-label">Cleanse</div><div class="ritual__step-name">Matcha Skin Cleanser</div><div class="ritual__step-desc">A green juice for your face.</div></div>
+      <div class="ritual__step reveal reveal-delay-2"><div class="ritual__step-num">02</div><div class="ritual__step-image"></div><div class="ritual__step-label">Tone</div><div class="ritual__step-name">Oak Milk Toner</div><div class="ritual__step-desc">Balances without stripping.</div></div>
+      <div class="ritual__step reveal reveal-delay-3"><div class="ritual__step-num">03</div><div class="ritual__step-image"></div><div class="ritual__step-label">Treat</div><div class="ritual__step-name">Green Juice Serum</div><div class="ritual__step-desc">The quiet worker.</div></div>
+      <div class="ritual__step reveal reveal-delay-4"><div class="ritual__step-num">04</div><div class="ritual__step-image"></div><div class="ritual__step-label">Seal</div><div class="ritual__step-name">Guava Glow Moisturizer</div><div class="ritual__step-desc">Leaves you glowing.</div></div>
+      <div class="ritual__step reveal reveal-delay-4"><div class="ritual__step-num">05</div><div class="ritual__step-image"></div><div class="ritual__step-label">Lip</div><div class="ritual__step-name">Glac&#233; Kiss Balm</div><div class="ritual__step-desc">Glossy, kind, kissable.</div></div>
+    </div>
+    <div class="ritual__cta reveal"><a href="#" class="btn btn-primary">Add the ritual — $149</a></div>
+  </section>
+
+  <!-- 9. DIFFERENTIATOR BANNER -->
+  <div class="diff-banner">
+    <div class="diff-banner__inner">
+      <div class="diff-banner__item"><div class="diff-banner__icon">&#10003;</div> Fragrance-free</div>
+      <div class="diff-banner__item"><div class="diff-banner__icon">&#9825;</div> Vegan &amp; Cruelty-free</div>
+      <div class="diff-banner__item"><div class="diff-banner__icon">&#9672;</div> Non-comedogenic</div>
+      <div class="diff-banner__item"><div class="diff-banner__icon">&#9733;</div> Kind Calmplex&#8482;</div>
+      <div class="diff-banner__item"><div class="diff-banner__icon">&#9790;</div> Alcohol-free</div>
+    </div>
+  </div>
+
+  <!-- 10. SOCIAL STORIES -->
+  <section class="stories">
+    <div class="stories__header">
+      <div class="subhead reveal">Real Skin, Real Stories</div>
+      <h2 class="reveal reveal-delay-1">Made with you.</h2>
+      <p class="reveal reveal-delay-2">Tap through real moments from the hiku community.</p>
+    </div>
+    <div class="stories__carousel reveal">
+      <div class="stories__card" style="background: linear-gradient(160deg, var(--oat-matcha) 20%, #a8b880);">
+        <div class="stories__card-progress"><div class="stories__card-progress-seg active"></div><div class="stories__card-progress-seg"></div><div class="stories__card-progress-seg"></div></div>
+        <div class="stories__card-user"><div class="stories__card-avatar"></div><span class="stories__card-username">@mia.glow</span></div>
+        <div class="stories__card-tag"><div class="stories__card-tag-thumb"></div><div><div class="stories__card-tag-name">Matcha Skin Cleanser</div><div class="stories__card-tag-price">$28</div></div></div>
+      </div>
+      <div class="stories__card" style="background: linear-gradient(160deg, var(--pink) 20%, var(--rosewood));">
+        <div class="stories__card-progress"><div class="stories__card-progress-seg"></div><div class="stories__card-progress-seg active"></div><div class="stories__card-progress-seg"></div></div>
+        <div class="stories__card-user"><div class="stories__card-avatar"></div><span class="stories__card-username">@zara.skin</span></div>
+        <div class="stories__card-tag"><div class="stories__card-tag-thumb" style="background: var(--vivid-pink);"></div><div><div class="stories__card-tag-name">Guava Glow Moisturizer</div><div class="stories__card-tag-price">$34</div></div></div>
+      </div>
+      <div class="stories__card stories__card--center" style="background: linear-gradient(160deg, var(--mauve) 10%, #a890a8 50%, var(--rosewood));">
+        <div class="stories__card-progress"><div class="stories__card-progress-seg"></div><div class="stories__card-progress-seg"></div><div class="stories__card-progress-seg active"></div></div>
+        <div class="stories__card-user"><div class="stories__card-avatar"></div><span class="stories__card-username">@lily.ritual</span></div>
+        <div class="stories__card-tag"><div class="stories__card-tag-thumb" style="background: var(--baby-blue);"></div><div><div class="stories__card-tag-name">Green Juice Serum</div><div class="stories__card-tag-price">$38</div></div></div>
+      </div>
+      <div class="stories__card" style="background: linear-gradient(160deg, var(--baby-blue) 20%, #90b0c8);">
+        <div class="stories__card-progress"><div class="stories__card-progress-seg active"></div><div class="stories__card-progress-seg"></div><div class="stories__card-progress-seg"></div></div>
+        <div class="stories__card-user"><div class="stories__card-avatar"></div><span class="stories__card-username">@harper.hiku</span></div>
+        <div class="stories__card-tag"><div class="stories__card-tag-thumb" style="background: var(--oat-matcha);"></div><div><div class="stories__card-tag-name">Discovery Set</div><div class="stories__card-tag-price">$49</div></div></div>
+      </div>
+      <div class="stories__card" style="background: linear-gradient(160deg, var(--vivid-pink) 20%, var(--pink));">
+        <div class="stories__card-progress"><div class="stories__card-progress-seg"></div><div class="stories__card-progress-seg active"></div><div class="stories__card-progress-seg"></div></div>
+        <div class="stories__card-user"><div class="stories__card-avatar"></div><span class="stories__card-username">@skincare.sam</span></div>
+        <div class="stories__card-tag"><div class="stories__card-tag-thumb" style="background: var(--rosewood);"></div><div><div class="stories__card-tag-name">Glac&#233; Kiss Balm</div><div class="stories__card-tag-price">$22</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. CRYSTAL BALL -->
+  <section class="quiz">
+    <div class="quiz__ball reveal" id="crystal-ball">
+      <div class="quiz__ball-text">How do you want your skin to greet the morning?</div>
+    </div>
+    <div class="subhead reveal">The Crystal Ball</div>
+    <h2 class="reveal reveal-delay-1">Discover your skin mood.</h2>
+    <p class="quiz__sub reveal reveal-delay-2">Gently explore to find your ritual. No prescriptions — just curiosity.</p>
+    <a href="#" class="btn btn-primary reveal reveal-delay-3">Begin the discovery</a>
+  </section>
+
+  <!-- 12. COMMUNITY -->
+  <section class="community" id="community-section">
+    <div class="community__header">
+      <div class="subhead reveal">Made With You</div>
+      <h2 class="reveal reveal-delay-1">Being part of hiku means having a say.</h2>
+      <p class="reveal reveal-delay-2">You're not just a customer — you're a co-creator.</p>
+    </div>
+    <div class="community__grid" id="community-grid">
+      <div class="community__item"></div><div class="community__item"></div><div class="community__item"></div>
+      <div class="community__item"></div><div class="community__item"></div><div class="community__item"></div><div class="community__item"></div>
+    </div>
+    <div class="community__cta reveal"><a href="#" class="btn btn-primary">Join the house</a></div>
+  </section>
+
+  <!-- 13. FOOTER -->
+  <footer class="footer">
+    <div class="footer__hero">
+      <div class="footer__hero-img"></div>
+      <div class="footer__hero-img"><div class="footer__hero-logo">hiku<sup>by harper</sup></div></div>
+      <div class="footer__hero-img"></div>
+    </div>
+    <div class="footer__main">
+      <div class="footer__newsletter">
+        <div class="subhead">Newsletter</div>
+        <h3>Connect with Us</h3>
+        <form class="footer__form" onsubmit="return false;">
+          <div class="footer__field"><label>Email Address</label><input type="email" class="footer__input" placeholder="Email Address"></div>
+          <div class="footer__field"><label>Phone Number</label><input type="tel" class="footer__input" placeholder="Phone Number"></div>
+          <p class="footer__consent">By providing your info, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.</p>
+          <button type="submit" class="btn btn-outline">Subscribe</button>
+        </form>
+      </div>
+      <div class="footer__links">
+        <div class="footer__col"><div class="footer__col-title">Shop</div><a href="#">Shop All</a><a href="#">Cleanser & Toner</a><a href="#">Serum</a><a href="#">Moisturizer</a><a href="#">Mask & Scrub</a><a href="#">Lip Care</a><a href="#">Sets</a></div>
+        <div class="footer__col"><div class="footer__col-title">About</div><a href="#">Our Story</a><a href="#">Find Your Ritual</a><a href="#">Ingredient Index</a><a href="#">Community</a></div>
+        <div class="footer__col"><div class="footer__col-title">Help</div><a href="#">Contact Us</a><a href="#">FAQs</a><a href="#">Shipping & Returns</a></div>
+        <div class="footer__col"><div class="footer__col-title">Social</div><a href="#">Instagram</a><a href="#">TikTok</a><a href="#">Pinterest</a></div>
+      </div>
+    </div>
+    <div class="otter-zone" id="otter-zone">
+      <div class="otter otter--left" id="otter-left"><div class="otter__body"><div class="otter__torso"></div><div class="otter__belly"></div><div class="otter__head"><div class="otter__ear otter__ear--l"></div><div class="otter__ear otter__ear--r"></div><div class="otter__eye otter__eye--l"></div><div class="otter__eye otter__eye--r"></div><div class="otter__nose"></div></div><div class="otter__paw otter__paw--l"></div><div class="otter__paw otter__paw--r"></div></div><div class="otter__reach"></div></div>
+      <div class="otter otter--right" id="otter-right"><div class="otter__body"><div class="otter__torso"></div><div class="otter__belly"></div><div class="otter__head"><div class="otter__ear otter__ear--l"></div><div class="otter__ear otter__ear--r"></div><div class="otter__eye otter__eye--l"></div><div class="otter__eye otter__eye--r"></div><div class="otter__nose"></div></div><div class="otter__paw otter__paw--l"></div><div class="otter__paw otter__paw--r"></div></div><div class="otter__reach"></div></div>
+      <div class="otter-hearts" id="otter-hearts"><span>&#10084;&#65039;</span><span>&#10084;&#65039;</span><span>&#10084;&#65039;</span></div>
+      <div class="otter-secret" id="otter-secret"><div class="otter-secret__title">You found them holding hands!</div><div>Welcome to the TYB loyalty program</div><div class="otter-secret__code">OTTERLOVE</div><div class="otter-secret__sub">Use this code for early VIP access</div></div>
+      <div class="otter-zone__hint">psst... try bringing us together</div>
+    </div>
+    <div class="footer__bottom">&copy; 2026 Hiku Beauty. All Rights Reserved.</div>
+  </footer>
+
+  <script>
+    // Door opening
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('door-overlay').classList.add('open');
+        document.body.classList.remove('door-locked');
+        setTimeout(animateHero, 600);
+        setTimeout(() => document.getElementById('door-overlay').style.display = 'none', 2000);
+      }, 800);
+    });
+
+    // Hero text animation
+    function animateHero() {
+      const title = document.getElementById('hero-title');
+      title.innerHTML = title.textContent.split(' ').map((w, i) =>
+        `<span class="word" style="transition-delay:${i*0.08}s">${w}</span> `).join('');
+      requestAnimationFrame(() => title.classList.add('animate'));
+      setTimeout(() => document.getElementById('hero-subtitle').classList.add('animate'), 200);
+      setTimeout(() => document.getElementById('hero-ctas').classList.add('animate'), 400);
+      // Stagger hero image cells
+      ['hero-cell-1','hero-cell-2','hero-cell-3','hero-cell-4'].forEach((id, i) => {
+        setTimeout(() => document.getElementById(id).classList.add('visible'), 300 + i * 150);
+      });
+    }
+
+    // Scroll reveal
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
+
+    // Community mask reveal
+    const comObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.querySelectorAll('.community__item').forEach((item, i) => {
+            setTimeout(() => item.classList.add('visible'), i * 100);
+          });
+          comObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    const cg = document.getElementById('community-grid');
+    if (cg) comObs.observe(cg);
+
+    // Nav scroll shadow
+    window.addEventListener('scroll', () => {
+      document.getElementById('nav').classList.toggle('nav--scrolled', window.scrollY > 100);
+    });
+
+    // Lookbook drag scroll
+    const lbScroll = document.getElementById('lookbook-scroll');
+    let lbDragging = false, lbStart = 0, lbScrollStart = 0;
+    lbScroll.addEventListener('mousedown', e => { lbDragging = true; lbStart = e.pageX; lbScrollStart = lbScroll.scrollLeft; lbScroll.style.cursor = 'grabbing'; });
+    window.addEventListener('mousemove', e => { if (!lbDragging) return; lbScroll.scrollLeft = lbScrollStart - (e.pageX - lbStart); });
+    window.addEventListener('mouseup', () => { lbDragging = false; lbScroll.style.cursor = 'grab'; });
+
+    // Crystal ball shimmer
+    const ball = document.getElementById('crystal-ball');
+    ball.addEventListener('mousemove', e => {
+      const r = ball.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / r.width) * 100;
+      const y = ((e.clientY - r.top) / r.height) * 100;
+      ball.style.background = `radial-gradient(circle at ${x}% ${y}%, rgba(255,255,255,0.8), rgba(196,160,167,0.3) 20%, rgba(184,160,184,0.4) 40%, rgba(231,130,169,0.25) 60%, rgba(196,160,167,0.5) 80%, rgba(61,28,30,0.12))`;
+    });
+    ball.addEventListener('mouseleave', () => ball.style.background = '');
+
+    // Otter drag easter egg
+    const otterLeft = document.getElementById('otter-left');
+    const otterRight = document.getElementById('otter-right');
+    const otterZone = document.getElementById('otter-zone');
+    let activeOtter = null, otterOffset = {x:0,y:0}, otterRevealed = false;
+
+    function startDrag(otter, e) {
+      if (otterRevealed) return;
+      activeOtter = otter;
+      otter.classList.add('dragging');
+      const rect = otter.getBoundingClientRect();
+      const cx = e.touches ? e.touches[0].clientX : e.clientX;
+      const cy = e.touches ? e.touches[0].clientY : e.clientY;
+      otterOffset.x = cx - rect.left;
+      otterOffset.y = cy - rect.top;
+      e.preventDefault();
+    }
+    otterLeft.addEventListener('mousedown', e => startDrag(otterLeft, e));
+    otterRight.addEventListener('mousedown', e => startDrag(otterRight, e));
+    otterLeft.addEventListener('touchstart', e => startDrag(otterLeft, e), {passive:false});
+    otterRight.addEventListener('touchstart', e => startDrag(otterRight, e), {passive:false});
+
+    function moveDrag(e) {
+      if (!activeOtter) return;
+      const zr = otterZone.getBoundingClientRect();
+      const cx = e.touches ? e.touches[0].clientX : e.clientX;
+      const cy = e.touches ? e.touches[0].clientY : e.clientY;
+      let x = Math.max(0, Math.min(cx - zr.left - otterOffset.x, zr.width - 60));
+      let y = Math.max(0, Math.min(cy - zr.top - otterOffset.y, zr.height - 60));
+      activeOtter.style.left = x + 'px';
+      activeOtter.style.top = y + 'px';
+      activeOtter.style.right = 'auto';
+      const lr = otterLeft.getBoundingClientRect(), rr = otterRight.getBoundingClientRect();
+      const dist = Math.abs(lr.right - rr.left);
+      otterLeft.classList.toggle('reaching', dist < 40);
+      otterRight.classList.toggle('reaching', dist < 40);
+      if (dist < 15 && !otterRevealed) {
+        otterRevealed = true;
+        document.getElementById('otter-hearts').classList.add('show');
+        setTimeout(() => document.getElementById('otter-secret').classList.add('show'), 800);
+      }
+    }
+    window.addEventListener('mousemove', moveDrag);
+    window.addEventListener('touchmove', moveDrag, {passive:false});
+    window.addEventListener('mouseup', () => { if (activeOtter) { activeOtter.classList.remove('dragging'); activeOtter = null; } });
+    window.addEventListener('touchend', () => { if (activeOtter) { activeOtter.classList.remove('dragging'); activeOtter = null; } });
+  </script>
+</body>
+</html>
