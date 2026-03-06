@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hiku by harper — we're getting ready</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       HIKU — Pre-launch Lander
+       "Pop the bubble" interactive experience
+       Based on Figma feedback 889:4317
+       ======================================== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --pink: #F5E6E0;
+      --brown: #3D1C1E;
+      --almond: #FDF8F5;
+      --rosewood: #C4A0A7;
+      --cream: #F7F1EB;
+      --serif: 'Playfair Display', 'Big Caslon', Georgia, serif;
+      --sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    html, body { height: 100%; overflow: hidden; }
+    body {
+      font-family: var(--sans);
+      background: var(--pink);
+      color: var(--brown);
+      -webkit-font-smoothing: antialiased;
+      user-select: none;
+    }
+
+    /* ============================
+       FULL-SCREEN LANDER
+       ============================ */
+    .lander {
+      position: relative;
+      width: 100%; height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Background image */
+    .lander__bg {
+      position: absolute; inset: 0;
+      background-image: url('assets/prelaunch-desktop.png');
+      background-size: cover;
+      background-position: center center;
+      background-color: var(--pink);
+      z-index: 0;
+    }
+    @media (max-width: 768px) {
+      .lander__bg {
+        background-image: url('assets/prelaunch-mobile.png');
+      }
+    }
+    .lander__bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        transparent 80%,
+        rgba(245,230,224,0.6) 100%
+      );
+    }
+
+    /* Logo */
+    .lander__logo {
+      position: relative; z-index: 10;
+      text-align: center;
+      padding-top: clamp(30px, 5vh, 50px);
+    }
+    .lander__logo-text {
+      font-family: var(--serif);
+      font-size: clamp(40px, 7vw, 64px);
+      font-weight: 600;
+      color: var(--almond);
+      letter-spacing: -0.02em;
+      text-shadow: 0 2px 20px rgba(61,28,30,0.15);
+    }
+    .lander__logo-text sup {
+      font-size: 11px;
+      font-style: italic;
+      font-weight: 400;
+      opacity: 0.6;
+      vertical-align: super;
+    }
+
+    /* Footer bar */
+    .lander__footer {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      z-index: 10;
+      background: var(--pink);
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .lander__social {
+      display: flex; gap: 32px;
+    }
+    .lander__social a {
+      font-size: 13px; color: var(--brown);
+      text-decoration: none; opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+    .lander__social a:hover { opacity: 1; }
+    .lander__tagline {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(18px, 2.5vw, 24px);
+      color: var(--brown);
+      opacity: 0.8;
+    }
+
+    /* ============================
+       BUBBLES
+       ============================ */
+    .bubble {
+      position: absolute;
+      z-index: 5;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      will-change: transform;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .bubble__circle {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle at 35% 30%,
+        rgba(255,255,255,0.75) 0%,
+        rgba(255,255,255,0.35) 30%,
+        rgba(255,255,255,0.12) 60%,
+        rgba(255,255,255,0.04) 100%
+      );
+      border: 1px solid rgba(255,255,255,0.35);
+      box-shadow:
+        inset 0 -4px 8px rgba(255,255,255,0.1),
+        0 4px 20px rgba(61,28,30,0.06);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.3s ease;
+    }
+    /* Iridescent shimmer highlight that shifts with position */
+    .bubble__circle::before {
+      content: '';
+      position: absolute;
+      width: 40%; height: 25%;
+      top: 15%; left: 20%;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+      filter: blur(3px);
+    }
+    .bubble__label {
+      font-size: 10px;
+      font-family: var(--sans);
+      color: rgba(255,255,255,0.7);
+      letter-spacing: 0.04em;
+      text-shadow: 0 1px 4px rgba(61,28,30,0.1);
+    }
+
+    /* Bubble pop animation */
+    .bubble--popping .bubble__circle {
+      animation: bubblePop 0.4s var(--ease-out-expo) forwards;
+    }
+    @keyframes bubblePop {
+      0% { transform: scale(1); opacity: 1; }
+      30% { transform: scale(1.3); opacity: 0.8; }
+      100% { transform: scale(2); opacity: 0; }
+    }
+
+    /* Wobble on hover */
+    .bubble:hover .bubble__circle {
+      animation: bubbleWobble 0.6s ease-in-out;
+    }
+    @keyframes bubbleWobble {
+      0%   { transform: scale(1); }
+      25%  { transform: scale(1.08, 0.93); }
+      50%  { transform: scale(0.95, 1.06); }
+      75%  { transform: scale(1.03, 0.97); }
+      100% { transform: scale(1); }
+    }
+
+    /* Pop particles */
+    .pop-particle {
+      position: absolute;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.6);
+      pointer-events: none;
+      animation: popParticle 0.6s var(--ease-out-expo) forwards;
+    }
+    @keyframes popParticle {
+      0% { transform: translate(0, 0) scale(1); opacity: 1; }
+      100% { transform: translate(var(--px), var(--py)) scale(0); opacity: 0; }
+    }
+
+    /* ============================
+       MESSAGE REVEAL
+       ============================ */
+    .message-reveal {
+      position: fixed;
+      z-index: 50;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      opacity: 0;
+      transform: translateY(10px) scale(0.9);
+      transition: opacity 0.5s var(--ease-out-expo), transform 0.5s var(--ease-out-expo);
+    }
+    .message-reveal.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    .message-reveal__text {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(16px, 2.5vw, 22px);
+      color: var(--almond);
+      text-shadow: 0 2px 16px rgba(61,28,30,0.25);
+      text-align: center;
+      white-space: nowrap;
+    }
+    .message-reveal__sub {
+      font-family: var(--sans);
+      font-size: 11px;
+      color: rgba(253,248,245,0.7);
+      letter-spacing: 0.04em;
+    }
+
+    /* Secret bubble styles removed — easter egg is now pop-count based */
+
+    /* ============================
+       SIGNUP MODAL
+       ============================ */
+    .signup-overlay {
+      position: fixed; inset: 0;
+      z-index: 100;
+      background: rgba(61,28,30,0.6);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s var(--ease-out-expo);
+    }
+    .signup-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .signup-card {
+      background: var(--almond);
+      border-radius: 16px;
+      padding: clamp(32px, 5vw, 48px);
+      max-width: 440px;
+      width: 90%;
+      text-align: center;
+      box-shadow:
+        0 24px 60px rgba(61,28,30,0.2),
+        0 2px 0 rgba(0,0,0,0.05),
+        inset 0 1px 0 rgba(255,255,255,0.5);
+      transform: translateY(30px) scale(0.95);
+      transition: transform 0.5s var(--ease-spring);
+    }
+    .signup-overlay.show .signup-card {
+      transform: translateY(0) scale(1);
+    }
+    .signup-card__badge {
+      display: inline-block;
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+    .signup-card__title {
+      font-family: var(--serif);
+      font-size: clamp(22px, 3vw, 28px);
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+    .signup-card__desc {
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(61,28,30,0.65);
+      margin-bottom: 24px;
+    }
+    .signup-card__secret-desc {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--brown);
+      background: linear-gradient(135deg, rgba(231,130,169,0.1), rgba(196,160,167,0.15));
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .signup-card__input-group {
+      text-align: left;
+      margin-bottom: 14px;
+    }
+    .signup-card__label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(61,28,30,0.5);
+      display: block;
+      margin-bottom: 6px;
+    }
+    .signup-card__input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid rgba(61,28,30,0.12);
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: var(--sans);
+      background: white;
+      color: var(--brown);
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .signup-card__input:focus {
+      border-color: var(--rosewood);
+      box-shadow: 0 0 0 3px rgba(196,160,167,0.15);
+    }
+    .signup-card__input::placeholder { color: rgba(61,28,30,0.25); }
+    .signup-card__btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--brown);
+      color: var(--almond);
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 8px;
+      box-shadow:
+        0 2px 0 rgba(0,0,0,0.2),
+        0 4px 12px rgba(61,28,30,0.2),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+      transition: transform 0.3s var(--ease-spring), box-shadow 0.3s;
+    }
+    .signup-card__btn:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 4px 0 rgba(0,0,0,0.15),
+        0 8px 24px rgba(61,28,30,0.25),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+    .signup-card__btn:active { transform: translateY(1px); }
+    .signup-card__close {
+      position: absolute; top: 16px; right: 16px;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(61,28,30,0.06);
+      color: var(--brown);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .signup-card__close:hover { background: rgba(61,28,30,0.1); }
+    .signup-card__footer {
+      font-size: 10px;
+      line-height: 1.5;
+      color: rgba(61,28,30,0.35);
+      margin-top: 16px;
+    }
+
+    /* Counter removed — infinite bubbles */
+
+    /* ============================
+       SECRET REWARD TOAST
+       ============================ */
+    .reward-toast {
+      position: fixed;
+      bottom: 100px; left: 50%;
+      transform: translateX(-50%) translateY(40px);
+      z-index: 80;
+      background: var(--brown);
+      color: var(--almond);
+      padding: 16px 28px;
+      border-radius: 14px;
+      font-size: 13px;
+      font-family: var(--sans);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow:
+        0 8px 32px rgba(61,28,30,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+      opacity: 0;
+      transition: opacity 0.5s, transform 0.5s var(--ease-spring);
+      white-space: nowrap;
+    }
+    .reward-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ============================
+       FOOTER SIGNUP (fallback)
+       ============================ */
+    .lander__footer-signup {
+      display: none;
+    }
+    .lander__footer-signup.show {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .lander__footer-input {
+      padding: 10px 16px;
+      border: 1px solid rgba(61,28,30,0.15);
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: var(--sans);
+      background: white;
+      color: var(--brown);
+      outline: none;
+      width: 220px;
+      transition: border-color 0.3s;
+    }
+    .lander__footer-input:focus { border-color: var(--rosewood); }
+    .lander__footer-input::placeholder { color: rgba(61,28,30,0.3); }
+    .lander__footer-btn {
+      padding: 10px 20px;
+      background: var(--brown);
+      color: var(--almond);
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      font-family: var(--sans);
+      cursor: pointer;
+      box-shadow: 0 2px 0 rgba(0,0,0,0.15);
+      transition: transform 0.2s;
+    }
+    .lander__footer-btn:hover { transform: translateY(-1px); }
+
+    /* ============================
+       RESPONSIVE
+       ============================ */
+    @media (max-width: 768px) {
+      .lander__footer { padding: 16px 20px; flex-wrap: wrap; gap: 12px; }
+      .lander__social { gap: 20px; }
+      .lander__social a { font-size: 12px; }
+      .lander__tagline { font-size: 16px; }
+      .reward-toast { bottom: 120px; font-size: 12px; padding: 12px 20px; }
+      .lander__footer-signup.show { width: 100%; order: -1; }
+      .lander__footer-input { flex: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="lander">
+    <!-- Background -->
+    <div class="lander__bg"></div>
+
+    <!-- Logo -->
+    <div class="lander__logo">
+      <span class="lander__logo-text">hiku<sup>by harper</sup></span>
+    </div>
+
+    <!-- Bubbles container (populated by JS) -->
+    <div id="bubblesContainer"></div>
+
+    <!-- Footer -->
+    <div class="lander__footer">
+      <div class="lander__social">
+        <a href="#">Instagram</a>
+        <a href="#">Pinterest</a>
+        <a href="#">TikTok</a>
+        <a href="#">Facebook</a>
+      </div>
+      <div class="lander__footer-signup" id="footerSignup">
+        <input type="email" class="lander__footer-input" placeholder="your email" id="footerEmail">
+        <button class="lander__footer-btn" id="footerSignupBtn">notify me</button>
+      </div>
+      <span class="lander__tagline">we're getting ready</span>
+    </div>
+  </div>
+
+  <!-- Message reveal (floats where bubble was popped) -->
+  <div class="message-reveal" id="messageReveal">
+    <span class="message-reveal__text" id="messageText"></span>
+    <span class="message-reveal__sub" id="messageSub"></span>
+  </div>
+
+  <!-- Signup modal -->
+  <div class="signup-overlay" id="signupOverlay">
+    <div class="signup-card" style="position:relative;">
+      <button class="signup-card__close" id="signupClose">&times;</button>
+      <div class="signup-card__badge" id="signupBadge">&#10024;</div>
+      <h2 class="signup-card__title" id="signupTitle">you made it</h2>
+      <p class="signup-card__desc" id="signupDesc">You popped all the bubbles. Be the first to know when hiku launches.</p>
+      <div class="signup-card__secret-desc" id="signupSecret" style="display:none;">
+        You found the secret bubble! You'll get a special profile tag when we launch.
+      </div>
+      <div class="signup-card__input-group">
+        <label class="signup-card__label">Email</label>
+        <input type="email" class="signup-card__input" placeholder="you@email.com" id="signupEmail">
+      </div>
+      <div class="signup-card__input-group">
+        <label class="signup-card__label">Phone (optional)</label>
+        <input type="tel" class="signup-card__input" placeholder="(555) 000-0000" id="signupPhone">
+      </div>
+      <button class="signup-card__btn" id="signupBtn">join the waitlist</button>
+      <p class="signup-card__footer">We'll only reach out when it matters. No spam, ever.</p>
+    </div>
+  </div>
+
+  <!-- Secret reward toast -->
+  <div class="reward-toast" id="rewardToast">
+    &#10024; Secret bubble found! You've earned a special profile tag.
+  </div>
+
+  <script>
+    /* ========================================
+       HIKU PRE-LAUNCH — Physics Bubble System
+       Organic floating + cursor repulsion
+       ======================================== */
+
+    const container = document.getElementById('bubblesContainer');
+    const messageReveal = document.getElementById('messageReveal');
+    const messageText = document.getElementById('messageText');
+    const messageSub = document.getElementById('messageSub');
+    const signupOverlay = document.getElementById('signupOverlay');
+    const rewardToast = document.getElementById('rewardToast');
+    const footerSignup = document.getElementById('footerSignup');
+
+    // Mouse tracking
+    let mouseX = -9999, mouseY = -9999;
+    const REPEL_RADIUS = 70;
+    const REPEL_STRENGTH = 0.03;
+
+    document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+    document.addEventListener('mouseleave', () => { mouseX = -9999; mouseY = -9999; });
+    // Touch support
+    document.addEventListener('touchmove', (e) => {
+      mouseX = e.touches[0].clientX;
+      mouseY = e.touches[0].clientY;
+    }, { passive: true });
+    document.addEventListener('touchend', () => { mouseX = -9999; mouseY = -9999; });
+
+    // Bubble config — no text labels, just clean bubbles
+    const bubbleData = [
+      { xPct: 0.18, yPct: 0.25, size: 56 },
+      { xPct: 0.72, yPct: 0.18, size: 48 },
+      { xPct: 0.30, yPct: 0.52, size: 42 },
+      { xPct: 0.80, yPct: 0.48, size: 52 },
+      { xPct: 0.55, yPct: 0.33, size: 38 },
+      { xPct: 0.12, yPct: 0.65, size: 44 },
+      { xPct: 0.50, yPct: 0.58, size: 50 },
+      { xPct: 0.88, yPct: 0.72, size: 36 },
+    ];
+
+    // Hint messages — shown randomly on some pops
+    const hintMessages = [
+      { msg: 'good things take time', sub: 'breathe' },
+      { msg: "you're close, but not quite there", sub: 'patience' },
+      { msg: 'your skin already knows', sub: 'trust it' },
+      { msg: 'gentle is powerful', sub: 'always' },
+      { msg: 'the glow starts from within', sub: 'believe it' },
+      { msg: 'slow beauty wins', sub: 'every time' },
+    ];
+    let hintIndex = 0;
+
+    let poppedCount = 0;
+    const EASTER_EGG_POP = 3; // 3rd pop triggers easter egg
+
+    // Physics bubble state
+    const bubbles = [];
+
+    function createBubble(data) {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      const el = document.createElement('div');
+      el.className = 'bubble';
+      el.style.width = data.size + 'px';
+      el.style.height = data.size + 'px';
+
+      const circle = document.createElement('div');
+      circle.className = 'bubble__circle';
+      el.appendChild(circle);
+
+      // Physics state
+      const b = {
+        el,
+        data,
+        x: data.xPct * vw,
+        y: data.yPct * vh + Math.random() * vh * 0.2,
+        homeX: data.xPct * vw,
+        homeY: data.yPct * vh,
+        vx: 0,
+        vy: 0,
+        size: data.size,
+        // Each bubble gets unique organic motion params
+        phase: Math.random() * Math.PI * 2,
+        phaseX: Math.random() * Math.PI * 2,
+        speedY: 0.3 + Math.random() * 0.4,
+        speedX: 0.2 + Math.random() * 0.3,
+        ampY: 8 + Math.random() * 12,
+        ampX: 6 + Math.random() * 10,
+        alive: true,
+      };
+
+      // Click handler
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        popBubble(b);
+      });
+
+      container.appendChild(el);
+      bubbles.push(b);
+      return b;
+    }
+
+    // Create all bubbles
+    bubbleData.forEach(d => createBubble(d));
+
+    // Handle resize
+    window.addEventListener('resize', () => {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      bubbles.forEach(b => {
+        b.homeX = b.data.xPct * vw;
+        b.homeY = b.data.yPct * vh;
+      });
+    });
+
+    // ============================
+    // PHYSICS LOOP
+    // ============================
+    const FRICTION = 0.92;
+    const BUOYANCY = -0.04;       // constant upward force (negative = up)
+    const DRIFT_STRENGTH = 0.3;  // horizontal wobble strength
+
+    function tick(t) {
+      const time = t * 0.001;
+      const vh = window.innerHeight;
+      const vw = window.innerWidth;
+
+      for (const b of bubbles) {
+        if (!b.alive) continue;
+
+        // 1. Buoyancy — constant upward drift (like real bubbles)
+        b.vy += BUOYANCY;
+
+        // 2. Horizontal drift — organic sine sway
+        b.vx += Math.sin(time * b.speedX + b.phaseX) * DRIFT_STRENGTH * 0.1;
+
+        // 3. Cursor repulsion
+        const dx = b.x - mouseX;
+        const dy = b.y - mouseY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < REPEL_RADIUS && dist > 0) {
+          const force = (1 - dist / REPEL_RADIUS) * REPEL_STRENGTH;
+          b.vx += (dx / dist) * force * REPEL_RADIUS;
+          b.vy += (dy / dist) * force * REPEL_RADIUS;
+        }
+
+        // 4. Bubble-to-bubble soft repulsion
+        for (const other of bubbles) {
+          if (other === b || !other.alive) continue;
+          const bx = b.x - other.x;
+          const by = b.y - other.y;
+          const bDist = Math.sqrt(bx * bx + by * by);
+          const minDist = (b.size + other.size) * 0.6;
+          if (bDist < minDist && bDist > 0) {
+            const overlap = (minDist - bDist) * 0.02;
+            b.vx += (bx / bDist) * overlap;
+            b.vy += (by / bDist) * overlap;
+          }
+        }
+
+        // 5. Friction (more on X to keep vertical rise dominant)
+        b.vx *= 0.95;
+        b.vy *= FRICTION;
+
+        // 6. Apply velocity
+        b.x += b.vx;
+        b.y += b.vy;
+
+        // 7. Wrap around — when bubble floats off top, loop from bottom
+        if (b.y < -b.size) {
+          b.y = vh + b.size;
+          b.x = b.homeX + (Math.random() - 0.5) * 200; // slight random X reset
+          b.vx = 0;
+          b.vy = 0;
+        }
+
+        // 8. Soft horizontal bounds
+        const pad = b.size * 0.5;
+        if (b.x < pad) b.vx += (pad - b.x) * 0.03;
+        if (b.x > vw - pad) b.vx += (vw - pad - b.x) * 0.03;
+
+        // 9. Render
+        b.el.style.transform = `translate(${b.x - b.size / 2}px, ${b.y - b.size / 2}px)`;
+
+        // 10. Subtle scale wobble based on velocity
+        const speed = Math.sqrt(b.vx * b.vx + b.vy * b.vy);
+        const wobble = Math.min(speed * 0.008, 0.08);
+        const scaleX = 1 + wobble;
+        const scaleY = 1 - wobble * 0.5;
+        b.el.querySelector('.bubble__circle').style.transform = `scale(${scaleX}, ${scaleY})`;
+      }
+
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+
+    // ============================
+    // POP BUBBLE
+    // ============================
+    function popBubble(b) {
+      if (!b.alive) return;
+      b.alive = false;
+      poppedCount++;
+
+      b.el.classList.add('bubble--popping');
+
+      // Particles — every pop gets them
+      const cx = b.x;
+      const cy = b.y;
+      for (let i = 0; i < 10; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'pop-particle';
+        const angle = (Math.PI * 2 / 10) * i + Math.random() * 0.3;
+        const dist = 20 + Math.random() * 40;
+        particle.style.left = cx + 'px';
+        particle.style.top = cy + 'px';
+        particle.style.setProperty('--px', Math.cos(angle) * dist + 'px');
+        particle.style.setProperty('--py', Math.sin(angle) * dist + 'px');
+        particle.style.width = (3 + Math.random() * 5) + 'px';
+        particle.style.height = particle.style.width;
+        document.body.appendChild(particle);
+        setTimeout(() => particle.remove(), 600);
+      }
+
+      // 3rd pop = easter egg (signup + reward)
+      if (poppedCount === EASTER_EGG_POP) {
+        showMessage(cx, cy - 30, 'you found the secret', 'you are special');
+        setTimeout(() => {
+          rewardToast.classList.add('show');
+          setTimeout(() => rewardToast.classList.remove('show'), 4000);
+        }, 800);
+        setTimeout(() => openSignup(true), 2500);
+      }
+      // Randomly show a hint message (~50% chance, not on easter egg pop)
+      else if (Math.random() > 0.5) {
+        const hint = hintMessages[hintIndex % hintMessages.length];
+        hintIndex++;
+        showMessage(cx, cy - 30, hint.msg, hint.sub);
+      }
+
+      // Show footer signup after first pop
+      if (poppedCount === 1) {
+        footerSignup.classList.add('show');
+      }
+
+      // Shockwave — nudge nearby bubbles
+      for (const other of bubbles) {
+        if (other === b || !other.alive) continue;
+        const dx = other.x - b.x;
+        const dy = other.y - b.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 200 && dist > 0) {
+          const force = (1 - dist / 200) * 4;
+          other.vx += (dx / dist) * force;
+          other.vy += (dy / dist) * force;
+        }
+      }
+
+      // Respawn bubble from bottom after a delay (infinite bubbles)
+      setTimeout(() => {
+        b.el.remove();
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        b.x = b.homeX + (Math.random() - 0.5) * 200;
+        b.y = vh + b.size;
+        b.vx = 0;
+        b.vy = 0;
+        b.alive = true;
+        b.el.classList.remove('bubble--popping');
+        const circle = b.el.querySelector('.bubble__circle');
+        circle.style.transform = '';
+        circle.style.animation = '';
+        circle.style.opacity = '';
+        container.appendChild(b.el);
+      }, 1500);
+    }
+
+    let messageTimer;
+    function showMessage(x, y, msg, sub) {
+      clearTimeout(messageTimer);
+      messageReveal.style.left = x + 'px';
+      messageReveal.style.top = y + 'px';
+      messageReveal.style.transform = 'translate(-50%, -100%)';
+      messageText.textContent = msg;
+      messageSub.textContent = sub || '';
+      messageReveal.classList.add('show');
+      messageTimer = setTimeout(() => messageReveal.classList.remove('show'), 2500);
+    }
+
+    function openSignup(isSecret) {
+      if (isSecret) {
+        document.getElementById('signupBadge').textContent = '\u2728';
+        document.getElementById('signupTitle').textContent = 'you found the secret';
+        document.getElementById('signupDesc').textContent = "Only the most curious find this bubble. You've earned early access and a special profile tag.";
+        document.getElementById('signupSecret').style.display = 'block';
+      }
+      signupOverlay.classList.add('show');
+    }
+
+    // Close modal
+    document.getElementById('signupClose').addEventListener('click', () => signupOverlay.classList.remove('show'));
+    signupOverlay.addEventListener('click', (e) => {
+      if (e.target === signupOverlay) signupOverlay.classList.remove('show');
+    });
+
+    // Signup button
+    document.getElementById('signupBtn').addEventListener('click', () => {
+      const email = document.getElementById('signupEmail').value;
+      if (email) {
+        document.getElementById('signupTitle').textContent = "you're in";
+        document.getElementById('signupDesc').textContent = "We'll be in touch soon. Welcome to hiku.";
+        document.getElementById('signupSecret').style.display = 'none';
+        document.querySelector('.signup-card__input-group').style.display = 'none';
+        document.querySelectorAll('.signup-card__input-group')[1].style.display = 'none';
+        document.getElementById('signupBtn').style.display = 'none';
+        document.querySelector('.signup-card__footer').textContent = '';
+        document.getElementById('signupBadge').textContent = '\u2764\uFE0F';
+      }
+    });
+
+    // Footer signup
+    document.getElementById('footerSignupBtn').addEventListener('click', () => {
+      const email = document.getElementById('footerEmail').value;
+      if (email) {
+        document.getElementById('footerSignupBtn').textContent = 'joined!';
+        document.getElementById('footerEmail').value = '';
+        document.getElementById('footerEmail').placeholder = 'thank you!';
+        document.getElementById('footerEmail').disabled = true;
+        document.getElementById('footerSignupBtn').disabled = true;
+      }
+    });
+  </script>
+</body>
+</html>

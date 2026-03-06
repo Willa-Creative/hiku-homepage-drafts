@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hiku by harper — V8 Surprise + Delight</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       HIKU V8 — Surprise + Delight
+       Based on Figma feedback frame 889:4511
+       Faithful to approved Option 1 layout +
+       3D/embossed styling, otter animations,
+       interactive moments throughout
+       ======================================== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --pink: #F5E6E0;
+      --brown: #3D1C1E;
+      --brown-light: #5C3A3D;
+      --rosewood: #C4A0A7;
+      --almond: #FDF8F5;
+      --cream: #F7F1EB;
+      --mauve: #B8A0B8;
+      --vivid-pink: #E782A9;
+      --baby-blue: #B8D4E8;
+      --oat-matcha: #C4CFA0;
+      --stone-300: #D6D3D1;
+      --stone-400: #A6A09B;
+      --serif: 'Playfair Display', 'Big Caslon', Georgia, serif;
+      --sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --ease-premium: cubic-bezier(0.215, 0.61, 0.355, 1);
+      /* 3D emboss tokens */
+      --emboss-light: rgba(255,255,255,0.45);
+      --emboss-shadow: rgba(61,28,30,0.25);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 1.2;
+      color: var(--brown);
+      background: var(--almond);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    body.door-locked { overflow: hidden; }
+    h1, h2, h3, h4 { font-family: var(--serif); font-weight: 500; line-height: 1.1; }
+    h1 { font-size: clamp(40px, 5vw, 56px); }
+    h2 { font-size: clamp(28px, 3.5vw, 40px); }
+    h3 { font-size: 24px; }
+    h4 { font-size: 16px; }
+    .subhead {
+      font-family: var(--sans); font-weight: 700; font-size: 12px;
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+
+    /* 3D Embossed Button — Gisou-inspired */
+    .btn {
+      display: inline-block; font-family: var(--sans); font-weight: 500; font-size: 12px;
+      line-height: 1; padding: 14px 28px; border-radius: 4px; text-decoration: none;
+      cursor: pointer; border: none; position: relative;
+      transition: transform 0.3s var(--ease-spring), box-shadow 0.3s ease;
+    }
+    .btn-primary {
+      background: var(--brown);
+      color: var(--almond);
+      box-shadow:
+        0 2px 0 0 rgba(0,0,0,0.2),
+        0 4px 12px rgba(61,28,30,0.2),
+        inset 0 1px 0 0 rgba(255,255,255,0.08);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 4px 0 0 rgba(0,0,0,0.15),
+        0 8px 24px rgba(61,28,30,0.3),
+        inset 0 1px 0 0 rgba(255,255,255,0.1);
+    }
+    .btn-primary:active {
+      transform: translateY(1px);
+      box-shadow:
+        0 1px 0 0 rgba(0,0,0,0.2),
+        0 2px 6px rgba(61,28,30,0.2),
+        inset 0 1px 0 0 rgba(255,255,255,0.05);
+    }
+    .btn-outline {
+      background: transparent; color: var(--brown); border: 1px solid var(--brown);
+      box-shadow: 0 2px 0 0 rgba(61,28,30,0.1);
+    }
+    .btn-outline:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(61,28,30,0.15);
+      background: rgba(61,28,30,0.03);
+    }
+
+    /* Scroll Reveal */
+    .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ============================
+       DOOR OPENING
+       ============================ */
+    .door-overlay { position: fixed; inset: 0; z-index: 9999; pointer-events: none; display: flex; }
+    .door-panel {
+      width: 50%; height: 100%; background: var(--brown); display: flex;
+      align-items: center; justify-content: center;
+      transition: transform 1.4s var(--ease-out-expo); will-change: transform;
+    }
+    .door-panel--left { transform: translateX(0); justify-content: flex-end; padding-right: 8px; }
+    .door-panel--right { transform: translateX(0); justify-content: flex-start; padding-left: 8px; }
+    .door-overlay.open .door-panel--left { transform: translateX(-100%); }
+    .door-overlay.open .door-panel--right { transform: translateX(100%); }
+    .door-logo {
+      font-family: var(--serif); font-size: 72px; font-weight: 600;
+      color: var(--almond); letter-spacing: -0.03em; transition: opacity 0.3s ease;
+    }
+    .door-overlay.open .door-logo { opacity: 0; }
+    .door-logo sup { font-size: 12px; font-style: italic; font-weight: 400; opacity: 0.5; }
+
+    /* ============================
+       1. BANNER
+       ============================ */
+    .banner {
+      background: var(--brown); height: 41px; display: flex; align-items: center;
+      justify-content: center; font-size: 12px; color: var(--almond); letter-spacing: 0.02em;
+      position: relative; overflow: hidden;
+    }
+    .banner__text { position: relative; z-index: 1; }
+    .banner__arrows {
+      position: absolute; right: 40px; top: 50%; transform: translateY(-50%);
+      display: flex; gap: 6px; align-items: center;
+    }
+    .banner__arrow {
+      width: 16px; height: 16px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; opacity: 0.6; transition: opacity 0.2s;
+      background: none; border: none; color: var(--almond);
+    }
+    .banner__arrow:hover { opacity: 1; }
+
+    /* ============================
+       2. NAV
+       ============================ */
+    .nav {
+      background: transparent; height: 80px; display: flex; align-items: center;
+      justify-content: space-between; padding: 0 40px;
+      position: absolute; top: 41px; left: 0; right: 0; z-index: 100;
+      transition: background 0.4s, box-shadow 0.3s, top 0.3s;
+    }
+    .nav--sticky {
+      position: fixed; top: 0; background: rgba(61,28,30,0.95);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 4px 30px rgba(61,28,30,0.15);
+    }
+    .nav__logo {
+      font-family: var(--serif); font-size: 28px; font-weight: 600;
+      color: var(--almond); text-decoration: none; letter-spacing: -0.02em;
+      position: relative; display: inline-flex; align-items: center;
+    }
+    .nav__logo sup { font-size: 9px; font-style: italic; font-weight: 400; opacity: 0.5; margin-left: 2px; }
+    .nav__links { display: flex; gap: 32px; }
+    .nav__links a {
+      color: var(--almond); text-decoration: none; font-size: 13px;
+      letter-spacing: 0.01em; opacity: 0.85; transition: opacity 0.2s;
+    }
+    .nav__links a:hover { opacity: 1; }
+    .nav__actions { display: flex; gap: 20px; align-items: center; }
+    .nav__icon {
+      width: 18px; height: 18px; color: var(--almond); opacity: 0.8;
+      cursor: pointer; transition: opacity 0.2s;
+    }
+    .nav__icon:hover { opacity: 1; }
+
+    /* Otter paw on logo hover */
+    .nav__paw {
+      position: absolute; left: -30px; top: -8px;
+      font-size: 20px; opacity: 0; transform: rotate(-20deg) scale(0.5);
+      transition: opacity 0.4s var(--ease-spring), transform 0.4s var(--ease-spring);
+      pointer-events: none;
+    }
+    .nav__logo:hover .nav__paw {
+      opacity: 1; transform: rotate(0deg) scale(1);
+    }
+
+    /* ============================
+       3. HERO
+       ============================ */
+    .hero {
+      position: relative; height: 100vh; min-height: 600px; max-height: 900px;
+      overflow: hidden; display: flex; align-items: flex-end;
+    }
+    .hero__image {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--pink) 0%, var(--rosewood) 100%);
+      background-size: cover; background-position: center;
+    }
+    .hero__image::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(61,28,30,0.35) 0%, transparent 50%);
+    }
+    .hero__content {
+      position: relative; z-index: 2; padding: 0 40px 60px;
+      max-width: 600px;
+    }
+    .hero__title {
+      font-size: clamp(48px, 6vw, 72px); color: var(--almond);
+      line-height: 0.95; margin-bottom: 24px;
+      text-shadow: 0 2px 20px rgba(61,28,30,0.2);
+    }
+    .hero .btn-primary {
+      background: var(--brown);
+      box-shadow:
+        0 2px 0 0 rgba(0,0,0,0.3),
+        0 6px 20px rgba(61,28,30,0.3),
+        inset 0 1px 0 0 rgba(255,255,255,0.1);
+    }
+
+    /* Otter peek — bottom right of hero */
+    .hero__otter-peek {
+      position: absolute; bottom: -40px; right: 120px; z-index: 10;
+      font-size: 48px; transition: bottom 0.6s var(--ease-spring);
+      cursor: pointer; filter: drop-shadow(0 -4px 12px rgba(61,28,30,0.2));
+    }
+    .hero__otter-peek:hover { bottom: -10px; }
+    .hero__otter-peek .otter-message {
+      position: absolute; bottom: 100%; right: -20px;
+      background: var(--almond); color: var(--brown); padding: 8px 14px;
+      border-radius: 12px 12px 2px 12px; font-size: 12px; font-family: var(--sans);
+      white-space: nowrap; opacity: 0; transform: translateY(8px);
+      transition: opacity 0.3s, transform 0.3s var(--ease-spring);
+      box-shadow: 0 4px 16px rgba(61,28,30,0.15);
+      pointer-events: none;
+    }
+    .hero__otter-peek:hover .otter-message {
+      opacity: 1; transform: translateY(0);
+    }
+
+    /* ============================
+       4. PRODUCT CAROUSEL
+       ============================ */
+    .products {
+      padding: 60px 40px 40px;
+    }
+    .products__header {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 40px;
+    }
+    .products__title { font-size: clamp(24px, 2.5vw, 28px); }
+    .products__link {
+      font-size: 13px; color: var(--brown); text-decoration: none;
+      border-bottom: 1px solid var(--stone-300); padding-bottom: 2px;
+      transition: border-color 0.2s;
+    }
+    .products__link:hover { border-color: var(--brown); }
+    .products__track {
+      display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory;
+      padding-bottom: 20px; scrollbar-width: none; -ms-overflow-style: none;
+    }
+    .products__track::-webkit-scrollbar { display: none; }
+
+    /* 3D Product Card — embossed feel */
+    .product-card {
+      flex: 0 0 328px; scroll-snap-align: start; cursor: pointer;
+      position: relative; border-radius: 6px; overflow: hidden;
+      background: white;
+      box-shadow:
+        0 1px 0 0 var(--emboss-light),
+        0 4px 16px rgba(61,28,30,0.08),
+        0 1px 3px rgba(61,28,30,0.06);
+      transition: transform 0.4s var(--ease-spring), box-shadow 0.4s ease;
+    }
+    .product-card:hover {
+      transform: translateY(-6px) scale(1.01);
+      box-shadow:
+        0 1px 0 0 var(--emboss-light),
+        0 16px 40px rgba(61,28,30,0.12),
+        0 4px 12px rgba(61,28,30,0.08);
+    }
+    .product-card__image {
+      width: 100%; aspect-ratio: 328/410;
+      background: var(--pink); position: relative; overflow: hidden;
+    }
+    .product-card__image-inner {
+      width: 100%; height: 100%; background-size: cover; background-position: center;
+      transition: transform 0.6s var(--ease-out-expo);
+    }
+    .product-card:hover .product-card__image-inner { transform: scale(1.04); }
+    /* Editorial hover overlay — JW Anderson inspired */
+    .product-card__editorial {
+      position: absolute; inset: 0; display: flex; align-items: flex-end;
+      padding: 20px; opacity: 0; transition: opacity 0.4s;
+      background: linear-gradient(to top, rgba(61,28,30,0.5) 0%, transparent 60%);
+    }
+    .product-card:hover .product-card__editorial { opacity: 1; }
+    .product-card__quote {
+      color: var(--almond); font-family: var(--serif); font-style: italic;
+      font-size: 14px; line-height: 1.4;
+    }
+    .product-card__info { padding: 16px 16px 12px; }
+    .product-card__row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 4px;
+    }
+    .product-card__name {
+      font-family: var(--sans); font-weight: 600; font-size: 12px;
+      text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .product-card__price { font-size: 13px; color: var(--stone-400); }
+    .product-card__desc { font-size: 12px; color: var(--stone-400); margin-bottom: 8px; }
+    .product-card__rating { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--stone-400); margin-bottom: 12px; }
+    .product-card__star { color: var(--brown); }
+    .product-card .btn {
+      width: 100%; text-align: center; padding: 10px; font-size: 11px;
+      text-transform: uppercase; letter-spacing: 0.06em;
+    }
+
+    /* Progress bar */
+    .products__progress {
+      width: 100%; height: 2px; background: var(--stone-300);
+      border-radius: 1px; margin-top: 20px; position: relative; overflow: hidden;
+    }
+    .products__progress-bar {
+      height: 100%; width: 20%; background: var(--brown);
+      border-radius: 1px; transition: width 0.3s;
+    }
+
+    /* ============================
+       5. PRESS QUOTE
+       ============================ */
+    .press {
+      text-align: center; padding: 80px 40px;
+    }
+    .press__quote {
+      font-family: var(--serif); font-style: italic;
+      font-size: clamp(28px, 4vw, 44px); line-height: 1.15;
+      max-width: 700px; margin: 0 auto 24px;
+      /* 3D text emboss */
+      text-shadow:
+        0 1px 0 var(--emboss-light),
+        0 2px 4px rgba(61,28,30,0.08);
+    }
+    .press__source {
+      font-family: var(--serif); font-size: 28px; font-style: italic;
+      opacity: 0.7; letter-spacing: 0.02em;
+    }
+
+    /* ============================
+       6. MARQUEE
+       ============================ */
+    .marquee {
+      overflow: hidden; padding: 18px 0;
+      border-top: 1px solid rgba(61,28,30,0.08);
+      border-bottom: 1px solid rgba(61,28,30,0.08);
+      /* Embossed banner feel */
+      background: linear-gradient(180deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%);
+      box-shadow: inset 0 1px 0 0 var(--emboss-light), inset 0 -1px 0 0 rgba(61,28,30,0.04);
+    }
+    .marquee__track {
+      display: flex; gap: 40px; white-space: nowrap;
+      animation: marqueeScroll 20s linear infinite;
+    }
+    .marquee__item {
+      font-size: 13px; letter-spacing: 0.02em; color: var(--brown); opacity: 0.7;
+      flex-shrink: 0;
+    }
+    .marquee__dot { opacity: 0.3; flex-shrink: 0; }
+    @keyframes marqueeScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ============================
+       7. ABOUT SECTION (50/50 split)
+       ============================ */
+    .about {
+      display: grid; grid-template-columns: 1fr 1fr; min-height: 720px;
+    }
+    .about__image {
+      background: var(--pink);
+      background-size: cover; background-position: center;
+      position: relative;
+      /* 3D depth — inner shadow */
+      box-shadow: inset 8px 0 30px rgba(61,28,30,0.08);
+    }
+    .about__content {
+      padding: 60px 80px; display: flex; flex-direction: column;
+      justify-content: center; max-width: 520px;
+    }
+    .about__label { margin-bottom: 16px; }
+    .about__heading {
+      font-size: clamp(28px, 3vw, 36px); margin-bottom: 24px; line-height: 1.15;
+    }
+    .about__body {
+      font-size: 14px; line-height: 1.7; color: var(--brown-light);
+      margin-bottom: 24px;
+    }
+    .about__link {
+      font-size: 13px; color: var(--brown); text-decoration: none;
+      border-bottom: 1px solid var(--stone-300); padding-bottom: 2px;
+      display: inline-block; transition: border-color 0.2s;
+    }
+    .about__link:hover { border-color: var(--brown); }
+
+    /* ============================
+       8. UGC — hiku + you
+       ============================ */
+    .ugc {
+      padding: 80px 40px; background: var(--cream);
+      /* Embossed section feel */
+      box-shadow:
+        inset 0 2px 0 0 var(--emboss-light),
+        inset 0 -1px 0 0 rgba(61,28,30,0.04);
+    }
+    .ugc__title {
+      font-size: clamp(20px, 2vw, 24px); margin-bottom: 40px;
+    }
+    .ugc__grid {
+      display: flex; align-items: center; justify-content: center;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .ugc__item {
+      border-radius: 6px; overflow: hidden; position: relative;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(61,28,30,0.08);
+      transition: transform 0.4s var(--ease-spring), box-shadow 0.4s;
+    }
+    .ugc__item:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 12px 32px rgba(61,28,30,0.12);
+    }
+    .ugc__item--sm { width: 160px; height: 200px; }
+    .ugc__item--md { width: 200px; height: 260px; }
+    .ugc__item--lg { width: 260px; height: 340px; }
+    .ugc__item-inner {
+      width: 100%; height: 100%; background-size: cover; background-position: center;
+      transition: transform 0.6s var(--ease-out-expo);
+    }
+    .ugc__item:hover .ugc__item-inner { transform: scale(1.06); }
+    /* Surprise otter hidden in UGC */
+    .ugc__otter-surprise {
+      position: absolute; bottom: 8px; right: 8px;
+      font-size: 22px; opacity: 0;
+      transition: opacity 0.3s, transform 0.3s var(--ease-spring);
+      transform: scale(0.6) rotate(-10deg);
+      pointer-events: none;
+    }
+    .ugc__item:hover .ugc__otter-surprise {
+      opacity: 1; transform: scale(1) rotate(0deg);
+    }
+
+    /* ============================
+       9. DAILY FOUNDATION (routine)
+       ============================ */
+    .routine {
+      display: grid; grid-template-columns: minmax(300px, 500px) 1fr;
+      min-height: 900px; position: relative;
+    }
+    .routine__content {
+      padding: 60px 40px; display: flex; flex-direction: column;
+    }
+    .routine__heading {
+      font-size: clamp(36px, 4vw, 48px); margin-bottom: 16px; line-height: 1.05;
+    }
+    .routine__desc {
+      font-size: 14px; line-height: 1.7; color: var(--brown-light);
+      margin-bottom: 40px; max-width: 400px;
+    }
+    .routine__steps { display: flex; flex-direction: column; gap: 0; flex: 1; }
+    .routine__step {
+      display: grid; grid-template-columns: 60px 1fr; gap: 16px;
+      padding: 20px 0; border-top: 1px solid rgba(61,28,30,0.08);
+      cursor: pointer; transition: background 0.3s;
+      border-radius: 4px; position: relative;
+    }
+    .routine__step:hover { background: rgba(61,28,30,0.02); }
+    .routine__step-label {
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--rosewood); padding-top: 4px;
+    }
+    .routine__step-thumb {
+      width: 48px; height: 60px; border-radius: 4px;
+      background: var(--pink);
+      /* 3D bottle thumbnail */
+      box-shadow:
+        0 2px 8px rgba(61,28,30,0.1),
+        inset 0 1px 0 var(--emboss-light);
+    }
+    .routine__step-info { display: flex; flex-direction: column; gap: 4px; }
+    .routine__step-name {
+      font-family: var(--sans); font-weight: 600; font-size: 12px;
+      text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .routine__step-detail { font-size: 12px; color: var(--stone-400); }
+    .routine__step-price { font-size: 13px; font-weight: 600; }
+    .routine__image {
+      background: var(--pink); background-size: cover; background-position: center;
+      position: relative;
+      /* 3D depth */
+      box-shadow: inset -8px 0 30px rgba(61,28,30,0.06);
+    }
+
+    /* ============================
+       10. DAILY RITUAL SPLIT + TRENDING
+       ============================ */
+    .ritual {
+      display: grid; grid-template-columns: 1fr 1fr; min-height: 720px;
+    }
+    .ritual__image {
+      background: var(--pink); background-size: cover; background-position: center;
+      box-shadow: inset 8px 0 30px rgba(61,28,30,0.06);
+    }
+    .ritual__content {
+      padding: 60px 80px; display: flex; flex-direction: column;
+      justify-content: center; max-width: 520px;
+    }
+    .ritual__label { margin-bottom: 16px; }
+    .ritual__heading {
+      font-size: clamp(28px, 3vw, 36px); margin-bottom: 16px; line-height: 1.15;
+    }
+    .ritual__body {
+      font-size: 14px; line-height: 1.7; color: var(--brown-light);
+      margin-bottom: 24px;
+    }
+
+    /* Trending Section */
+    .trending { padding: 60px 40px 40px; }
+
+    /* ============================
+       11. FOOTER
+       ============================ */
+    .footer {
+      background: var(--brown); color: var(--almond); padding: 60px 40px 40px;
+      position: relative; overflow: hidden;
+    }
+    .footer__top {
+      display: grid; grid-template-columns: repeat(3, 180px) 1fr;
+      gap: 40px; margin-bottom: 60px;
+    }
+    .footer__col-title {
+      font-family: var(--sans); font-weight: 600; font-size: 13px;
+      margin-bottom: 16px; letter-spacing: 0.02em;
+    }
+    .footer__links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer__links a {
+      color: var(--almond); text-decoration: none; font-size: 13px;
+      opacity: 0.65; transition: opacity 0.2s;
+    }
+    .footer__links a:hover { opacity: 1; }
+
+    /* Newsletter */
+    .footer__newsletter { max-width: 440px; }
+    .footer__newsletter-heading {
+      font-family: var(--serif); font-size: clamp(24px, 2.5vw, 32px);
+      line-height: 1.2; margin-bottom: 24px;
+    }
+    .footer__input-group { margin-bottom: 16px; position: relative; }
+    .footer__input-label {
+      font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
+      opacity: 0.5; display: block; margin-bottom: 4px;
+    }
+    .footer__input {
+      width: 100%; background: transparent; border: none;
+      border-bottom: 1px solid rgba(253,248,245,0.25);
+      color: var(--almond); padding: 10px 4px; font-size: 14px;
+      font-family: var(--sans); outline: none;
+      transition: border-color 0.3s;
+    }
+    .footer__input:focus { border-color: rgba(253,248,245,0.6); }
+    .footer__input::placeholder { color: rgba(253,248,245,0.3); }
+    .footer__disclaimer {
+      font-size: 9px; line-height: 1.5; opacity: 0.35; margin-bottom: 16px;
+    }
+    .footer .btn-outline {
+      color: var(--almond); border-color: rgba(253,248,245,0.4);
+    }
+    .footer .btn-outline:hover {
+      border-color: var(--almond); background: rgba(253,248,245,0.06);
+    }
+
+    /* Footer bottom */
+    .footer__bottom {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      padding-top: 40px;
+    }
+    .footer__logo {
+      font-family: var(--serif); font-size: 80px; font-weight: 600;
+      color: var(--almond); opacity: 0.15; letter-spacing: -0.03em; line-height: 1;
+    }
+    .footer__social { display: flex; gap: 40px; }
+    .footer__social-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .footer__social-thumb {
+      width: 140px; height: 178px; border-radius: 4px;
+      background: var(--brown-light); background-size: cover; background-position: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      transition: transform 0.3s var(--ease-spring);
+    }
+    .footer__social-thumb:hover { transform: translateY(-4px); }
+    .footer__social-label {
+      font-size: 12px; opacity: 0.6; text-decoration: none; color: var(--almond);
+      transition: opacity 0.2s;
+    }
+    .footer__social-label:hover { opacity: 1; }
+    .footer__copyright {
+      font-size: 12px; opacity: 0.4; padding-top: 20px;
+    }
+
+    /* Footer otter — animated popup */
+    .footer__otter {
+      position: absolute; top: -60px; right: 200px;
+      font-size: 64px; z-index: 10;
+      animation: otterBounce 3s var(--ease-spring) infinite;
+      cursor: pointer;
+      filter: drop-shadow(0 4px 16px rgba(61,28,30,0.2));
+    }
+    .footer__otter-bubble {
+      position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%);
+      background: var(--almond); color: var(--brown); padding: 10px 16px;
+      border-radius: 14px 14px 14px 4px; font-size: 12px; font-family: var(--sans);
+      white-space: nowrap; opacity: 0; transition: opacity 0.3s, transform 0.3s;
+      box-shadow: 0 4px 20px rgba(61,28,30,0.15);
+      pointer-events: none;
+    }
+    .footer__otter:hover .footer__otter-bubble {
+      opacity: 1; transform: translateX(-50%) translateY(-4px);
+    }
+    @keyframes otterBounce {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25% { transform: translateY(-8px) rotate(-3deg); }
+      75% { transform: translateY(-4px) rotate(2deg); }
+    }
+
+    /* ============================
+       FLOATING OTTER (random popup)
+       ============================ */
+    .floating-otter {
+      position: fixed; z-index: 200; pointer-events: none;
+      font-size: 36px; opacity: 0;
+      transition: opacity 0.5s, transform 0.5s var(--ease-spring);
+    }
+    .floating-otter.show {
+      opacity: 1; pointer-events: auto; cursor: pointer;
+    }
+    .floating-otter__message {
+      position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+      background: var(--almond); color: var(--brown); padding: 8px 14px;
+      border-radius: 12px; font-size: 11px; font-family: var(--sans);
+      white-space: nowrap; box-shadow: 0 4px 16px rgba(61,28,30,0.12);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .floating-otter.show .floating-otter__message { opacity: 1; }
+
+    /* ============================
+       SECRET OTTER REWARD TOAST
+       ============================ */
+    .otter-toast {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+      background: var(--brown); color: var(--almond); padding: 16px 28px;
+      border-radius: 12px; font-size: 13px; font-family: var(--sans);
+      display: flex; align-items: center; gap: 10px; z-index: 300;
+      box-shadow:
+        0 8px 32px rgba(61,28,30,0.3),
+        0 2px 0 0 rgba(0,0,0,0.2),
+        inset 0 1px 0 0 rgba(255,255,255,0.08);
+      transition: transform 0.6s var(--ease-spring);
+    }
+    .otter-toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ============================
+       RESPONSIVE
+       ============================ */
+    @media (max-width: 1024px) {
+      .about, .ritual { grid-template-columns: 1fr; }
+      .about__image, .ritual__image { min-height: 400px; }
+      .about__content, .ritual__content { padding: 40px; max-width: 100%; }
+      .routine { grid-template-columns: 1fr; }
+      .routine__image { min-height: 400px; order: -1; }
+      .footer__top { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .nav { padding: 0 20px; }
+      .nav__links { display: none; }
+      .hero__content { padding: 0 20px 40px; }
+      .products, .trending { padding: 40px 20px; }
+      .product-card { flex: 0 0 280px; }
+      .ugc { padding: 40px 20px; }
+      .ugc__grid { gap: 10px; }
+      .ugc__item--sm { width: 120px; height: 150px; }
+      .ugc__item--md { width: 150px; height: 200px; }
+      .ugc__item--lg { width: 200px; height: 260px; }
+      .routine__content { padding: 40px 20px; }
+      .press { padding: 60px 20px; }
+      .footer { padding: 40px 20px; }
+      .footer__top { grid-template-columns: 1fr; gap: 30px; }
+      .footer__bottom { flex-direction: column; align-items: flex-start; gap: 30px; }
+      .footer__social { gap: 20px; }
+    }
+  </style>
+</head>
+<body class="door-locked">
+
+  <!-- DOOR OPENING ANIMATION -->
+  <div class="door-overlay" id="doorOverlay">
+    <div class="door-panel door-panel--left">
+      <span class="door-logo">hik</span>
+    </div>
+    <div class="door-panel door-panel--right">
+      <span class="door-logo">u<sup>by harper</sup></span>
+    </div>
+  </div>
+
+  <!-- BANNER -->
+  <div class="banner">
+    <span class="banner__text">Free standard shipping on orders $45+</span>
+    <div class="banner__arrows">
+      <button class="banner__arrow" aria-label="Previous">&#8249;</button>
+      <button class="banner__arrow" aria-label="Next">&#8250;</button>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav class="nav" id="mainNav">
+    <a href="#" class="nav__logo">
+      <span class="nav__paw">&#128062;</span>
+      hiku<sup>by harper</sup>
+    </a>
+    <div class="nav__links">
+      <a href="#">Shop +</a>
+      <a href="#">About</a>
+      <a href="#">Community</a>
+      <a href="#">Find Your Ritual</a>
+    </div>
+    <div class="nav__actions">
+      <svg class="nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+      <svg class="nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 12 0v1"/></svg>
+      <svg class="nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2h12l2 7H4l2-7zM4 9v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9"/></svg>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero__image" style="background-image: url('https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?w=1600&q=80'); background-color: #C4A0A7;"></div>
+    <div class="hero__content">
+      <h1 class="hero__title reveal">gentle works</h1>
+      <a href="#" class="btn btn-primary reveal reveal-delay-1">shop hiku</a>
+    </div>
+    <div class="hero__otter-peek" id="heroOtter">
+      &#129446;
+      <span class="otter-message">psst... good skin takes time</span>
+    </div>
+  </section>
+
+  <!-- PRODUCT CAROUSEL — skincare essentials -->
+  <section class="products reveal" id="productsSection">
+    <div class="products__header">
+      <h2 class="products__title">skincare essentials</h2>
+      <a href="#" class="products__link">shop all</a>
+    </div>
+    <div class="products__track" id="productsTrack">
+      <div class="product-card">
+        <div class="product-card__image">
+          <div class="product-card__image-inner" style="background-color: #E8D5CE;"></div>
+          <div class="product-card__editorial"><span class="product-card__quote">"my skin has never been this calm"</span></div>
+        </div>
+        <div class="product-card__info">
+          <div class="product-card__row"><span class="product-card__name">Guava Glow Moisturizer</span><span class="product-card__price">$34.00</span></div>
+          <div class="product-card__desc">Hydrating glow for all skin types</div>
+          <div class="product-card__rating"><span class="product-card__star">&#9733;</span> 4.8 (124)</div>
+          <a href="#" class="btn btn-primary">add to bag</a>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-card__image">
+          <div class="product-card__image-inner" style="background-color: #D4DFC4;"></div>
+          <div class="product-card__editorial"><span class="product-card__quote">"the matcha cleanser changed everything"</span></div>
+        </div>
+        <div class="product-card__info">
+          <div class="product-card__row"><span class="product-card__name">Matcha Skin Cleanser</span><span class="product-card__price">$28.00</span></div>
+          <div class="product-card__desc">Gentle daily purifying cleanse</div>
+          <div class="product-card__rating"><span class="product-card__star">&#9733;</span> 4.9 (89)</div>
+          <a href="#" class="btn btn-primary">add to bag</a>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-card__image">
+          <div class="product-card__image-inner" style="background-color: #C8D8E8;"></div>
+          <div class="product-card__editorial"><span class="product-card__quote">"a serum that actually does what it says"</span></div>
+        </div>
+        <div class="product-card__info">
+          <div class="product-card__row"><span class="product-card__name">Green Juice Serum</span><span class="product-card__price">$38.00</span></div>
+          <div class="product-card__desc">Brightening antioxidant boost</div>
+          <div class="product-card__rating"><span class="product-card__star">&#9733;</span> 4.7 (67)</div>
+          <a href="#" class="btn btn-primary">add to bag</a>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-card__image">
+          <div class="product-card__image-inner" style="background-color: #F0E6DC;"></div>
+          <div class="product-card__editorial"><span class="product-card__quote">"so soothing on my sensitive skin"</span></div>
+        </div>
+        <div class="product-card__info">
+          <div class="product-card__row"><span class="product-card__name">Oat Milk Toner</span><span class="product-card__price">$26.00</span></div>
+          <div class="product-card__desc">Calming prep for balanced skin</div>
+          <div class="product-card__rating"><span class="product-card__star">&#9733;</span> 4.8 (93)</div>
+          <a href="#" class="btn btn-primary">add to bag</a>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-card__image">
+          <div class="product-card__image-inner" style="background-color: #DDD5CA;"></div>
+          <div class="product-card__editorial"><span class="product-card__quote">"the mask I didn't know I needed"</span></div>
+        </div>
+        <div class="product-card__info">
+          <div class="product-card__row"><span class="product-card__name">Rice Water Clay Mask</span><span class="product-card__price">$32.00</span></div>
+          <div class="product-card__desc">Deep cleanse without stripping</div>
+          <div class="product-card__rating"><span class="product-card__star">&#9733;</span> 4.6 (58)</div>
+          <a href="#" class="btn btn-primary">add to bag</a>
+        </div>
+      </div>
+    </div>
+    <div class="products__progress"><div class="products__progress-bar" id="productsProgress"></div></div>
+  </section>
+
+  <!-- PRESS QUOTE -->
+  <section class="press reveal">
+    <p class="press__quote">&ldquo;A thoughtful answer to viral skincare culture&rdquo;</p>
+    <p class="press__source">allure</p>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee">
+    <div class="marquee__track">
+      <span class="marquee__item">Non-comedogenic</span><span class="marquee__dot">&bull;</span>
+      <span class="marquee__item">Alcohol-free</span><span class="marquee__dot">&bull;</span>
+      <span class="marquee__item">Fragrance-free</span><span class="marquee__dot">&bull;</span>
+      <span class="marquee__item">Vegan</span><span class="marquee__dot">&bull;</span>
+      <span class="marquee__item">Cruelty-free</span><span class="marquee__dot">&bull;</span>
+      <span class="marquee__item">Non-comedogenic</span><span class="marquee__dot">&bull;</span>
+      <span class="marquee__item">Alcohol-free</span><span class="marquee__dot">&bull;</span>
+      <span class="marquee__item">Fragrance-free</span><span class="marquee__dot">&bull;</span>
+      <span class="marquee__item">Vegan</span><span class="marquee__dot">&bull;</span>
+      <span class="marquee__item">Cruelty-free</span><span class="marquee__dot">&bull;</span>
+      <!-- duplicate for seamless loop -->
+      <span class="marquee__item">Non-comedogenic</span><span class="marquee__dot">&bull;</span>
+      <span class="marquee__item">Alcohol-free</span><span class="marquee__dot">&bull;</span>
+      <span class="marquee__item">Fragrance-free</span><span class="marquee__dot">&bull;</span>
+      <span class="marquee__item">Vegan</span><span class="marquee__dot">&bull;</span>
+      <span class="marquee__item">Cruelty-free</span><span class="marquee__dot">&bull;</span>
+      <span class="marquee__item">Non-comedogenic</span><span class="marquee__dot">&bull;</span>
+      <span class="marquee__item">Alcohol-free</span><span class="marquee__dot">&bull;</span>
+      <span class="marquee__item">Fragrance-free</span><span class="marquee__dot">&bull;</span>
+      <span class="marquee__item">Vegan</span><span class="marquee__dot">&bull;</span>
+      <span class="marquee__item">Cruelty-free</span><span class="marquee__dot">&bull;</span>
+    </div>
+  </div>
+
+  <!-- ABOUT — 50/50 SPLIT -->
+  <section class="about reveal">
+    <div class="about__image" style="background-image: url('https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=800&q=80'); background-color: #D4C4B8;"></div>
+    <div class="about__content">
+      <span class="subhead about__label">About</span>
+      <h2 class="about__heading">skincare that supports who you already are, not who you're told to be</h2>
+      <p class="about__body">you're among the first to experience hiku &mdash; skincare I've been dreaming up since I was little and shaped by everything I've learned along the way, with you in mind.<br><br>it's what I wish had existed from the start. considered products and derm-approved formulas for a grounding routine designed to respect developing skin.<br><br>x Harper</p>
+      <a href="#" class="about__link">more</a>
+    </div>
+  </section>
+
+  <!-- UGC — hiku + you -->
+  <section class="ugc reveal">
+    <h2 class="ugc__title">hiku + you</h2>
+    <div class="ugc__grid">
+      <div class="ugc__item ugc__item--sm">
+        <div class="ugc__item-inner" style="background-image: url('https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?w=400&q=80'); background-color: #D4C4B8;"></div>
+      </div>
+      <div class="ugc__item ugc__item--sm">
+        <div class="ugc__item-inner" style="background-image: url('https://images.unsplash.com/photo-1609357871098-7500bfee7740?w=400&q=80'); background-color: #E8D5CE;"></div>
+      </div>
+      <div class="ugc__item ugc__item--lg">
+        <div class="ugc__item-inner" style="background-image: url('https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=600&q=80'); background-color: #C8B8A8;"></div>
+        <span class="ugc__otter-surprise">&#129446;</span>
+      </div>
+      <div class="ugc__item ugc__item--md">
+        <div class="ugc__item-inner" style="background-image: url('https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&q=80'); background-color: #D8C8B8;"></div>
+      </div>
+      <div class="ugc__item ugc__item--sm">
+        <div class="ugc__item-inner" style="background-image: url('https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=400&q=80'); background-color: #E0D0C0;"></div>
+      </div>
+      <div class="ugc__item ugc__item--md">
+        <div class="ugc__item-inner" style="background-image: url('https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=400&q=80'); background-color: #D0C0B0;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE DAILY FOUNDATION (routine builder) -->
+  <section class="routine reveal">
+    <div class="routine__content">
+      <h2 class="routine__heading">the daily foundation</h2>
+      <p class="routine__desc">The steady foundation that keeps skin comfortable, balanced, and ready for whatever comes next. Four steps that do exactly what your skin needs &mdash; nothing more, nothing less.</p>
+      <div class="routine__steps">
+        <div class="routine__step">
+          <span class="routine__step-label">Cleanse</span>
+          <div class="routine__step-thumb" style="background-color: #D4DFC4;"></div>
+          <div class="routine__step-info">
+            <span class="routine__step-name">Matcha Skin Cleanser</span>
+            <span class="routine__step-detail">Lorem ipsum dolor sit amet.</span>
+            <span class="routine__step-price">$28.00</span>
+          </div>
+        </div>
+        <div class="routine__step">
+          <span class="routine__step-label">Tone</span>
+          <div class="routine__step-thumb" style="background-color: #F0E6DC;"></div>
+          <div class="routine__step-info">
+            <span class="routine__step-name">Oat Milk Toner</span>
+            <span class="routine__step-detail">Lorem ipsum dolor sit amet.</span>
+            <span class="routine__step-price">$26.00</span>
+          </div>
+        </div>
+        <div class="routine__step">
+          <span class="routine__step-label">Treat</span>
+          <div class="routine__step-thumb" style="background-color: #C8D8E8;"></div>
+          <div class="routine__step-info">
+            <span class="routine__step-name">Green Juice Serum</span>
+            <span class="routine__step-detail">Lorem ipsum dolor sit amet.</span>
+            <span class="routine__step-price">$38.00</span>
+          </div>
+        </div>
+        <div class="routine__step">
+          <span class="routine__step-label">Seal</span>
+          <div class="routine__step-thumb" style="background-color: #E8D5CE;"></div>
+          <div class="routine__step-info">
+            <span class="routine__step-name">Guava Glow Moisturizer</span>
+            <span class="routine__step-detail">Lorem ipsum dolor sit amet.</span>
+            <span class="routine__step-price">$34.00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="routine__image" style="background-image: url('https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=900&q=80'); background-color: #D4C4B8;"></div>
+  </section>
+
+  <!-- DAILY RITUAL SPLIT -->
+  <section class="ritual reveal">
+    <div class="ritual__image" style="background-image: url('https://images.unsplash.com/photo-1612817288484-6f916006741a?w=800&q=80'); background-color: #C8B8A8;"></div>
+    <div class="ritual__content">
+      <span class="subhead ritual__label">daily ritual</span>
+      <h2 class="ritual__heading">skincare that begins with knowing you</h2>
+      <p class="ritual__body">A routine that's genuinely yours &mdash; built around how your skin feels, what it craves, and the life you actually live.</p>
+      <a href="#" class="btn btn-primary">find yours</a>
+    </div>
+  </section>
+
+  <!-- TRENDING CAROUSEL -->
+  <section class="trending reveal" id="trendingSection">
+    <div class="products__header">
+      <h2 class="products__title">trending</h2>
+      <a href="#" class="products__link">shop all</a>
+    </div>
+    <div class="products__track" id="trendingTrack">
+      <div class="product-card">
+        <div class="product-card__image">
+          <div class="product-card__image-inner" style="background-color: #DDD5CA;"></div>
+          <div class="product-card__editorial"><span class="product-card__quote">"my new holy grail mask"</span></div>
+        </div>
+        <div class="product-card__info">
+          <div class="product-card__row"><span class="product-card__name">Rice Water Clay Mask</span><span class="product-card__price">$32.00</span></div>
+          <div class="product-card__desc">Deep cleanse without stripping</div>
+          <div class="product-card__rating"><span class="product-card__star">&#9733;</span> 4.6 (58)</div>
+          <a href="#" class="btn btn-primary">add to bag</a>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-card__image">
+          <div class="product-card__image-inner" style="background-color: #F0C8D0;"></div>
+          <div class="product-card__editorial"><span class="product-card__quote">"my lips have never felt softer"</span></div>
+        </div>
+        <div class="product-card__info">
+          <div class="product-card__row"><span class="product-card__name">Glace Kiss Balm</span><span class="product-card__price">$22.00</span></div>
+          <div class="product-card__desc">Nourishing tinted lip treatment</div>
+          <div class="product-card__rating"><span class="product-card__star">&#9733;</span> 4.9 (142)</div>
+          <a href="#" class="btn btn-primary">add to bag</a>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-card__image">
+          <div class="product-card__image-inner" style="background-color: #C8D8E8;"></div>
+          <div class="product-card__editorial"><span class="product-card__quote">"the glow is real"</span></div>
+        </div>
+        <div class="product-card__info">
+          <div class="product-card__row"><span class="product-card__name">Green Juice Serum</span><span class="product-card__price">$38.00</span></div>
+          <div class="product-card__desc">Brightening antioxidant boost</div>
+          <div class="product-card__rating"><span class="product-card__star">&#9733;</span> 4.7 (67)</div>
+          <a href="#" class="btn btn-primary">add to bag</a>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-card__image">
+          <div class="product-card__image-inner" style="background-color: #E8D5CE;"></div>
+          <div class="product-card__editorial"><span class="product-card__quote">"dewy without being greasy"</span></div>
+        </div>
+        <div class="product-card__info">
+          <div class="product-card__row"><span class="product-card__name">Guava Glow Moisturizer</span><span class="product-card__price">$34.00</span></div>
+          <div class="product-card__desc">Hydrating glow for all skin types</div>
+          <div class="product-card__rating"><span class="product-card__star">&#9733;</span> 4.8 (124)</div>
+          <a href="#" class="btn btn-primary">add to bag</a>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-card__image">
+          <div class="product-card__image-inner" style="background-color: #F0E6DC;"></div>
+          <div class="product-card__editorial"><span class="product-card__quote">"finally a toner that doesn't sting"</span></div>
+        </div>
+        <div class="product-card__info">
+          <div class="product-card__row"><span class="product-card__name">Oat Milk Toner</span><span class="product-card__price">$26.00</span></div>
+          <div class="product-card__desc">Calming prep for balanced skin</div>
+          <div class="product-card__rating"><span class="product-card__star">&#9733;</span> 4.8 (93)</div>
+          <a href="#" class="btn btn-primary">add to bag</a>
+        </div>
+      </div>
+    </div>
+    <div class="products__progress"><div class="products__progress-bar" id="trendingProgress"></div></div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <!-- Otter popup above footer -->
+    <div class="footer__otter" id="footerOtter">
+      &#129446;
+      <div class="footer__otter-bubble">you found me! secret code: OTTERLOVE</div>
+    </div>
+
+    <div class="footer__top">
+      <div>
+        <div class="footer__col-title">Shop</div>
+        <ul class="footer__links">
+          <li><a href="#">Shop All</a></li>
+          <li><a href="#">Cleanser & Toner</a></li>
+          <li><a href="#">Serum</a></li>
+          <li><a href="#">Moisturizer</a></li>
+          <li><a href="#">Mask & Scrub</a></li>
+          <li><a href="#">Lip Care</a></li>
+          <li><a href="#">Sets</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer__col-title">About</div>
+        <ul class="footer__links">
+          <li><a href="#">Our Story</a></li>
+          <li><a href="#">Find Your Ritual</a></li>
+          <li><a href="#">Ingredient Index</a></li>
+          <li><a href="#">Journal</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer__col-title">Help</div>
+        <ul class="footer__links">
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">FAQs</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Shipping & Returns</a></li>
+        </ul>
+      </div>
+      <div class="footer__newsletter">
+        <h3 class="footer__newsletter-heading">things we're working on. things we're learning.</h3>
+        <div class="footer__input-group">
+          <label class="footer__input-label">Email</label>
+          <input type="email" class="footer__input" placeholder="you@email.com">
+        </div>
+        <div class="footer__input-group">
+          <label class="footer__input-label">Phone (optional)</label>
+          <input type="tel" class="footer__input" placeholder="(555) 000-0000">
+        </div>
+        <p class="footer__disclaimer">By providing your number and clicking the button, you agree to receive recurring auto-dialed marketing SMS (including cart reminders) and our Terms of Service (including arbitration). Consent is not required to purchase. Msg & data rates may apply. Msg frequency varies. Reply HELP for help; STOP to opt-out. View Privacy Policy.</p>
+        <a href="#" class="btn btn-outline">stay close</a>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <div>
+        <div class="footer__logo">hiku</div>
+        <p class="footer__copyright">&copy; 2026 Hiku Beauty. All Rights Reserved.</p>
+      </div>
+      <div class="footer__social">
+        <a href="#" class="footer__social-item">
+          <div class="footer__social-thumb" style="background-color: var(--brown-light);"></div>
+          <span class="footer__social-label">Instagram</span>
+        </a>
+        <a href="#" class="footer__social-item">
+          <div class="footer__social-thumb" style="background-color: var(--brown-light);"></div>
+          <span class="footer__social-label">Pinterest</span>
+        </a>
+        <a href="#" class="footer__social-item">
+          <div class="footer__social-thumb" style="background-color: var(--brown-light);"></div>
+          <span class="footer__social-label">Tiktok</span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING OTTER (random popup throughout scroll) -->
+  <div class="floating-otter" id="floatingOtter">
+    &#129446;
+    <div class="floating-otter__message" id="floatingOtterMsg"></div>
+  </div>
+
+  <!-- SECRET OTTER TOAST -->
+  <div class="otter-toast" id="otterToast">
+    &#129446; You found all 3 otters! Secret code: <strong>OTTERLOVE</strong>
+  </div>
+
+  <script>
+    /* ========================================
+       HIKU V8 — Interactions & Surprise+Delight
+       ======================================== */
+
+    // Door opening
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('doorOverlay').classList.add('open');
+        document.body.classList.remove('door-locked');
+      }, 800);
+    });
+
+    // Sticky nav
+    const nav = document.getElementById('mainNav');
+    const bannerHeight = 41;
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      if (scrollY > bannerHeight + 80) {
+        nav.classList.add('nav--sticky');
+      } else {
+        nav.classList.remove('nav--sticky');
+      }
+      lastScroll = scrollY;
+    });
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(el => revealObserver.observe(el));
+
+    // Product carousel progress
+    function setupCarouselProgress(trackId, barId) {
+      const track = document.getElementById(trackId);
+      const bar = document.getElementById(barId);
+      if (!track || !bar) return;
+      track.addEventListener('scroll', () => {
+        const scrollLeft = track.scrollLeft;
+        const maxScroll = track.scrollWidth - track.clientWidth;
+        const pct = maxScroll > 0 ? (scrollLeft / maxScroll) * 100 : 0;
+        bar.style.width = Math.max(20, pct) + '%';
+      });
+    }
+    setupCarouselProgress('productsTrack', 'productsProgress');
+    setupCarouselProgress('trendingTrack', 'trendingProgress');
+
+    // ========================================
+    // SURPRISE + DELIGHT: Floating Otter
+    // ========================================
+    const otterMessages = [
+      "you're glowing already",
+      "good things take time",
+      "be gentle with yourself",
+      "your skin says thank you",
+      "slow down, you're doing great",
+      "skincare is self-care",
+    ];
+    const floatingOtter = document.getElementById('floatingOtter');
+    const floatingOtterMsg = document.getElementById('floatingOtterMsg');
+    let otterTimeout;
+    let ottersFound = 0;
+    const otterToast = document.getElementById('otterToast');
+
+    function showFloatingOtter() {
+      const viewW = window.innerWidth;
+      const viewH = window.innerHeight;
+      const side = Math.random() > 0.5 ? 'right' : 'left';
+      const x = side === 'right' ? viewW - 80 : 40;
+      const y = 200 + Math.random() * (viewH - 400);
+      const msg = otterMessages[Math.floor(Math.random() * otterMessages.length)];
+
+      floatingOtter.style.left = x + 'px';
+      floatingOtter.style.top = y + 'px';
+      floatingOtterMsg.textContent = msg;
+      floatingOtter.classList.add('show');
+
+      otterTimeout = setTimeout(() => {
+        floatingOtter.classList.remove('show');
+      }, 4000);
+    }
+
+    floatingOtter.addEventListener('click', () => {
+      floatingOtter.classList.remove('show');
+      clearTimeout(otterTimeout);
+      ottersFound++;
+      checkOtterReward();
+    });
+
+    // Show floating otter at random intervals while scrolling
+    let scrollOtterTimer;
+    let otterShownCount = 0;
+    window.addEventListener('scroll', () => {
+      if (otterShownCount >= 3) return;
+      clearTimeout(scrollOtterTimer);
+      scrollOtterTimer = setTimeout(() => {
+        if (Math.random() > 0.7 && !floatingOtter.classList.contains('show')) {
+          showFloatingOtter();
+          otterShownCount++;
+        }
+      }, 2000);
+    });
+
+    // Hero otter click
+    document.getElementById('heroOtter').addEventListener('click', () => {
+      ottersFound++;
+      checkOtterReward();
+    });
+
+    // Footer otter click
+    document.getElementById('footerOtter').addEventListener('click', () => {
+      ottersFound++;
+      checkOtterReward();
+    });
+
+    function checkOtterReward() {
+      if (ottersFound >= 3) {
+        otterToast.classList.add('show');
+        setTimeout(() => otterToast.classList.remove('show'), 5000);
+      }
+    }
+  </script>
+</body>
+</html>
