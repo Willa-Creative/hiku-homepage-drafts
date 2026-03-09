@@ -10,13 +10,13 @@
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
-      --pink: #F5E6E0;
       --brown: #3D1C1E;
-      --rosewood: #C4A0A7;
       --almond: #FDF8F5;
-      --stone-400: #A6A09B;
       --serif: 'Playfair Display', 'Big Caslon', Georgia, serif;
       --sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --thumb-size: 120px;
+      --thumb-gap: 24px;
+      --thumb-step: calc(var(--thumb-size) + var(--thumb-gap));
     }
     html, body {
       height: 100%;
@@ -38,59 +38,54 @@
       padding: 32px 0 24px;
     }
     .thumbnails {
-      display: flex;
-      gap: 24px;
-      justify-content: flex-start;
-      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      height: var(--thumb-size);
+      margin: 0 auto;
     }
     .thumb {
-      width: 120px;
-      height: 120px;
+      width: var(--thumb-size);
+      height: var(--thumb-size);
       border-radius: 8px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
-      position: relative;
-      transition: transform 0.3s ease, border-color 0.3s ease;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      margin-left: calc(var(--thumb-size) / -2);
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                  border-color 0.3s ease,
+                  opacity 0.4s ease;
       border: 1px solid transparent;
       background: transparent;
     }
-    .thumb:hover {
-      transform: scale(1.05);
-    }
     .thumb.active {
       border-color: var(--brown);
-      border-radius: 8px;
-      transform: scale(1.08);
     }
-    .thumb__img {
-      width: 100%;
-      height: 100%;
+    .thumb img {
+      width: 85%;
+      height: 85%;
       object-fit: contain;
-      filter: drop-shadow(0 2px 8px rgba(61,28,30,0.08));
+      pointer-events: none;
     }
 
     /* ─── Stack Container ─── */
     .stack-container {
       flex: 1;
       position: relative;
-      margin: 32px 48px 48px;
-      overflow: hidden;
-      border-radius: 12px;
+      margin: 24px 48px 48px;
+      overflow: visible;
     }
 
     /* ─── Frames / Slides ─── */
     .frame {
       position: absolute;
       inset: 0;
-      border-radius: 12px;
       overflow: hidden;
-      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-                  opacity 0.5s ease,
-                  box-shadow 0.5s ease;
       will-change: transform, opacity;
+      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 0.5s ease;
     }
     .frame__bg {
       position: absolute;
@@ -103,182 +98,101 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      height: 60%;
-      max-height: 420px;
+      height: 55%;
+      max-height: 400px;
       filter: drop-shadow(0 8px 32px rgba(61,28,30,0.2));
-      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-                  opacity 0.5s ease;
+    }
+    .frame__product img {
+      height: 100%;
+      width: auto;
+      object-fit: contain;
     }
 
-    /* Stack positions */
+    /* Stack: only 3 visible */
     .frame[data-depth="0"] {
       z-index: 10;
       transform: translateY(0) scale(1);
       opacity: 1;
     }
-.frame[data-depth="1"] {
+    .frame[data-depth="1"] {
       z-index: 9;
-      transform: translateY(20px) scale(0.97);
-      opacity: 0.7;
-      box-shadow: 0 -4px 20px rgba(61,28,30,0.1);
+      transform: translateY(28px) scale(0.96);
+      opacity: 0.75;
     }
     .frame[data-depth="2"] {
       z-index: 8;
-      transform: translateY(40px) scale(0.94);
-      opacity: 0.4;
-      box-shadow: 0 -4px 20px rgba(61,28,30,0.08);
+      transform: translateY(56px) scale(0.92);
+      opacity: 0.5;
     }
-    .frame[data-depth="3"] {
-      z-index: 7;
-      transform: translateY(55px) scale(0.91);
-      opacity: 0.2;
-    }
-    .frame[data-depth="4"],
-    .frame[data-depth="5"],
-    .frame[data-depth="6"] {
-      z-index: 6;
-      transform: translateY(65px) scale(0.88);
+    .frame.hidden-frame {
+      z-index: 1;
+      transform: translateY(70px) scale(0.88);
       opacity: 0;
       pointer-events: none;
     }
 
-    /* ─── Product SVG placeholders ─── */
-    .product-icon {
-      width: 70%;
-      height: 70%;
-    }
-
     /* ─── Responsive ─── */
     @media (max-width: 768px) {
-      .thumbnails {
-        gap: 12px;
-        padding: 20px 16px 16px;
-        justify-content: flex-start;
-      }
-      .thumb {
-        width: 72px;
-        height: 72px;
+      :root {
+        --thumb-size: 72px;
+        --thumb-gap: 12px;
       }
       .stack-container {
         margin: 16px 16px 24px;
       }
       .frame__product {
-        height: 50%;
+        height: 45%;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Product Thumbnails -->
   <div class="thumbnails-wrap">
     <div class="thumbnails" id="thumbnails"></div>
   </div>
 
-  <!-- Stacked Frames -->
   <div class="stack-container" id="stack"></div>
 
   <script>
+    // Product images from Figma
+    const IMG_JAR = 'assets/b1983030efe5da27c6000b46e47a3bb5cb301ba1.png';
+    const IMG_DROPPER = 'assets/2073f3c36a70227dc6ab5531ba597f67945f8777.png';
+    const IMG_TUBE = 'assets/b0eb6302ee336ef8745a70594462453669872c14.png';
+    const IMG_SLIM = 'assets/bf4ac0864ff9934a18e93943c82515606d8017bd.png';
+
     const products = [
-      {
-        name: 'Guava Glow Moisturizer',
-        short: 'Guava Glow',
-        type: 'jar',
-        bg: 'linear-gradient(160deg, #e8c4b8 0%, #d4a594 40%, #c48b78 100%)',
-        accent: '#c48b78'
-      },
-      {
-        name: 'Soft Matte Moisturizer',
-        short: 'Soft Matte',
-        type: 'jar',
-        bg: 'linear-gradient(160deg, #dbb8c4 0%, #c89aaa 40%, #b87d90 100%)',
-        accent: '#b87d90'
-      },
-      {
-        name: 'Oak Milk Toner',
-        short: 'Oak Milk',
-        type: 'bottle',
-        bg: 'linear-gradient(160deg, #c9b8a0 0%, #b8a48a 40%, #a08968 100%)',
-        accent: '#a08968'
-      },
-      {
-        name: 'Matcha Skin Cleanser',
-        short: 'Matcha',
-        type: 'tube',
-        bg: 'linear-gradient(160deg, #b8c4a8 0%, #9aaa84 40%, #7d9068 100%)',
-        accent: '#7d9068'
-      },
-      {
-        name: 'Green Juice Serum',
-        short: 'Green Juice',
-        type: 'dropper',
-        bg: 'linear-gradient(160deg, #a8c4b0 0%, #84aa8c 40%, #689070 100%)',
-        accent: '#689070'
-      },
-      {
-        name: 'Smooth Skin Face Scrub',
-        short: 'Face Scrub',
-        type: 'tube',
-        bg: 'linear-gradient(160deg, #d4b8c8 0%, #c4a0b4 40%, #a8849c 100%)',
-        accent: '#a8849c'
-      },
-      {
-        name: 'Glacé Kiss Balm',
-        short: 'Glacé Kiss',
-        type: 'slim',
-        bg: 'linear-gradient(160deg, #e0c8cc 0%, #d4b4bc 40%, #c89ca8 100%)',
-        accent: '#c89ca8'
-      }
-    ];
-
-    // SVG product shapes
-    function productSVG(type, color) {
-      const fill = '#F5E6E0';
-      const dark = '#3D1C1E';
-      switch(type) {
-        case 'jar':
-          return `<svg viewBox="0 0 120 100" class="product-icon"><rect x="20" y="10" width="80" height="12" rx="3" fill="${dark}" opacity="0.15"/><rect x="15" y="22" width="90" height="65" rx="10" fill="${fill}"/><rect x="15" y="22" width="90" height="65" rx="10" stroke="${dark}" stroke-width="0.5" fill="none" opacity="0.1"/><text x="60" y="52" text-anchor="middle" font-family="'Playfair Display',serif" font-size="16" font-weight="600" fill="${dark}">hiku</text><text x="60" y="68" text-anchor="middle" font-family="'Helvetica Neue',sans-serif" font-size="5" fill="${dark}" opacity="0.5">by harper</text></svg>`;
-        case 'bottle':
-          return `<svg viewBox="0 0 80 140" class="product-icon"><rect x="30" y="5" width="20" height="18" rx="3" fill="${dark}" opacity="0.15"/><rect x="20" y="23" width="40" height="105" rx="8" fill="${fill}"/><rect x="20" y="23" width="40" height="105" rx="8" stroke="${dark}" stroke-width="0.5" fill="none" opacity="0.1"/><text x="40" y="72" text-anchor="middle" font-family="'Playfair Display',serif" font-size="14" font-weight="600" fill="${dark}" transform="rotate(-90 40 72)">hiku</text></svg>`;
-        case 'tube':
-          return `<svg viewBox="0 0 70 160" class="product-icon"><ellipse cx="35" cy="12" rx="10" ry="12" fill="${dark}" opacity="0.12"/><rect x="12" y="20" width="46" height="125" rx="10" fill="${fill}"/><rect x="12" y="20" width="46" height="125" rx="10" stroke="${dark}" stroke-width="0.5" fill="none" opacity="0.1"/><text x="35" y="85" text-anchor="middle" font-family="'Playfair Display',serif" font-size="16" font-weight="600" fill="${dark}" transform="rotate(-90 35 85)">hiku</text></svg>`;
-        case 'dropper':
-          return `<svg viewBox="0 0 60 150" class="product-icon"><rect x="24" y="2" width="12" height="30" rx="4" fill="${dark}" opacity="0.15"/><rect x="15" y="32" width="30" height="108" rx="6" fill="${fill}"/><rect x="15" y="32" width="30" height="108" rx="6" stroke="${dark}" stroke-width="0.5" fill="none" opacity="0.1"/><text x="30" y="88" text-anchor="middle" font-family="'Playfair Display',serif" font-size="12" font-weight="600" fill="${dark}" transform="rotate(-90 30 88)">hiku</text></svg>`;
-        case 'slim':
-          return `<svg viewBox="0 0 40 140" class="product-icon"><rect x="12" y="2" width="16" height="14" rx="3" fill="${dark}" opacity="0.12"/><rect x="8" y="16" width="24" height="115" rx="5" fill="${fill}"/><rect x="8" y="16" width="24" height="115" rx="5" stroke="${dark}" stroke-width="0.5" fill="none" opacity="0.1"/><text x="20" y="75" text-anchor="middle" font-family="'Playfair Display',serif" font-size="10" font-weight="600" fill="${dark}" transform="rotate(-90 20 75)">hiku</text></svg>`;
-      }
-    }
-
-    // Background images — using skin-tone close-up gradients as placeholders
-    // In production these would be actual photography
-    const bgImages = [
-      'radial-gradient(ellipse at 40% 40%, #e4bfae 0%, #d4a08a 30%, #c08870 60%, #a87060 100%)',
-      'radial-gradient(ellipse at 55% 35%, #e8ccc0 0%, #d8b0a0 30%, #c49888 60%, #b08070 100%)',
-      'radial-gradient(ellipse at 45% 50%, #dcc4b4 0%, #ccac98 30%, #b89480 60%, #a47c68 100%)',
-      'radial-gradient(ellipse at 50% 40%, #d8c4b0 0%, #c8aa94 30%, #b49078 60%, #a07860 100%)',
-      'radial-gradient(ellipse at 60% 45%, #e0c8b8 0%, #d0b09c 30%, #bc9880 60%, #a88068 100%)',
-      'radial-gradient(ellipse at 35% 55%, #dcc0b0 0%, #cca898 30%, #b89080 60%, #a47868 100%)',
-      'radial-gradient(ellipse at 50% 50%, #e4c8bc 0%, #d4b0a0 30%, #c09884 60%, #ac806c 100%)'
+      { name: 'Guava Glow Moisturizer', img: IMG_JAR,
+        bg: 'radial-gradient(ellipse at 40% 40%, #e4bfae 0%, #d4a08a 30%, #c08870 60%, #a87060 100%)' },
+      { name: 'Soft Matte Moisturizer', img: IMG_JAR,
+        bg: 'radial-gradient(ellipse at 55% 35%, #e8ccc0 0%, #d8b0a0 30%, #c49888 60%, #b08070 100%)' },
+      { name: 'Oak Milk Toner', img: IMG_DROPPER,
+        bg: 'radial-gradient(ellipse at 45% 50%, #dcc4b4 0%, #ccac98 30%, #b89480 60%, #a47c68 100%)' },
+      { name: 'Matcha Skin Cleanser', img: IMG_TUBE,
+        bg: 'radial-gradient(ellipse at 50% 40%, #d8c4b0 0%, #c8aa94 30%, #b49078 60%, #a07860 100%)' },
+      { name: 'Green Juice Serum', img: IMG_DROPPER,
+        bg: 'radial-gradient(ellipse at 60% 45%, #e0c8b8 0%, #d0b09c 30%, #bc9880 60%, #a88068 100%)' },
+      { name: 'Smooth Skin Face Scrub', img: IMG_TUBE,
+        bg: 'radial-gradient(ellipse at 35% 55%, #dcc0b0 0%, #cca898 30%, #b89080 60%, #a47868 100%)' },
+      { name: 'Glacé Kiss Balm', img: IMG_SLIM,
+        bg: 'radial-gradient(ellipse at 50% 50%, #e4c8bc 0%, #d4b0a0 30%, #c09884 60%, #ac806c 100%)' }
     ];
 
     const N = products.length;
-    const COPIES = 3; // triple the strip for infinite illusion
-    let activeIndex = 3; // Start with Matcha
+    let activeIndex = 3;
     const stack = document.getElementById('stack');
     const thumbsContainer = document.getElementById('thumbnails');
-    const thumbsWrap = document.querySelector('.thumbnails-wrap');
 
-    // Build thumbnails — 3 copies for infinite loop
-    for (let copy = 0; copy < COPIES; copy++) {
-      products.forEach((p, i) => {
-        const div = document.createElement('div');
-        div.className = 'thumb';
-        div.dataset.product = i;
-        div.innerHTML = productSVG(p.type, p.accent);
-        div.addEventListener('click', () => selectProduct(i));
-        thumbsContainer.appendChild(div);
-      });
-    }
+    // Build thumbnails — one per product
+    const thumbEls = [];
+    products.forEach((p, i) => {
+      const div = document.createElement('div');
+      div.className = 'thumb';
+      div.innerHTML = `<img src="${p.img}" alt="${p.name}">`;
+      div.addEventListener('click', () => selectProduct(i));
+      thumbsContainer.appendChild(div);
+      thumbEls.push(div);
+    });
 
     // Build frames
     products.forEach((p, i) => {
@@ -286,57 +200,50 @@
       frame.className = 'frame';
       frame.dataset.index = i;
       frame.innerHTML = `
-        <div class="frame__bg" style="background: ${bgImages[i]}"></div>
-        <div class="frame__product">${productSVG(p.type, p.accent)}</div>
+        <div class="frame__bg" style="background: ${p.bg}"></div>
+        <div class="frame__product"><img src="${p.img}" alt="${p.name}"></div>
       `;
       stack.appendChild(frame);
     });
 
-    // Scale product SVGs in frames
-    stack.querySelectorAll('.frame__product .product-icon').forEach(svg => {
-      svg.style.width = '100%';
-      svg.style.height = '100%';
-    });
-    stack.querySelectorAll('.frame__product').forEach(el => {
-      el.style.width = '160px';
-      el.style.height = '380px';
-    });
+    // Position thumbs circularly — active always centered, 3 on each side
+    function layoutThumbs() {
+      thumbEls.forEach((el, i) => {
+        // Shortest circular distance from active
+        let offset = i - activeIndex;
+        if (offset > Math.floor(N / 2)) offset -= N;
+        if (offset < -Math.floor(N / 2)) offset += N;
 
-    function centerThumb(productIndex) {
-      // Always center on the middle copy's thumb
-      const middleThumbIndex = N + productIndex; // middle copy starts at index N
-      const thumbs = thumbsContainer.querySelectorAll('.thumb');
-      const thumb = thumbs[middleThumbIndex];
-      if (!thumb) return;
-      const wrapWidth = thumbsWrap.offsetWidth;
-      const thumbLeft = thumb.offsetLeft;
-      const thumbWidth = thumb.offsetWidth;
-      const offset = -(thumbLeft - (wrapWidth / 2) + (thumbWidth / 2));
-      thumbsContainer.style.transform = `translateX(${offset}px)`;
+        // Position: offset * step from center (center = 0)
+        const step = 144; // thumb-size + gap on desktop
+        const x = offset * step;
+        el.style.transform = `translateX(${x}px)`;
+        el.classList.toggle('active', i === activeIndex);
+      });
     }
 
     function selectProduct(index, force) {
       if (index === activeIndex && !force) return;
       activeIndex = index;
+      layoutThumbs();
 
-      // Update active state on all copies
-      thumbsContainer.querySelectorAll('.thumb').forEach(t => {
-        t.classList.toggle('active', parseInt(t.dataset.product) === index);
-      });
-
-      // Slide to center
-      centerThumb(index);
-
-      // Reorder stack
+      // Stack: active on top, then next 2 visible, rest hidden
       const frames = [...stack.querySelectorAll('.frame')];
-      const order = [index];
-      for (let i = 1; i < N; i++) {
-        const idx = (index - i + N) % N;
-        order.push(idx);
-      }
       frames.forEach(f => {
         const fi = parseInt(f.dataset.index);
-        f.dataset.depth = order.indexOf(fi);
+        // Circular distance
+        let dist = fi - index;
+        if (dist > Math.floor(N / 2)) dist -= N;
+        if (dist < -Math.floor(N / 2)) dist += N;
+        dist = Math.abs(dist);
+
+        if (dist <= 2) {
+          f.dataset.depth = dist;
+          f.classList.remove('hidden-frame');
+        } else {
+          f.removeAttribute('data-depth');
+          f.classList.add('hidden-frame');
+        }
       });
     }
 
@@ -366,9 +273,6 @@
         else selectProduct((activeIndex - 1 + N) % N);
       }
     }, { passive: true });
-
-    // Keep centered on resize
-    window.addEventListener('resize', () => centerThumb(activeIndex));
   </script>
 
 </body>
