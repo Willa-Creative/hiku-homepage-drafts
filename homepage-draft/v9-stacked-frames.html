@@ -19,16 +19,13 @@
       --thumb-step: calc(var(--thumb-size) + var(--thumb-gap));
     }
     html, body {
-      height: 100%;
-      overflow: hidden;
+      min-height: 100%;
     }
     body {
       font-family: var(--sans);
       background: var(--almond);
       color: var(--brown);
       -webkit-font-smoothing: antialiased;
-      display: flex;
-      flex-direction: column;
     }
 
     /* ─── Thumbnails ─── */
@@ -72,10 +69,11 @@
 
     /* ─── Stack Container ─── */
     .stack-container {
-      flex: 1;
       position: relative;
-      margin: 24px 48px 48px;
-      overflow: visible;
+      margin: 24px 48px 0;
+      height: 70vh;
+      /* extra bottom padding for stacked frames peeking out */
+      margin-bottom: 240px;
     }
 
     /* ─── Frames / Slides ─── */
