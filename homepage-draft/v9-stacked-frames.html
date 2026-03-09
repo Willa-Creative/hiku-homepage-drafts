@@ -32,12 +32,15 @@
     }
 
     /* ─── Thumbnails ─── */
+    .thumbnails-wrap {
+      flex-shrink: 0;
+      overflow: hidden;
+      padding: 32px 0 24px;
+    }
     .thumbnails {
       display: flex;
       gap: 24px;
-      padding: 32px 48px 24px;
-      flex-shrink: 0;
-      overflow: hidden;
+      justify-content: flex-start;
       transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .thumb {
@@ -168,7 +171,9 @@
 <body>
 
   <!-- Product Thumbnails -->
-  <div class="thumbnails" id="thumbnails"></div>
+  <div class="thumbnails-wrap">
+    <div class="thumbnails" id="thumbnails"></div>
+  </div>
 
   <!-- Stacked Frames -->
   <div class="stack-container" id="stack"></div>
@@ -256,18 +261,24 @@
       'radial-gradient(ellipse at 50% 50%, #e4c8bc 0%, #d4b0a0 30%, #c09884 60%, #ac806c 100%)'
     ];
 
-    let activeIndex = 3; // Start with Matcha (center product, like Figma)
+    const N = products.length;
+    const COPIES = 3; // triple the strip for infinite illusion
+    let activeIndex = 3; // Start with Matcha
     const stack = document.getElementById('stack');
     const thumbsContainer = document.getElementById('thumbnails');
+    const thumbsWrap = document.querySelector('.thumbnails-wrap');
 
-    // Build thumbnails
-    products.forEach((p, i) => {
-      const div = document.createElement('div');
-      div.className = `thumb${i === activeIndex ? ' active' : ''}`;
-      div.innerHTML = productSVG(p.type, p.accent);
-      div.addEventListener('click', () => selectProduct(i));
-      thumbsContainer.appendChild(div);
-    });
+    // Build thumbnails — 3 copies for infinite loop
+    for (let copy = 0; copy < COPIES; copy++) {
+      products.forEach((p, i) => {
+        const div = document.createElement('div');
+        div.className = 'thumb';
+        div.dataset.product = i;
+        div.innerHTML = productSVG(p.type, p.accent);
+        div.addEventListener('click', () => selectProduct(i));
+        thumbsContainer.appendChild(div);
+      });
+    }
 
     // Build frames
     products.forEach((p, i) => {
@@ -291,56 +302,55 @@
       el.style.height = '380px';
     });
 
-    function centerThumb(index) {
-      const thumbs = document.querySelectorAll('.thumb');
-      const thumb = thumbs[index];
-      const container = thumbsContainer;
-      const containerWidth = container.offsetWidth;
+    function centerThumb(productIndex) {
+      // Always center on the middle copy's thumb
+      const middleThumbIndex = N + productIndex; // middle copy starts at index N
+      const thumbs = thumbsContainer.querySelectorAll('.thumb');
+      const thumb = thumbs[middleThumbIndex];
+      if (!thumb) return;
+      const wrapWidth = thumbsWrap.offsetWidth;
       const thumbLeft = thumb.offsetLeft;
       const thumbWidth = thumb.offsetWidth;
-      const offset = -(thumbLeft - (containerWidth / 2) + (thumbWidth / 2));
-      container.style.transform = `translateX(${offset}px)`;
+      const offset = -(thumbLeft - (wrapWidth / 2) + (thumbWidth / 2));
+      thumbsContainer.style.transform = `translateX(${offset}px)`;
     }
 
     function selectProduct(index, force) {
       if (index === activeIndex && !force) return;
       activeIndex = index;
 
-      // Update thumbs
-      document.querySelectorAll('.thumb').forEach((t, i) => {
-        t.classList.toggle('active', i === index);
+      // Update active state on all copies
+      thumbsContainer.querySelectorAll('.thumb').forEach(t => {
+        t.classList.toggle('active', parseInt(t.dataset.product) === index);
       });
 
-      // Slide active thumb to center
+      // Slide to center
       centerThumb(index);
 
-      // Reorder stack — selected frame comes to top (depth 0)
-      // Build order: selected first, then the rest in reverse recency
+      // Reorder stack
       const frames = [...stack.querySelectorAll('.frame')];
       const order = [index];
-      for (let i = 1; i < products.length; i++) {
-        const idx = (index - i + products.length) % products.length;
+      for (let i = 1; i < N; i++) {
+        const idx = (index - i + N) % N;
         order.push(idx);
       }
-
       frames.forEach(f => {
         const fi = parseInt(f.dataset.index);
-        const depth = order.indexOf(fi);
-        f.dataset.depth = depth;
+        f.dataset.depth = order.indexOf(fi);
       });
     }
 
-    // Initialize stack
+    // Initialize
     selectProduct(activeIndex, true);
 
     // Keyboard nav
     document.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
         e.preventDefault();
-        selectProduct((activeIndex + 1) % products.length);
+        selectProduct((activeIndex + 1) % N);
       } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
         e.preventDefault();
-        selectProduct((activeIndex - 1 + products.length) % products.length);
+        selectProduct((activeIndex - 1 + N) % N);
       }
     });
 
@@ -352,8 +362,8 @@
     stack.addEventListener('touchend', (e) => {
       const diff = e.changedTouches[0].clientX - touchStartX;
       if (Math.abs(diff) > 50) {
-        if (diff < 0) selectProduct((activeIndex + 1) % products.length);
-        else selectProduct((activeIndex - 1 + products.length) % products.length);
+        if (diff < 0) selectProduct((activeIndex + 1) % N);
+        else selectProduct((activeIndex - 1 + N) % N);
       }
     }, { passive: true });
 
