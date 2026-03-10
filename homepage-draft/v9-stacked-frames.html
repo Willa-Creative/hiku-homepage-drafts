@@ -106,7 +106,7 @@
       object-fit: contain;
     }
 
-    /* Stack: only 3 visible */
+    /* Stack: only 3 visible, hidden ones sit on top invisible */
     .frame[data-depth="0"] {
       z-index: 10;
       transform: translateY(0) scale(1);
@@ -120,10 +120,11 @@
       transform: translateY(180px) scale(0.92);
     }
     .frame.hidden-frame {
-      z-index: 1;
-      transform: translateY(220px) scale(0.88);
+      z-index: 11;
+      transform: translateY(0) scale(1);
       opacity: 0;
       pointer-events: none;
+      transition: none;
     }
 
     /* ─── Responsive ─── */
@@ -261,19 +262,24 @@
         setTimeout(() => { transitioning = false; }, 560);
       }
 
-      // Stack: active on top, then next 2 visible, rest hidden
+      // Stack: active on top, next 2 visible below, rest hidden on top
       const frames = [...stack.querySelectorAll('.frame')];
       frames.forEach(f => {
         const fi = parseInt(f.dataset.index);
-        // Circular distance
         let dist = fi - index;
         if (dist > Math.floor(N / 2)) dist -= N;
         if (dist < -Math.floor(N / 2)) dist += N;
         dist = Math.abs(dist);
 
+        const wasHidden = f.classList.contains('hidden-frame');
+
         if (dist <= 2) {
+          if (wasHidden) {
+            // Coming from hidden: remove hidden class, re-enable transition
+            f.classList.remove('hidden-frame');
+            f.offsetHeight; // reflow
+          }
           f.dataset.depth = dist;
-          f.classList.remove('hidden-frame');
         } else {
           f.removeAttribute('data-depth');
           f.classList.add('hidden-frame');
