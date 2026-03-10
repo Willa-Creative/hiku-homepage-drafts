@@ -48,46 +48,33 @@
     .thumb--logo { border: none !important; }
     .thumb--logo svg { width: 60%; height: 60%; }
 
-    /* ─── Scroll Track ─── */
-    .scroll-track { position: relative; }
+    /* ─── Sticky Card Stack (JR Atelier style) ─── */
+    .product-stack {
+      display: none;
+    }
+    .product-stack.active {
+      display: block;
+    }
 
-    /* ─── Sticky viewport ─── */
-    .stack-sticky {
+    .frame {
       position: sticky;
       top: 0;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    .stack-container {
-      position: absolute;
-      left: 0; right: 0;
-      /* starts below the sticky thumb bar (~160px) with side margins */
-      top: 160px;
-      bottom: 0;
-      margin: 0 48px;
-    }
-
-    .product-stack {
-      position: absolute; inset: 0;
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.4s ease;
-    }
-    .product-stack.active { opacity: 1; pointer-events: auto; }
-
-    /* ─── Frames ─── */
-    .frame {
-      position: absolute;
-      left: 0; right: 0; top: 0;
-      height: 100%;
+      height: 94vh;
+      width: 100%;
       overflow: hidden;
       border-radius: 12px;
-      will-change: transform, opacity;
+      will-change: transform;
     }
+    /* Each frame gets a higher z-index so it stacks on top */
+    .frame:nth-child(1) { z-index: 1; }
+    .frame:nth-child(2) { z-index: 2; }
+    .frame:nth-child(3) { z-index: 3; }
+
     .frame__bg {
       position: absolute; inset: 0;
       background-size: cover; background-position: center;
     }
+
     .frame--placeholder {
       display: flex; align-items: center; justify-content: center;
     }
@@ -95,31 +82,22 @@
       font-family: var(--serif); font-size: 18px;
       opacity: 0.4; text-align: center; line-height: 1.5;
     }
-    .frame--single {
-      position: relative; border-radius: 12px; overflow: hidden;
-      width: 100%; height: 100%;
-      display: flex; align-items: center; justify-content: center;
-    }
 
     @media (max-width: 768px) {
       :root { --thumb-size: 72px; --thumb-gap: 12px; }
-      .stack-container { margin: 0 16px; top: 112px; }
+      .frame { height: 90vh; }
     }
   </style>
 </head>
 <body>
 
-  <div class="thumbnails-wrap" id="thumbBar">
+  <div class="thumbnails-wrap">
     <div class="thumbnails" id="thumbnails"></div>
   </div>
 
-  <div class="scroll-track" id="scrollTrack">
-    <div class="stack-sticky">
-      <div class="stack-container" id="stackContainer"></div>
-    </div>
-  </div>
+  <div id="stacks"></div>
 
-  <div style="height: 100px;"></div>
+  <div style="height: 60px;"></div>
 
   <script>
     const IMG_JAR = 'assets/b1983030efe5da27c6000b46e47a3bb5cb301ba1.png';
@@ -192,17 +170,9 @@
       },
     ];
 
-    // ─── Config ───
-    const UNSTACK_SCROLL = 300;   // px to go from stacked → full width
-    const FRAME_SCROLL = 600;     // px per frame while scroll-locked
-    const STACK_OFFSET = 90;
-    const STACK_SCALE_STEP = 0.04;
-    const INITIAL_MARGIN = 48;    // initial side margin (matches CSS)
-
     const N = products.length;
     let activeIndex = 0;
-    const scrollTrack = document.getElementById('scrollTrack');
-    const stackContainer = document.getElementById('stackContainer');
+    const stacksContainer = document.getElementById('stacks');
     const thumbsContainer = document.getElementById('thumbnails');
 
     // ─── Build thumbnails ───
@@ -221,24 +191,21 @@
       thumbEls.push(div);
     });
 
-    // ─── Build frames ───
+    // ─── Build sticky card stacks ───
     const stackEls = [];
     products.forEach((p, pi) => {
       const stackDiv = document.createElement('div');
       stackDiv.className = 'product-stack';
       stackDiv.dataset.product = pi;
 
-      const isSingle = p.frames.length === 1;
-
       p.frames.forEach((f, fi) => {
         const frame = document.createElement('div');
-        frame.dataset.slide = fi;
 
         if (f.type === 'image') {
-          frame.className = isSingle ? 'frame frame--single' : 'frame';
+          frame.className = 'frame';
           frame.innerHTML = `<div class="frame__bg" style="background-image:url('${f.src}')"></div>`;
         } else {
-          frame.className = isSingle ? 'frame frame--single frame--placeholder' : 'frame frame--placeholder';
+          frame.className = 'frame frame--placeholder';
           frame.style.background = f.color;
           frame.innerHTML = `<span>${p.name}<br>${f.label}</span>`;
         }
@@ -246,103 +213,9 @@
         stackDiv.appendChild(frame);
       });
 
-      stackContainer.appendChild(stackDiv);
+      stacksContainer.appendChild(stackDiv);
       stackEls.push(stackDiv);
     });
-
-    // ─── Scroll track height ───
-    function updateScrollTrackHeight() {
-      const frameCount = products[activeIndex].frames.length;
-      if (frameCount <= 1) {
-        scrollTrack.style.height = '100vh';
-      } else {
-        scrollTrack.style.height = (UNSTACK_SCROLL + frameCount * FRAME_SCROLL + 100) + 'px';
-      }
-    }
-
-    // ─── Scroll-driven animation ───
-    function updateFrames() {
-      const p = products[activeIndex];
-      const frameCount = p.frames.length;
-      if (frameCount <= 1) return;
-
-      const trackRect = scrollTrack.getBoundingClientRect();
-      const scrolled = -trackRect.top;
-
-      const stackEl = stackEls[activeIndex];
-      const frames = stackEl.querySelectorAll('.frame');
-
-      if (scrolled < 0) {
-        // Before track — stacked with margins
-        stackContainer.style.left = '';
-        stackContainer.style.right = '';
-        stackContainer.style.margin = '0 ' + INITIAL_MARGIN + 'px';
-        frames.forEach((f, fi) => {
-          f.style.transform = `translateY(${fi * STACK_OFFSET}px) scale(${1 - fi * STACK_SCALE_STEP})`;
-          f.style.zIndex = frameCount - fi;
-          f.style.opacity = '1';
-          f.style.borderRadius = '12px';
-        });
-        return;
-      }
-
-      if (scrolled <= UNSTACK_SCROLL) {
-        // Phase 1: Unstack + expand to full width
-        const t = Math.min(1, scrolled / UNSTACK_SCROLL);
-        const ease = t * (2 - t); // ease-out
-
-        // Margins shrink from INITIAL_MARGIN to 0
-        const margin = INITIAL_MARGIN * (1 - ease);
-        stackContainer.style.margin = '0 ' + margin + 'px';
-
-        // Top shrinks to 0 (frames fill viewport below thumb bar)
-        const initTop = 160;
-        const topVal = initTop * (1 - ease);
-        stackContainer.style.top = topVal + 'px';
-
-        frames.forEach((f, fi) => {
-          const offsetY = (fi * STACK_OFFSET) * (1 - ease);
-          const scale = 1 - (fi * STACK_SCALE_STEP) * (1 - ease);
-          const radius = 12 * (1 - ease);
-          f.style.transform = `translateY(${offsetY}px) scale(${scale})`;
-          f.style.zIndex = frameCount - fi;
-          f.style.opacity = '1';
-          f.style.borderRadius = radius + 'px';
-        });
-      } else {
-        // Phase 2: Fully expanded, scroll-locked, cycle frames
-        stackContainer.style.margin = '0';
-        stackContainer.style.top = '0';
-
-        const cycleScrolled = scrolled - UNSTACK_SCROLL;
-        const currentFrame = Math.min(frameCount - 1, Math.floor(cycleScrolled / FRAME_SCROLL));
-        const frameProgress = (cycleScrolled - currentFrame * FRAME_SCROLL) / FRAME_SCROLL;
-
-        frames.forEach((f, fi) => {
-          f.style.transform = 'translateY(0) scale(1)';
-          f.style.borderRadius = '0px';
-
-          if (fi === currentFrame) {
-            f.style.opacity = '1';
-            f.style.zIndex = 10;
-          } else if (fi === currentFrame + 1 && currentFrame < frameCount - 1) {
-            // Next frame fades in during last 40% of scroll
-            const fadeIn = Math.max(0, (frameProgress - 0.6) / 0.4);
-            f.style.opacity = fadeIn;
-            f.style.zIndex = 11;
-          } else {
-            f.style.opacity = '0';
-            f.style.zIndex = 1;
-          }
-        });
-      }
-    }
-
-    // ─── Reset stack styles when switching products ───
-    function resetStackStyles() {
-      stackContainer.style.margin = '0 ' + INITIAL_MARGIN + 'px';
-      stackContainer.style.top = '160px';
-    }
 
     // ─── Thumbnail positioning ───
     let transitioning = false;
@@ -395,21 +268,16 @@
         setTimeout(() => { transitioning = false; }, 560);
       }
 
+      // Show active stack
       stackEls.forEach((s, si) => s.classList.toggle('active', si === index));
-      resetStackStyles();
-      updateScrollTrackHeight();
 
+      // Scroll to top
       if (!force) {
-        scrollTrack.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
-
-      updateFrames();
     }
 
-    // ─── Scroll listener ───
-    window.addEventListener('scroll', updateFrames, { passive: true });
-
-    // ─── Init ───
+    // Init
     selectProduct(activeIndex, true);
 
     // Keyboard
@@ -417,14 +285,6 @@
       if (e.key === 'ArrowRight') { e.preventDefault(); selectProduct((activeIndex + 1) % N); }
       else if (e.key === 'ArrowLeft') { e.preventDefault(); selectProduct((activeIndex - 1 + N) % N); }
     });
-
-    // Swipe
-    let touchStartX = 0;
-    stackContainer.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
-    stackContainer.addEventListener('touchend', (e) => {
-      const d = e.changedTouches[0].clientX - touchStartX;
-      if (Math.abs(d) > 50) { d < 0 ? selectProduct((activeIndex + 1) % N) : selectProduct((activeIndex - 1 + N) % N); }
-    }, { passive: true });
   </script>
 </body>
 </html>
