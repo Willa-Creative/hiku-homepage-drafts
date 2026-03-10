@@ -69,14 +69,16 @@
     .frame {
       position: sticky;
       top: var(--nav-h);
-      height: calc(100vh - var(--nav-h));
+      height: calc(100vh - var(--nav-h) - 48px);
       width: 100%;
       overflow: hidden;
       border-radius: 12px;
       will-change: transform;
-      transition: border-radius 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: height 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                  border-radius 0.5s cubic-bezier(0.22, 1, 0.36, 1);
     }
     #stacks.expanded .frame {
+      height: calc(100vh - var(--nav-h));
       border-radius: 0;
     }
     /* Each frame gets a higher z-index so it stacks on top */
@@ -86,9 +88,7 @@
 
     .frame__bg {
       position: absolute; inset: 0;
-      background-size: contain; background-position: center;
-      background-repeat: no-repeat;
-      background-color: var(--almond);
+      background-size: cover; background-position: center;
     }
 
     .frame--placeholder {
