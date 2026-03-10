@@ -158,20 +158,20 @@
     const IMG_SLIM = 'assets/bf4ac0864ff9934a18e93943c82515606d8017bd.png';
 
     const products = [
-      { name: 'Guava Glow Moisturizer', img: IMG_JAR,
-        bg: 'radial-gradient(ellipse at 40% 40%, #e4bfae 0%, #d4a08a 30%, #c08870 60%, #a87060 100%)' },
-      { name: 'Soft Matte Moisturizer', img: IMG_JAR,
-        bg: 'radial-gradient(ellipse at 55% 35%, #e8ccc0 0%, #d8b0a0 30%, #c49888 60%, #b08070 100%)' },
-      { name: 'Oak Milk Toner', img: IMG_DROPPER,
-        bg: 'radial-gradient(ellipse at 45% 50%, #dcc4b4 0%, #ccac98 30%, #b89480 60%, #a47c68 100%)' },
-      { name: 'Matcha Skin Cleanser', img: IMG_TUBE,
-        bg: 'radial-gradient(ellipse at 50% 40%, #d8c4b0 0%, #c8aa94 30%, #b49078 60%, #a07860 100%)' },
-      { name: 'Green Juice Serum', img: IMG_DROPPER,
-        bg: 'radial-gradient(ellipse at 60% 45%, #e0c8b8 0%, #d0b09c 30%, #bc9880 60%, #a88068 100%)' },
-      { name: 'Smooth Skin Face Scrub', img: IMG_TUBE,
-        bg: 'radial-gradient(ellipse at 35% 55%, #dcc0b0 0%, #cca898 30%, #b89080 60%, #a47868 100%)' },
-      { name: 'Glacé Kiss Balm', img: IMG_SLIM,
-        bg: 'radial-gradient(ellipse at 50% 50%, #e4c8bc 0%, #d4b0a0 30%, #c09884 60%, #ac806c 100%)' }
+      { name: 'Guava Glow Moisturizer', img: IMG_JAR, icon: '1',
+        bg: '#FF4444' },
+      { name: 'Soft Matte Moisturizer', img: IMG_JAR, icon: '2',
+        bg: '#FF8800' },
+      { name: 'Oak Milk Toner', img: IMG_DROPPER, icon: '3',
+        bg: '#FFCC00' },
+      { name: 'Matcha Skin Cleanser', img: IMG_TUBE, icon: '4',
+        bg: '#44CC44' },
+      { name: 'Green Juice Serum', img: IMG_DROPPER, icon: '5',
+        bg: '#4488FF' },
+      { name: 'Smooth Skin Face Scrub', img: IMG_TUBE, icon: '6',
+        bg: '#8844FF' },
+      { name: 'Glacé Kiss Balm', img: IMG_SLIM, icon: '7',
+        bg: '#FF44CC' }
     ];
 
     const N = products.length;
@@ -184,7 +184,7 @@
     products.forEach((p, i) => {
       const div = document.createElement('div');
       div.className = 'thumb';
-      div.innerHTML = `<img src="${p.img}" alt="${p.name}">`;
+      div.innerHTML = `<img src="${p.img}" alt="${p.name}"><span style="position:absolute;bottom:4px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:700;color:${p.bg};background:white;border-radius:10px;width:20px;height:20px;display:flex;align-items:center;justify-content:center;">${p.icon}</span>`;
       div.addEventListener('click', () => selectProduct(i));
       thumbsContainer.appendChild(div);
       thumbEls.push(div);
@@ -197,6 +197,7 @@
       frame.dataset.index = i;
       frame.innerHTML = `
         <div class="frame__bg" style="background: ${p.bg}"></div>
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:120px;font-weight:900;color:rgba(255,255,255,0.5);font-family:var(--sans);">${p.icon}</div>
         <div class="frame__product"><img src="${p.img}" alt="${p.name}"></div>
       `;
       stack.appendChild(frame);
