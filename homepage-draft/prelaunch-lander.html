@@ -247,7 +247,7 @@
     /* Secret bubble styles removed — easter egg is now pop-count based */
 
     /* ============================
-       SIGNUP MODAL — Foggy Window
+       SIGNUP MODAL — Steamy Glass
        ============================ */
     .signup-overlay {
       position: fixed; inset: 0;
@@ -257,70 +257,50 @@
       justify-content: center;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.8s var(--ease-out-expo);
+      transition: opacity 1.2s var(--ease-out-expo);
     }
     .signup-overlay.show {
       opacity: 1;
       pointer-events: auto;
     }
 
-    /* Foggy glass layer */
-    .fog-layer {
+    /* Steam canvas — covers whole screen, wipe-able */
+    .steam-canvas {
       position: absolute; inset: 0;
-      background: rgba(253,248,245,0.55);
-      backdrop-filter: blur(16px) saturate(1.2);
-      -webkit-backdrop-filter: blur(16px) saturate(1.2);
-      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.015' numOctaves='6' seed='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
-      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.015' numOctaves='6' seed='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
-      mask-size: cover;
-      -webkit-mask-size: cover;
-    }
-    /* Solid fog center — ensures form area is fully frosted */
-    .fog-layer::after {
-      content: '';
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 600px; height: 700px;
-      background: rgba(253,248,245,0.7);
-      border-radius: 50%;
-      filter: blur(80px);
+      z-index: 1;
+      cursor: crosshair;
     }
 
-    /* Condensation droplets SVG overlay */
-    .fog-drops {
+    /* Blur layer behind steam to make background look like frosted glass */
+    .steam-blur {
       position: absolute; inset: 0;
-      opacity: 0.12;
-      background-image: radial-gradient(circle 2px at 20% 30%, rgba(255,255,255,0.8) 0%, transparent 100%),
-        radial-gradient(circle 3px at 45% 15%, rgba(255,255,255,0.6) 0%, transparent 100%),
-        radial-gradient(circle 2px at 70% 45%, rgba(255,255,255,0.7) 0%, transparent 100%),
-        radial-gradient(circle 4px at 30% 70%, rgba(255,255,255,0.5) 0%, transparent 100%),
-        radial-gradient(circle 2px at 80% 60%, rgba(255,255,255,0.6) 0%, transparent 100%),
-        radial-gradient(circle 3px at 55% 80%, rgba(255,255,255,0.4) 0%, transparent 100%),
-        radial-gradient(circle 2px at 15% 50%, rgba(255,255,255,0.7) 0%, transparent 100%);
+      backdrop-filter: blur(20px) saturate(1.1);
+      -webkit-backdrop-filter: blur(20px) saturate(1.1);
+      z-index: 0;
     }
 
     .signup-card {
       position: relative;
       z-index: 2;
-      background: rgba(253,248,245,0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-radius: 16px;
+      background: transparent;
       padding: clamp(32px, 5vw, 48px);
       max-width: 440px;
       width: 90%;
       text-align: center;
-      box-shadow:
-        0 24px 60px rgba(61,28,30,0.15),
-        0 2px 0 rgba(255,255,255,0.3),
-        inset 0 1px 0 rgba(255,255,255,0.6);
-      border: 1px solid rgba(255,255,255,0.4);
       transform: translateY(30px) scale(0.95);
       transition: transform 0.5s var(--ease-spring);
+      pointer-events: auto;
     }
     .signup-overlay.show .signup-card {
       transform: translateY(0) scale(1);
+    }
+    /* Make form elements readable on glass */
+    .signup-card__title {
+      color: var(--almond);
+      text-shadow: 0 2px 20px rgba(61,28,30,0.3);
+    }
+    .signup-card__desc {
+      text-shadow: 0 1px 8px rgba(61,28,30,0.2);
     }
     .signup-card__badge {
       display: inline-block;
@@ -336,14 +316,15 @@
     .signup-card__desc {
       font-size: 14px;
       line-height: 1.6;
-      color: rgba(61,28,30,0.65);
+      color: var(--almond);
+      text-shadow: 0 1px 8px rgba(61,28,30,0.3);
       margin-bottom: 24px;
     }
     .signup-card__secret-desc {
       font-size: 13px;
       line-height: 1.5;
-      color: var(--brown);
-      background: linear-gradient(135deg, rgba(231,130,169,0.1), rgba(196,160,167,0.15));
+      color: var(--almond);
+      background: rgba(255,255,255,0.1);
       padding: 12px 16px;
       border-radius: 8px;
       margin-bottom: 20px;
@@ -356,31 +337,36 @@
       font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      color: rgba(61,28,30,0.5);
+      color: rgba(253,248,245,0.6);
       display: block;
       margin-bottom: 6px;
     }
     .signup-card__input {
       width: 100%;
       padding: 14px 16px;
-      border: 1px solid rgba(61,28,30,0.12);
+      border: 1px solid rgba(255,255,255,0.3);
       border-radius: 8px;
       font-size: 14px;
       font-family: var(--sans);
-      background: white;
-      color: var(--brown);
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: var(--almond);
       outline: none;
       transition: border-color 0.3s, box-shadow 0.3s;
     }
     .signup-card__input:focus {
-      border-color: var(--rosewood);
-      box-shadow: 0 0 0 3px rgba(196,160,167,0.15);
+      border-color: rgba(255,255,255,0.5);
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.1);
     }
-    .signup-card__input::placeholder { color: rgba(61,28,30,0.25); }
+    .signup-card__input::placeholder { color: rgba(253,248,245,0.4); }
     .signup-card__btn {
       width: 100%;
       padding: 16px;
-      background: var(--brown);
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       color: var(--almond);
       font-family: var(--sans);
       font-size: 13px;
@@ -409,18 +395,18 @@
       width: 32px; height: 32px;
       border-radius: 50%;
       border: none;
-      background: rgba(61,28,30,0.06);
-      color: var(--brown);
+      background: rgba(255,255,255,0.15);
+      color: var(--almond);
       font-size: 16px;
       cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       transition: background 0.2s;
     }
-    .signup-card__close:hover { background: rgba(61,28,30,0.1); }
+    .signup-card__close:hover { background: rgba(255,255,255,0.25); }
     .signup-card__footer {
       font-size: 10px;
       line-height: 1.5;
-      color: rgba(61,28,30,0.35);
+      color: rgba(253,248,245,0.4);
       margin-top: 16px;
     }
 
@@ -546,8 +532,8 @@
 
   <!-- Signup modal -->
   <div class="signup-overlay" id="signupOverlay">
-    <div class="fog-layer"></div>
-    <div class="fog-drops"></div>
+    <div class="steam-blur"></div>
+    <canvas class="steam-canvas" id="steamCanvas"></canvas>
     <div class="signup-card">
       <button class="signup-card__close" id="signupClose">&times;</button>
       <div class="signup-card__badge" id="signupBadge">&#10024;</div>
@@ -604,14 +590,14 @@
 
     // Bubble config — no text labels, just clean bubbles
     const bubbleData = [
-      { xPct: 0.18, yPct: 0.25, size: 56 },
-      { xPct: 0.72, yPct: 0.18, size: 48 },
-      { xPct: 0.30, yPct: 0.52, size: 42 },
-      { xPct: 0.80, yPct: 0.48, size: 52 },
-      { xPct: 0.55, yPct: 0.33, size: 38 },
-      { xPct: 0.12, yPct: 0.65, size: 44 },
-      { xPct: 0.50, yPct: 0.58, size: 50 },
-      { xPct: 0.88, yPct: 0.72, size: 36 },
+      { xPct: 0.18, yPct: 0.25, size: 168 },
+      { xPct: 0.72, yPct: 0.18, size: 144 },
+      { xPct: 0.30, yPct: 0.52, size: 126 },
+      { xPct: 0.80, yPct: 0.48, size: 156 },
+      { xPct: 0.55, yPct: 0.33, size: 114 },
+      { xPct: 0.12, yPct: 0.65, size: 132 },
+      { xPct: 0.50, yPct: 0.58, size: 150 },
+      { xPct: 0.88, yPct: 0.72, size: 108 },
     ];
 
     // Hint messages — shown randomly on some pops
@@ -904,6 +890,203 @@
         document.getElementById('footerEmail').disabled = true;
         document.getElementById('footerSignupBtn').disabled = true;
       }
+    });
+
+    // ============================
+    // STEAMY GLASS — Canvas Wipe
+    // ============================
+    const steamCanvas = document.getElementById('steamCanvas');
+    const steamCtx = steamCanvas.getContext('2d');
+    let steamReady = false;
+
+    function initSteam() {
+      const dpr = window.devicePixelRatio || 1;
+      steamCanvas.width = window.innerWidth * dpr;
+      steamCanvas.height = window.innerHeight * dpr;
+      steamCanvas.style.width = window.innerWidth + 'px';
+      steamCanvas.style.height = window.innerHeight + 'px';
+      steamCtx.scale(dpr, dpr);
+
+      // Fill with steam — semi-opaque white with noise texture
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+
+      // Base steam layer
+      steamCtx.fillStyle = 'rgba(245, 238, 232, 0.88)';
+      steamCtx.fillRect(0, 0, w, h);
+
+      // Add noise texture for organic steam look
+      const imageData = steamCtx.getImageData(0, 0, steamCanvas.width, steamCanvas.height);
+      const data = imageData.data;
+      for (let i = 0; i < data.length; i += 4) {
+        const noise = (Math.random() - 0.5) * 30;
+        data[i] = Math.min(255, Math.max(0, data[i] + noise));
+        data[i + 1] = Math.min(255, Math.max(0, data[i + 1] + noise));
+        data[i + 2] = Math.min(255, Math.max(0, data[i + 2] + noise));
+        // Vary alpha slightly for organic feel
+        data[i + 3] = Math.min(255, Math.max(100, data[i + 3] + (Math.random() - 0.5) * 40));
+      }
+      steamCtx.putImageData(imageData, 0, 0);
+
+      // Add some condensation streaks
+      for (let i = 0; i < 12; i++) {
+        const sx = Math.random() * w;
+        const sy = Math.random() * h * 0.3;
+        const len = 40 + Math.random() * 120;
+        steamCtx.beginPath();
+        steamCtx.moveTo(sx, sy);
+        let cx = sx;
+        for (let j = 0; j < len; j += 4) {
+          cx += (Math.random() - 0.5) * 3;
+          steamCtx.lineTo(cx, sy + j);
+        }
+        steamCtx.strokeStyle = `rgba(255,255,255,${0.15 + Math.random() * 0.2})`;
+        steamCtx.lineWidth = 1 + Math.random() * 2;
+        steamCtx.stroke();
+      }
+
+      steamReady = true;
+    }
+
+    // Wipe steam with cursor
+    let isWiping = false;
+    let lastWipeX = 0, lastWipeY = 0;
+
+    function wipeSteam(x, y) {
+      if (!steamReady) return;
+      steamCtx.save();
+      steamCtx.globalCompositeOperation = 'destination-out';
+
+      // Finger/cursor wipe — soft radial gradient for natural wipe
+      const radius = 35;
+      const grad = steamCtx.createRadialGradient(x, y, 0, x, y, radius);
+      grad.addColorStop(0, 'rgba(0,0,0,1)');
+      grad.addColorStop(0.5, 'rgba(0,0,0,0.8)');
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
+      steamCtx.fillStyle = grad;
+      steamCtx.beginPath();
+      steamCtx.arc(x, y, radius, 0, Math.PI * 2);
+      steamCtx.fill();
+
+      // Connect to last point for smooth strokes
+      if (lastWipeX && lastWipeY) {
+        const dx = x - lastWipeX;
+        const dy = y - lastWipeY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const steps = Math.ceil(dist / 8);
+        for (let i = 0; i < steps; i++) {
+          const t = i / steps;
+          const ix = lastWipeX + dx * t;
+          const iy = lastWipeY + dy * t;
+          const g = steamCtx.createRadialGradient(ix, iy, 0, ix, iy, radius * 0.8);
+          g.addColorStop(0, 'rgba(0,0,0,0.9)');
+          g.addColorStop(1, 'rgba(0,0,0,0)');
+          steamCtx.fillStyle = g;
+          steamCtx.beginPath();
+          steamCtx.arc(ix, iy, radius * 0.8, 0, Math.PI * 2);
+          steamCtx.fill();
+        }
+      }
+
+      steamCtx.restore();
+      lastWipeX = x;
+      lastWipeY = y;
+
+      // Drip effect — occasionally a wiped spot drips down
+      if (Math.random() < 0.08) {
+        requestAnimationFrame(() => steamDrip(x, y));
+      }
+    }
+
+    // Water drip animation after wiping
+    function steamDrip(startX, startY) {
+      let dripY = startY;
+      const dripX = startX + (Math.random() - 0.5) * 6;
+      const speed = 1 + Math.random() * 2;
+      const maxLen = 60 + Math.random() * 100;
+      let traveled = 0;
+
+      function dripFrame() {
+        if (traveled > maxLen) return;
+        steamCtx.save();
+        steamCtx.globalCompositeOperation = 'destination-out';
+        const r = 2 + Math.random() * 3;
+        const g = steamCtx.createRadialGradient(dripX, dripY, 0, dripX, dripY, r);
+        g.addColorStop(0, 'rgba(0,0,0,0.7)');
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        steamCtx.fillStyle = g;
+        steamCtx.beginPath();
+        steamCtx.arc(dripX, dripY, r, 0, Math.PI * 2);
+        steamCtx.fill();
+        steamCtx.restore();
+        dripY += speed;
+        traveled += speed;
+        requestAnimationFrame(dripFrame);
+      }
+      dripFrame();
+    }
+
+    // Mouse events on steam canvas
+    steamCanvas.addEventListener('mousedown', (e) => {
+      isWiping = true;
+      lastWipeX = e.clientX;
+      lastWipeY = e.clientY;
+      wipeSteam(e.clientX, e.clientY);
+    });
+    steamCanvas.addEventListener('mousemove', (e) => {
+      if (!isWiping) return;
+      wipeSteam(e.clientX, e.clientY);
+    });
+    document.addEventListener('mouseup', () => {
+      isWiping = false;
+      lastWipeX = 0;
+      lastWipeY = 0;
+    });
+
+    // Touch events
+    steamCanvas.addEventListener('touchstart', (e) => {
+      isWiping = true;
+      const t = e.touches[0];
+      lastWipeX = t.clientX;
+      lastWipeY = t.clientY;
+      wipeSteam(t.clientX, t.clientY);
+    }, { passive: true });
+    steamCanvas.addEventListener('touchmove', (e) => {
+      if (!isWiping) return;
+      const t = e.touches[0];
+      wipeSteam(t.clientX, t.clientY);
+    }, { passive: true });
+    document.addEventListener('touchend', () => {
+      isWiping = false;
+      lastWipeX = 0;
+      lastWipeY = 0;
+    });
+
+    // Slowly re-fog wiped areas (steam comes back)
+    function refog() {
+      if (!steamReady || !signupOverlay.classList.contains('show')) {
+        requestAnimationFrame(refog);
+        return;
+      }
+      steamCtx.save();
+      steamCtx.globalCompositeOperation = 'source-over';
+      steamCtx.fillStyle = 'rgba(245, 238, 232, 0.004)';
+      steamCtx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+      steamCtx.restore();
+      requestAnimationFrame(refog);
+    }
+    requestAnimationFrame(refog);
+
+    // Init steam when overlay opens
+    const origOpenSignup = openSignup;
+    openSignup = function(isSecret) {
+      initSteam();
+      origOpenSignup(isSecret);
+    };
+
+    // Handle resize
+    window.addEventListener('resize', () => {
+      if (steamReady) initSteam();
     });
   </script>
 </body>
