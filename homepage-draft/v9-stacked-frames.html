@@ -65,33 +65,33 @@
       display: block;
     }
 
-    /* ─── Peek cards (deck edges behind first frame) ─── */
+    /* ─── Peek cards (deck behind first frame) ─── */
     .peek-cards {
       position: fixed;
-      bottom: 0; left: 48px; right: 48px;
-      height: 48px;
-      z-index: 100;
+      /* sit behind the main frame, peeking at the bottom */
+      bottom: 8px; left: 48px; right: 48px;
+      height: 40px;
+      z-index: 0;
       pointer-events: none;
-      transition: opacity 0.4s ease, left 0.4s ease, right 0.4s ease;
+      transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .peek-card {
       position: absolute;
-      left: 0; right: 0;
+      bottom: 0; left: 0; right: 0;
       border-radius: 12px 12px 0 0;
     }
     .peek-card--1 {
-      bottom: 28px; height: 28px;
-      left: 8px; right: 8px;
-      background: rgba(61, 28, 30, 0.06);
+      height: 40px;
+      left: 10px; right: 10px;
+      background: rgba(61, 28, 30, 0.07);
     }
     .peek-card--2 {
-      bottom: 0; height: 28px;
-      left: 20px; right: 20px;
-      background: rgba(61, 28, 30, 0.03);
+      height: 20px;
+      left: 24px; right: 24px;
+      background: rgba(61, 28, 30, 0.04);
     }
     #stacks.expanded ~ .peek-cards {
-      opacity: 0;
-      pointer-events: none;
+      transform: translateY(100%);
     }
 
     /* ─── Sticky Card Stack (JR Atelier style) ─── */
@@ -131,7 +131,7 @@
     @media (max-width: 768px) {
       :root { --thumb-size: 72px; --thumb-gap: 12px; --nav-h: 112px; }
       #stacks { padding: 0 16px; }
-      .peek-cards { left: 16px; right: 16px; }
+      .peek-cards { left: 16px; right: 16px; bottom: 4px; }
     }
   </style>
 </head>
