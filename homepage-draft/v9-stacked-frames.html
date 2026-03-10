@@ -12,15 +12,19 @@
     :root {
       --brown: #3D1C1E;
       --almond: #FDF8F5;
+      --pink: #F5E6E0;
+      --rosewood: #C4A0A7;
+      --stone: #A6A09B;
       --serif: 'Playfair Display', 'Big Caslon', Georgia, serif;
       --sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       --thumb-size: 120px;
+      --thumb-size-small: 64px;
       --thumb-gap: 24px;
-      --thumb-step: calc(var(--thumb-size) + var(--thumb-gap));
+      --thumb-gap-small: 16px;
+      --nav-height: 184px;
+      --nav-height-small: 96px;
     }
-    html, body {
-      min-height: 100%;
-    }
+    html { scroll-behavior: smooth; }
     body {
       font-family: var(--sans);
       background: var(--almond);
@@ -30,291 +34,570 @@
       user-select: none;
     }
 
-    /* ─── Thumbnails ─── */
-    .thumbnails-wrap {
-      flex-shrink: 0;
+    /* ─── Sticky Nav ─── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--almond);
       overflow: hidden;
-      padding: 32px 0 24px;
+      transition: height 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                  box-shadow 0.3s ease;
+      height: var(--nav-height);
     }
+    .nav.compact {
+      height: var(--nav-height-small);
+      box-shadow: 0 1px 0 rgba(61,28,30,0.06);
+    }
+
     .thumbnails {
       position: relative;
-      height: var(--thumb-size);
+      height: 100%;
       margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
+
     .thumb {
-      width: var(--thumb-size);
-      height: var(--thumb-size);
       border-radius: 8px;
       cursor: pointer;
-      -webkit-user-select: none;
-      user-select: none;
       display: flex;
       align-items: center;
       justify-content: center;
       position: absolute;
-      top: 0;
-      left: 50%;
-      margin-left: calc(var(--thumb-size) / -2);
       transition: border-color 0.3s ease,
                   transform 0.3s ease,
-                  opacity 0.3s ease;
+                  opacity 0.3s ease,
+                  width 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                  height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
       border: 1px solid transparent;
       background: transparent;
     }
     .thumb.active {
       border-color: var(--brown);
     }
-    .thumb img {
+    .thumb img, .thumb svg {
       width: 85%;
       height: 85%;
       object-fit: contain;
       pointer-events: none;
     }
+    /* Logo thumb */
+    .thumb--logo {
+      border: none !important;
+    }
+    .thumb--logo svg {
+      width: 70%;
+      height: auto;
+    }
 
-    /* ─── Stack Container ─── */
-    .stack-container {
-      position: relative;
-      margin: 24px 48px 0;
+    /* ─── Content Area ─── */
+    .content {
+      min-height: 100vh;
+    }
+
+    /* ─── Brand Section (Logo/Home) ─── */
+    .brand-section {
+      display: none;
+      padding: 0 48px 80px;
+    }
+    .brand-section.active { display: block; }
+
+    .brand-hero {
       height: 70vh;
-      /* extra bottom padding for stacked frames peeking out */
-      margin-bottom: 240px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .brand-hero__bg {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 40%, var(--pink) 0%, var(--almond) 70%);
+      opacity: 0.6;
+    }
+    .brand-hero__logo {
+      position: relative;
+      font-family: var(--serif);
+      font-size: clamp(64px, 10vw, 120px);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+    .brand-hero__logo sup {
+      font-size: 0.18em;
+      font-style: italic;
+      font-weight: 400;
+      opacity: 0.5;
+      vertical-align: super;
+    }
+    .brand-hero__tagline {
+      position: relative;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(18px, 2.5vw, 24px);
+      color: var(--rosewood);
+      margin-bottom: 40px;
+    }
+    .brand-hero__cta {
+      position: relative;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--stone);
     }
 
-    /* ─── Frames / Slides ─── */
-    .frame {
-      position: absolute;
-      inset: 0;
-      overflow: hidden;
-      will-change: transform, opacity;
-      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-                  opacity 0.5s ease;
+    .brand-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
-    .frame__bg {
-      position: absolute;
-      inset: 0;
+    .brand-card {
+      background: white;
+      border-radius: 12px;
+      padding: 40px 32px;
+      text-align: center;
+      border: 1px solid rgba(61,28,30,0.04);
+    }
+    .brand-card__icon {
+      font-size: 32px;
+      margin-bottom: 16px;
+    }
+    .brand-card__title {
+      font-family: var(--serif);
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+    .brand-card__desc {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--stone);
+    }
+
+    /* ─── Product Section ─── */
+    .product-section {
+      display: none;
+      padding: 0 48px 80px;
+    }
+    .product-section.active { display: block; }
+
+    .product-hero {
+      height: 70vh;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .product-hero__bg {
+      position: absolute; inset: 0;
       background-size: cover;
       background-position: center;
     }
-    .frame__product {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+    .product-hero__img {
+      position: relative;
       height: 55%;
       max-height: 400px;
       filter: drop-shadow(0 8px 32px rgba(61,28,30,0.2));
     }
-    .frame__product img {
+    .product-hero__img img {
       height: 100%;
       width: auto;
       object-fit: contain;
     }
 
-    /* Stack: only 3 visible, hidden ones sit on top invisible */
-    .frame[data-depth="0"] {
-      z-index: 10;
-      transform: translateY(0) scale(1);
+    .product-info {
+      max-width: 800px;
+      margin: 60px auto 0;
+      text-align: center;
     }
-    .frame[data-depth="1"] {
-      z-index: 9;
-      transform: translateY(90px) scale(0.96);
+    .product-info__name {
+      font-family: var(--serif);
+      font-size: clamp(28px, 4vw, 42px);
+      margin-bottom: 12px;
     }
-    .frame[data-depth="2"] {
-      z-index: 8;
-      transform: translateY(180px) scale(0.92);
+    .product-info__price {
+      font-size: 18px;
+      color: var(--rosewood);
+      margin-bottom: 24px;
     }
-    .frame.hidden-frame {
-      z-index: 11;
-      transform: translateY(0) scale(1);
-      opacity: 0;
-      pointer-events: none;
-      transition: none;
+    .product-info__desc {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--stone);
+      max-width: 560px;
+      margin: 0 auto 40px;
+    }
+    .product-info__btn {
+      display: inline-block;
+      padding: 16px 48px;
+      background: var(--brown);
+      color: var(--almond);
+      font-size: 12px;
+      font-family: var(--sans);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .product-details {
+      max-width: 1000px;
+      margin: 80px auto 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .product-details__text { }
+    .product-details__label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--rosewood);
+      margin-bottom: 12px;
+    }
+    .product-details__heading {
+      font-family: var(--serif);
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+    .product-details__body {
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--stone);
+    }
+    .product-details__visual {
+      height: 400px;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .product-details__visual-bg {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .product-ingredients {
+      max-width: 800px;
+      margin: 80px auto 0;
+      text-align: center;
+    }
+    .product-ingredients__title {
+      font-family: var(--serif);
+      font-size: 24px;
+      margin-bottom: 32px;
+    }
+    .ingredient-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .ingredient {
+      background: white;
+      border-radius: 10px;
+      padding: 24px 16px;
+      border: 1px solid rgba(61,28,30,0.04);
+    }
+    .ingredient__name {
+      font-family: var(--serif);
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+    .ingredient__benefit {
+      font-size: 12px;
+      color: var(--stone);
+      line-height: 1.5;
     }
 
     /* ─── Responsive ─── */
     @media (max-width: 768px) {
       :root {
         --thumb-size: 72px;
+        --thumb-size-small: 44px;
         --thumb-gap: 12px;
+        --thumb-gap-small: 10px;
+        --nav-height: 120px;
+        --nav-height-small: 72px;
       }
-      .stack-container {
-        margin: 16px 16px 24px;
-      }
-      .frame__product {
-        height: 45%;
-      }
+      .brand-section, .product-section { padding: 0 20px 60px; }
+      .brand-grid { grid-template-columns: 1fr; }
+      .product-details { grid-template-columns: 1fr; }
+      .ingredient-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <div class="thumbnails-wrap">
+  <!-- Sticky product nav -->
+  <nav class="nav" id="nav">
     <div class="thumbnails" id="thumbnails"></div>
-  </div>
+  </nav>
 
-  <div class="stack-container" id="stack"></div>
+  <!-- Content sections -->
+  <div class="content" id="content"></div>
 
   <script>
-    // Product images from Figma
     const IMG_JAR = 'assets/b1983030efe5da27c6000b46e47a3bb5cb301ba1.png';
     const IMG_DROPPER = 'assets/2073f3c36a70227dc6ab5531ba597f67945f8777.png';
     const IMG_TUBE = 'assets/b0eb6302ee336ef8745a70594462453669872c14.png';
     const IMG_SLIM = 'assets/bf4ac0864ff9934a18e93943c82515606d8017bd.png';
 
-    const products = [
-      { name: 'Guava Glow Moisturizer', img: IMG_JAR,
-        bg: 'radial-gradient(ellipse at 40% 40%, #e4bfae 0%, #d4a08a 30%, #c08870 60%, #a87060 100%)' },
-      { name: 'Soft Matte Moisturizer', img: IMG_JAR,
-        bg: 'radial-gradient(ellipse at 55% 35%, #e8ccc0 0%, #d8b0a0 30%, #c49888 60%, #b08070 100%)' },
-      { name: 'Oak Milk Toner', img: IMG_DROPPER,
-        bg: 'radial-gradient(ellipse at 45% 50%, #dcc4b4 0%, #ccac98 30%, #b89480 60%, #a47c68 100%)' },
-      { name: 'Matcha Skin Cleanser', img: IMG_TUBE,
-        bg: 'radial-gradient(ellipse at 50% 40%, #d8c4b0 0%, #c8aa94 30%, #b49078 60%, #a07860 100%)' },
-      { name: 'Green Juice Serum', img: IMG_DROPPER,
-        bg: 'radial-gradient(ellipse at 60% 45%, #e0c8b8 0%, #d0b09c 30%, #bc9880 60%, #a88068 100%)' },
-      { name: 'Smooth Skin Face Scrub', img: IMG_TUBE,
-        bg: 'radial-gradient(ellipse at 35% 55%, #dcc0b0 0%, #cca898 30%, #b89080 60%, #a47868 100%)' },
-      { name: 'Glacé Kiss Balm', img: IMG_SLIM,
-        bg: 'radial-gradient(ellipse at 50% 50%, #e4c8bc 0%, #d4b0a0 30%, #c09884 60%, #ac806c 100%)' }
+    // Items: logo first (index 0), then products
+    const items = [
+      { type: 'logo', name: 'hiku' },
+      { type: 'product', name: 'Guava Glow Moisturizer', price: '$32', img: IMG_JAR,
+        bg: 'radial-gradient(ellipse at 40% 40%, #e4bfae 0%, #d4a08a 30%, #c08870 60%, #a87060 100%)',
+        desc: 'A dewy, whipped moisturizer infused with guava extract for a lit-from-within glow. Lightweight, non-greasy, sinks right in.',
+        ingredients: [{n:'Guava Extract',b:'Vitamin C brightening'},{n:'Hyaluronic Acid',b:'Deep hydration'},{n:'Squalane',b:'Moisture barrier'}] },
+      { type: 'product', name: 'Soft Matte Moisturizer', price: '$32', img: IMG_JAR,
+        bg: 'radial-gradient(ellipse at 55% 35%, #e8ccc0 0%, #d8b0a0 30%, #c49888 60%, #b08070 100%)',
+        desc: 'Velvet-finish moisturizer that controls shine without drying. Perfect canvas for makeup or a fresh bare-face feel.',
+        ingredients: [{n:'Niacinamide',b:'Pore refining'},{n:'Rice Bran',b:'Oil control'},{n:'Ceramides',b:'Barrier repair'}] },
+      { type: 'product', name: 'Oak Milk Toner', price: '$28', img: IMG_DROPPER,
+        bg: 'radial-gradient(ellipse at 45% 50%, #dcc4b4 0%, #ccac98 30%, #b89480 60%, #a47c68 100%)',
+        desc: 'Milky, pH-balancing toner with oat extract to soothe and prep. The bridge between cleansing and everything after.',
+        ingredients: [{n:'Oat Extract',b:'Calming + soothing'},{n:'Panthenol',b:'Skin conditioning'},{n:'Allantoin',b:'Gentle healing'}] },
+      { type: 'product', name: 'Matcha Skin Cleanser', price: '$26', img: IMG_TUBE,
+        bg: 'radial-gradient(ellipse at 50% 40%, #d8c4b0 0%, #c8aa94 30%, #b49078 60%, #a07860 100%)',
+        desc: 'Creamy gel cleanser powered by matcha antioxidants. Removes everything without stripping — your skin still feels like skin.',
+        ingredients: [{n:'Matcha',b:'Antioxidant protection'},{n:'Green Tea',b:'Anti-inflammatory'},{n:'Aloe Vera',b:'Gentle cleansing'}] },
+      { type: 'product', name: 'Green Juice Serum', price: '$38', img: IMG_DROPPER,
+        bg: 'radial-gradient(ellipse at 60% 45%, #e0c8b8 0%, #d0b09c 30%, #bc9880 60%, #a88068 100%)',
+        desc: 'Concentrated green superfood serum. Kale, spinach, and chlorophyll extracts feed your skin the nutrients it craves.',
+        ingredients: [{n:'Kale Extract',b:'Vitamin-rich nourishment'},{n:'Chlorophyll',b:'Detoxifying'},{n:'Centella',b:'Skin recovery'}] },
+      { type: 'product', name: 'Smooth Skin Face Scrub', price: '$24', img: IMG_TUBE,
+        bg: 'radial-gradient(ellipse at 35% 55%, #dcc0b0 0%, #cca898 30%, #b89080 60%, #a47868 100%)',
+        desc: 'Fine rice powder exfoliant that buffs without micro-tears. Use 2-3x a week for that just-resurfaced smoothness.',
+        ingredients: [{n:'Rice Powder',b:'Gentle exfoliation'},{n:'Jojoba Beads',b:'Smooth polishing'},{n:'Vitamin E',b:'Skin repair'}] },
+      { type: 'product', name: 'Glacé Kiss Balm', price: '$22', img: IMG_SLIM,
+        bg: 'radial-gradient(ellipse at 50% 50%, #e4c8bc 0%, #d4b0a0 30%, #c09884 60%, #ac806c 100%)',
+        desc: 'Glossy, hydrating lip balm with a barely-there tint. Shea butter + vitamin E keep lips soft all day.',
+        ingredients: [{n:'Shea Butter',b:'Deep moisture'},{n:'Vitamin E',b:'Lip protection'},{n:'Jojoba Oil',b:'Soft finish'}] },
     ];
 
-    const N = products.length;
-    let activeIndex = 3;
-    const stack = document.getElementById('stack');
+    const N = items.length; // 8 total (logo + 7 products)
+    let activeIndex = 0; // Start on logo/brand
+    const nav = document.getElementById('nav');
     const thumbsContainer = document.getElementById('thumbnails');
+    const contentEl = document.getElementById('content');
+    let isCompact = false;
 
-    // Build thumbnails — one per product
+    // Hiku logo SVG
+    const logoSVG = `<svg viewBox="0 0 120 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <text x="60" y="38" text-anchor="middle" font-family="'Playfair Display',serif" font-size="40" font-weight="600" fill="#3D1C1E">hiku</text>
+      <text x="90" y="14" text-anchor="middle" font-family="'Playfair Display',serif" font-size="10" font-style="italic" fill="#3D1C1E" opacity="0.5">by harper</text>
+    </svg>`;
+
+    // Build thumbnails
     const thumbEls = [];
-    products.forEach((p, i) => {
+    items.forEach((item, i) => {
       const div = document.createElement('div');
-      div.className = 'thumb';
-      div.innerHTML = `<img src="${p.img}" alt="${p.name}">`;
-      div.addEventListener('click', () => selectProduct(i));
+      div.className = 'thumb' + (item.type === 'logo' ? ' thumb--logo' : '');
+      if (item.type === 'logo') {
+        div.innerHTML = logoSVG;
+      } else {
+        div.innerHTML = `<img src="${item.img}" alt="${item.name}">`;
+      }
+      div.addEventListener('click', () => selectItem(i));
       thumbsContainer.appendChild(div);
       thumbEls.push(div);
     });
 
-    // Build frames
-    products.forEach((p, i) => {
-      const frame = document.createElement('div');
-      frame.className = 'frame';
-      frame.dataset.index = i;
-      frame.innerHTML = `
-        <div class="frame__bg" style="background: ${p.bg}"></div>
-        <div class="frame__product"><img src="${p.img}" alt="${p.name}"></div>
-      `;
-      stack.appendChild(frame);
+    // Build content sections
+    // Brand section (for logo)
+    const brandHTML = `
+      <div class="brand-section" data-section="0" id="section-0">
+        <div class="brand-hero">
+          <div class="brand-hero__bg"></div>
+          <div class="brand-hero__logo">hiku<sup>by harper</sup></div>
+          <div class="brand-hero__tagline">the coolest thing you can be is yourself</div>
+          <div class="brand-hero__cta">Explore our collection above</div>
+        </div>
+        <div class="brand-grid">
+          <div class="brand-card">
+            <div class="brand-card__icon">&#x2728;</div>
+            <div class="brand-card__title">Kind to Skin</div>
+            <div class="brand-card__desc">Derm-tested, Gen Z–approved formulas that actually work without being harsh.</div>
+          </div>
+          <div class="brand-card">
+            <div class="brand-card__icon">&#x1F331;</div>
+            <div class="brand-card__title">Clean + Conscious</div>
+            <div class="brand-card__desc">No sulfates, parabens, or things you can't pronounce. Just good ingredients.</div>
+          </div>
+          <div class="brand-card">
+            <div class="brand-card__icon">&#x1F9CA;</div>
+            <div class="brand-card__title">Routine, Not Rules</div>
+            <div class="brand-card__desc">Mix, match, layer however you want. Your skin, your call.</div>
+          </div>
+        </div>
+      </div>`;
+    contentEl.insertAdjacentHTML('beforeend', brandHTML);
+
+    // Product sections
+    items.forEach((item, i) => {
+      if (item.type !== 'product') return;
+      const ings = item.ingredients.map(ig =>
+        `<div class="ingredient"><div class="ingredient__name">${ig.n}</div><div class="ingredient__benefit">${ig.b}</div></div>`
+      ).join('');
+
+      const html = `
+      <div class="product-section" data-section="${i}" id="section-${i}">
+        <div class="product-hero">
+          <div class="product-hero__bg" style="background: ${item.bg}"></div>
+          <div class="product-hero__img"><img src="${item.img}" alt="${item.name}"></div>
+        </div>
+        <div class="product-info">
+          <h1 class="product-info__name">${item.name}</h1>
+          <div class="product-info__price">${item.price}</div>
+          <p class="product-info__desc">${item.desc}</p>
+          <button class="product-info__btn">Add to Bag</button>
+        </div>
+        <div class="product-details">
+          <div class="product-details__text">
+            <div class="product-details__label">How to use</div>
+            <h3 class="product-details__heading">Make it part of your ritual</h3>
+            <p class="product-details__body">Apply a small amount to clean skin morning and evening. Pat gently — don't rub. Let it absorb for 30 seconds before layering your next step. Works beautifully alone or under makeup.</p>
+          </div>
+          <div class="product-details__visual">
+            <div class="product-details__visual-bg" style="background: ${item.bg}; opacity: 0.5;"></div>
+          </div>
+        </div>
+        <div class="product-ingredients">
+          <h3 class="product-ingredients__title">Key Ingredients</h3>
+          <div class="ingredient-grid">${ings}</div>
+        </div>
+      </div>`;
+      contentEl.insertAdjacentHTML('beforeend', html);
     });
 
-    let transitioning = false;
-    const STEP = 144;
+    // ─── Thumb positioning ───
+    let currentThumbSize = 120;
+    let currentGap = 24;
 
-    function getOffset(productIndex, active) {
-      let offset = productIndex - active;
+    function getStep() { return currentThumbSize + currentGap; }
+
+    function getOffset(itemIndex, active) {
+      let offset = itemIndex - active;
       if (offset > Math.floor(N / 2)) offset -= N;
       if (offset < -Math.floor(N / 2)) offset += N;
       return offset;
     }
 
-    function selectProduct(index, force) {
+    function layoutThumbs(animate) {
+      const step = getStep();
+      thumbEls.forEach((el, i) => {
+        el.style.width = currentThumbSize + 'px';
+        el.style.height = currentThumbSize + 'px';
+        el.style.marginLeft = (-currentThumbSize / 2) + 'px';
+      });
+
+      thumbEls.forEach((el, i) => {
+        const offset = getOffset(i, activeIndex);
+        const x = offset * step;
+        if (!animate) {
+          el.style.transition = 'none';
+          el.style.transform = `translateX(${x}px)`;
+          el.offsetHeight;
+          el.style.transition = '';
+        } else {
+          el.style.transform = `translateX(${x}px)`;
+        }
+        el.style.opacity = '1';
+        el.classList.toggle('active', i === activeIndex);
+      });
+    }
+
+    let transitioning = false;
+
+    function selectItem(index, force) {
       if ((index === activeIndex && !force) || transitioning) return;
 
       const prevActive = activeIndex;
       activeIndex = index;
 
       if (force) {
-        // First render — no animation
-        thumbEls.forEach((el, i) => {
-          const offset = getOffset(i, activeIndex);
-          el.style.transition = 'none';
-          el.style.transform = `translateX(${offset * STEP}px)`;
-          el.style.opacity = '1';
-          el.offsetHeight;
-          el.style.transition = '';
-          el.classList.toggle('active', i === activeIndex);
-        });
+        layoutThumbs(false);
       } else {
         transitioning = true;
-
+        const step = getStep();
         thumbEls.forEach((el, i) => {
-          const oldOffset = getOffset(i, prevActive);
-          const newOffset = getOffset(i, activeIndex);
-          const isWrapping = Math.abs(newOffset - oldOffset) > 2;
-
-          if (isWrapping) {
-            // This thumb is wrapping around — scale out, reposition, scale in
-            el.style.transform = `translateX(${oldOffset * STEP}px) scale(0.3)`;
+          const oldOff = getOffset(i, prevActive);
+          const newOff = getOffset(i, activeIndex);
+          const wrapping = Math.abs(newOff - oldOff) > 2;
+          if (wrapping) {
+            el.style.transform = `translateX(${oldOff * step}px) scale(0.3)`;
             el.style.opacity = '0';
-
             setTimeout(() => {
               el.style.transition = 'none';
-              el.style.transform = `translateX(${newOffset * STEP}px) scale(0.3)`;
+              el.style.transform = `translateX(${newOff * step}px) scale(0.3)`;
               el.offsetHeight;
               el.style.transition = '';
-              el.style.transform = `translateX(${newOffset * STEP}px) scale(1)`;
+              el.style.transform = `translateX(${newOff * step}px) scale(1)`;
               el.style.opacity = '1';
             }, 280);
           } else {
-            // Normal slide
-            el.style.transform = `translateX(${newOffset * STEP}px)`;
+            el.style.transform = `translateX(${newOff * step}px)`;
             el.style.opacity = '1';
           }
-
           el.classList.toggle('active', i === activeIndex);
         });
-
         setTimeout(() => { transitioning = false; }, 560);
       }
 
-      // Stack: active on top, next 2 visible below, rest hidden on top
-      const frames = [...stack.querySelectorAll('.frame')];
-      frames.forEach(f => {
-        const fi = parseInt(f.dataset.index);
-        // Forward distance: how many steps ahead is this frame
-        let forwardDist = (fi - index + N) % N;
-
-        const wasHidden = f.classList.contains('hidden-frame');
-
-        if (forwardDist <= 2) {
-          // This is the active (0) or next 1-2 slides
-          if (wasHidden) {
-            f.classList.remove('hidden-frame');
-            f.offsetHeight;
-          }
-          f.dataset.depth = forwardDist;
-        } else {
-          f.removeAttribute('data-depth');
-          f.classList.add('hidden-frame');
-        }
+      // Show correct section
+      document.querySelectorAll('.brand-section, .product-section').forEach(s => {
+        s.classList.toggle('active', parseInt(s.dataset.section) === index);
       });
+
+      // Scroll to top of content
+      window.scrollTo({ top: 0, behavior: force ? 'instant' : 'smooth' });
     }
 
-    // Initialize
-    selectProduct(activeIndex, true);
+    // ─── Scroll: compact/expand nav ───
+    let lastScrollY = 0;
+    let scrollDir = 'up';
+
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      scrollDir = y > lastScrollY ? 'down' : 'up';
+      lastScrollY = y;
+
+      const shouldCompact = y > 80;
+
+      if (shouldCompact && !isCompact) {
+        isCompact = true;
+        nav.classList.add('compact');
+        currentThumbSize = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--thumb-size-small'));
+        currentGap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--thumb-gap-small'));
+        layoutThumbs(true);
+      } else if (!shouldCompact && isCompact) {
+        isCompact = false;
+        nav.classList.remove('compact');
+        currentThumbSize = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--thumb-size'));
+        currentGap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--thumb-gap'));
+        layoutThumbs(true);
+      }
+    }, { passive: true });
+
+    // ─── Init ───
+    currentThumbSize = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--thumb-size'));
+    currentGap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--thumb-gap'));
+    selectItem(activeIndex, true);
 
     // Keyboard nav
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-        e.preventDefault();
-        selectProduct((activeIndex + 1) % N);
-      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-        e.preventDefault();
-        selectProduct((activeIndex - 1 + N) % N);
-      }
+      if (e.key === 'ArrowRight') { e.preventDefault(); selectItem((activeIndex + 1) % N); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); selectItem((activeIndex - 1 + N) % N); }
     });
-
-    // Swipe support
-    let touchStartX = 0;
-    stack.addEventListener('touchstart', (e) => {
-      touchStartX = e.touches[0].clientX;
-    }, { passive: true });
-    stack.addEventListener('touchend', (e) => {
-      const diff = e.changedTouches[0].clientX - touchStartX;
-      if (Math.abs(diff) > 50) {
-        if (diff < 0) selectProduct((activeIndex + 1) % N);
-        else selectProduct((activeIndex - 1 + N) % N);
-      }
-    }, { passive: true });
   </script>
 
 </body>
