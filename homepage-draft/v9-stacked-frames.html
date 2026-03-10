@@ -68,27 +68,29 @@
     /* ─── Peek cards (deck behind first frame) ─── */
     .peek-cards {
       position: fixed;
-      /* sit behind the main frame, peeking at the bottom */
       bottom: 8px; left: 48px; right: 48px;
-      height: 40px;
+      height: 44px;
       z-index: 0;
       pointer-events: none;
-      transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                  opacity 0.3s ease;
     }
+    .peek-cards.hidden { opacity: 0; }
     .peek-card {
       position: absolute;
       bottom: 0; left: 0; right: 0;
       border-radius: 12px 12px 0 0;
+      transition: background 0.4s ease;
     }
+    /* Card 2 peeks 20px behind card 1, inset on each side */
     .peek-card--1 {
-      height: 40px;
-      left: 10px; right: 10px;
-      background: rgba(61, 28, 30, 0.07);
+      height: 44px;
+      left: 12px; right: 12px;
     }
+    /* Card 3 peeks 20px behind card 2, further inset */
     .peek-card--2 {
-      height: 20px;
-      left: 24px; right: 24px;
-      background: rgba(61, 28, 30, 0.04);
+      height: 24px;
+      left: 28px; right: 28px;
     }
     #stacks.expanded ~ .peek-cards {
       transform: translateY(100%);
@@ -322,9 +324,40 @@
       // Show active stack
       stackEls.forEach((s, si) => s.classList.toggle('active', si === index));
 
+      // Update peek cards
+      updatePeekCards(index);
+
       // Scroll to top
       if (!force) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    // ─── Peek cards logic ───
+    const peekCardsEl = document.querySelector('.peek-cards');
+    const peekCard1 = document.querySelector('.peek-card--1');
+    const peekCard2 = document.querySelector('.peek-card--2');
+
+    function getFrameColor(frame) {
+      if (frame.type === 'placeholder') return frame.color;
+      // For image frames, use a muted tone
+      return 'rgba(61, 28, 30, 0.08)';
+    }
+
+    function updatePeekCards(index) {
+      const p = products[index];
+      if (p.frames.length <= 1) {
+        // Single frame (logo) — hide peek cards
+        peekCardsEl.classList.add('hidden');
+      } else {
+        peekCardsEl.classList.remove('hidden');
+        peekCard1.style.background = getFrameColor(p.frames[1]);
+        if (p.frames[2]) {
+          peekCard2.style.background = getFrameColor(p.frames[2]);
+          peekCard2.style.display = '';
+        } else {
+          peekCard2.style.display = 'none';
+        }
       }
     }
 
