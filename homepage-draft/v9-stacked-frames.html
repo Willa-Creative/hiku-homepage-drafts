@@ -202,44 +202,27 @@
     });
 
     let transitioning = false;
+    const STEP = 144;
 
-    function positionThumbs(animate) {
-      const step = 144;
-      thumbEls.forEach((el, i) => {
-        let offset = i - activeIndex;
-        if (offset > Math.floor(N / 2)) offset -= N;
-        if (offset < -Math.floor(N / 2)) offset += N;
-        const x = offset * step;
-        if (animate) {
-          // Scale in at new position
-          el.style.transform = `translateX(${x}px) scale(1)`;
-          el.style.opacity = '1';
-        } else {
-          // Instant reposition while scaled down
-          el.style.transition = 'none';
-          el.style.transform = `translateX(${x}px) scale(0.5)`;
-          el.style.opacity = '0';
-          // Force reflow
-          el.offsetHeight;
-          el.style.transition = '';
-        }
-        el.classList.toggle('active', i === activeIndex);
-      });
+    function getOffset(productIndex, active) {
+      let offset = productIndex - active;
+      if (offset > Math.floor(N / 2)) offset -= N;
+      if (offset < -Math.floor(N / 2)) offset += N;
+      return offset;
     }
 
     function selectProduct(index, force) {
       if ((index === activeIndex && !force) || transitioning) return;
 
+      const prevActive = activeIndex;
+      activeIndex = index;
+
       if (force) {
         // First render — no animation
-        activeIndex = index;
-        const step = 144;
         thumbEls.forEach((el, i) => {
-          let offset = i - activeIndex;
-          if (offset > Math.floor(N / 2)) offset -= N;
-          if (offset < -Math.floor(N / 2)) offset += N;
+          const offset = getOffset(i, activeIndex);
           el.style.transition = 'none';
-          el.style.transform = `translateX(${offset * step}px) scale(1)`;
+          el.style.transform = `translateX(${offset * STEP}px)`;
           el.style.opacity = '1';
           el.offsetHeight;
           el.style.transition = '';
@@ -247,23 +230,35 @@
         });
       } else {
         transitioning = true;
-        // Phase 1: scale out all thumbs
-        thumbEls.forEach(el => {
-          el.style.transform = el.style.transform.replace(/scale\([^)]*\)/, 'scale(0.4)');
-          el.style.opacity = '0';
+
+        thumbEls.forEach((el, i) => {
+          const oldOffset = getOffset(i, prevActive);
+          const newOffset = getOffset(i, activeIndex);
+          const isWrapping = Math.abs(newOffset - oldOffset) > 2;
+
+          if (isWrapping) {
+            // This thumb is wrapping around — scale out, reposition, scale in
+            el.style.transform = `translateX(${oldOffset * STEP}px) scale(0.3)`;
+            el.style.opacity = '0';
+
+            setTimeout(() => {
+              el.style.transition = 'none';
+              el.style.transform = `translateX(${newOffset * STEP}px) scale(0.3)`;
+              el.offsetHeight;
+              el.style.transition = '';
+              el.style.transform = `translateX(${newOffset * STEP}px) scale(1)`;
+              el.style.opacity = '1';
+            }, 280);
+          } else {
+            // Normal slide
+            el.style.transform = `translateX(${newOffset * STEP}px)`;
+            el.style.opacity = '1';
+          }
+
+          el.classList.toggle('active', i === activeIndex);
         });
 
-        // Phase 2: after scale-out, reposition instantly then scale in
-        setTimeout(() => {
-          activeIndex = index;
-          positionThumbs(false); // instant reposition while invisible
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              positionThumbs(true); // scale in
-              transitioning = false;
-            });
-          });
-        }, 250);
+        setTimeout(() => { transitioning = false; }, 560);
       }
 
       // Stack: active on top, then next 2 visible, rest hidden
