@@ -988,38 +988,6 @@
       lastWipeX = x;
       lastWipeY = y;
 
-      // Drip effect — occasionally a wiped spot drips down
-      if (Math.random() < 0.08) {
-        requestAnimationFrame(() => steamDrip(x, y));
-      }
-    }
-
-    // Water drip animation after wiping
-    function steamDrip(startX, startY) {
-      let dripY = startY;
-      const dripX = startX + (Math.random() - 0.5) * 6;
-      const speed = 1 + Math.random() * 2;
-      const maxLen = 60 + Math.random() * 100;
-      let traveled = 0;
-
-      function dripFrame() {
-        if (traveled > maxLen) return;
-        steamCtx.save();
-        steamCtx.globalCompositeOperation = 'destination-out';
-        const r = 2 + Math.random() * 3;
-        const g = steamCtx.createRadialGradient(dripX, dripY, 0, dripX, dripY, r);
-        g.addColorStop(0, 'rgba(0,0,0,0.7)');
-        g.addColorStop(1, 'rgba(0,0,0,0)');
-        steamCtx.fillStyle = g;
-        steamCtx.beginPath();
-        steamCtx.arc(dripX, dripY, r, 0, Math.PI * 2);
-        steamCtx.fill();
-        steamCtx.restore();
-        dripY += speed;
-        traveled += speed;
-        requestAnimationFrame(dripFrame);
-      }
-      dripFrame();
     }
 
     // Mouse events on steam canvas
