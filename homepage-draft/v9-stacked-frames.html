@@ -267,20 +267,18 @@
       const frames = [...stack.querySelectorAll('.frame')];
       frames.forEach(f => {
         const fi = parseInt(f.dataset.index);
-        let dist = fi - index;
-        if (dist > Math.floor(N / 2)) dist -= N;
-        if (dist < -Math.floor(N / 2)) dist += N;
-        dist = Math.abs(dist);
+        // Forward distance: how many steps ahead is this frame
+        let forwardDist = (fi - index + N) % N;
 
         const wasHidden = f.classList.contains('hidden-frame');
 
-        if (dist <= 2) {
+        if (forwardDist <= 2) {
+          // This is the active (0) or next 1-2 slides
           if (wasHidden) {
-            // Coming from hidden: remove hidden class, re-enable transition
             f.classList.remove('hidden-frame');
-            f.offsetHeight; // reflow
+            f.offsetHeight;
           }
-          f.dataset.depth = dist;
+          f.dataset.depth = forwardDist;
         } else {
           f.removeAttribute('data-depth');
           f.classList.add('hidden-frame');
