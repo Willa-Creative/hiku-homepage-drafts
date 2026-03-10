@@ -55,7 +55,7 @@
       padding: 0 48px;
       transition: padding 0.5s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    #stacks.expanded {
+    #stacks.expanded:not(.no-expand) {
       padding: 0;
     }
 
@@ -118,7 +118,7 @@
       transition: height 0.5s cubic-bezier(0.22, 1, 0.36, 1),
                   border-radius 0.5s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    #stacks.expanded .frame {
+    #stacks.expanded:not(.no-expand) .frame {
       height: calc(100vh - var(--nav-h));
       border-radius: 0;
     }
@@ -334,8 +334,9 @@
       // Show active stack
       stackEls.forEach((s, si) => s.classList.toggle('active', si === index));
 
-      // Update peek cards
+      // Update peek cards + expansion behavior
       updatePeekCards(index);
+      stacksEl.classList.toggle('no-expand', products[index].frames.length <= 1);
 
       // Scroll to top
       if (!force) {
