@@ -51,6 +51,7 @@
 
     /* ─── Stacks container ─── */
     #stacks {
+      position: relative;
       padding: 0 48px;
       transition: padding 0.5s cubic-bezier(0.22, 1, 0.36, 1);
     }
@@ -59,10 +60,16 @@
     }
 
     .product-stack {
-      display: none;
+      position: absolute;
+      left: 0; right: 0; top: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.45s ease;
     }
     .product-stack.active {
-      display: block;
+      position: relative;
+      opacity: 1;
+      pointer-events: auto;
     }
 
     /* ─── Peek cards (deck behind first frame) ─── */
