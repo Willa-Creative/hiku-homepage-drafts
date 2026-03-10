@@ -16,6 +16,7 @@
       --sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       --thumb-size: 120px;
       --thumb-gap: 24px;
+      --nav-h: 160px; /* thumb bar total height */
     }
     html, body { min-height: 100%; }
     body {
@@ -48,7 +49,15 @@
     .thumb--logo { border: none !important; }
     .thumb--logo svg { width: 60%; height: 60%; }
 
-    /* ─── Sticky Card Stack (JR Atelier style) ─── */
+    /* ─── Stacks container ─── */
+    #stacks {
+      padding: 0 48px;
+      transition: padding 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    #stacks.expanded {
+      padding: 0;
+    }
+
     .product-stack {
       display: none;
     }
@@ -56,14 +65,19 @@
       display: block;
     }
 
+    /* ─── Sticky Card Stack (JR Atelier style) ─── */
     .frame {
       position: sticky;
-      top: 0;
-      height: 94vh;
+      top: var(--nav-h);
+      height: calc(100vh - var(--nav-h));
       width: 100%;
       overflow: hidden;
       border-radius: 12px;
       will-change: transform;
+      transition: border-radius 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    #stacks.expanded .frame {
+      border-radius: 0;
     }
     /* Each frame gets a higher z-index so it stacks on top */
     .frame:nth-child(1) { z-index: 1; }
@@ -72,7 +86,9 @@
 
     .frame__bg {
       position: absolute; inset: 0;
-      background-size: cover; background-position: center;
+      background-size: contain; background-position: center;
+      background-repeat: no-repeat;
+      background-color: var(--almond);
     }
 
     .frame--placeholder {
@@ -84,8 +100,8 @@
     }
 
     @media (max-width: 768px) {
-      :root { --thumb-size: 72px; --thumb-gap: 12px; }
-      .frame { height: 90vh; }
+      :root { --thumb-size: 72px; --thumb-gap: 12px; --nav-h: 112px; }
+      #stacks { padding: 0 16px; }
     }
   </style>
 </head>
@@ -276,6 +292,19 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
+
+    // ─── Scroll-driven expansion ───
+    const stacksEl = document.getElementById('stacks');
+    const EXPAND_THRESHOLD = 40; // px scrolled before expanding
+
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      if (scrollY > EXPAND_THRESHOLD) {
+        stacksEl.classList.add('expanded');
+      } else {
+        stacksEl.classList.remove('expanded');
+      }
+    }, { passive: true });
 
     // Init
     selectProduct(activeIndex, true);
