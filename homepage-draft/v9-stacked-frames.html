@@ -26,6 +26,8 @@
       background: var(--almond);
       color: var(--brown);
       -webkit-font-smoothing: antialiased;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     /* ─── Thumbnails ─── */
@@ -43,7 +45,9 @@
       width: var(--thumb-size);
       height: var(--thumb-size);
       border-radius: 8px;
-      pointer-events: none;
+      cursor: pointer;
+      -webkit-user-select: none;
+      user-select: none;
       display: flex;
       align-items: center;
       justify-content: center;
