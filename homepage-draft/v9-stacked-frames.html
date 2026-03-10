@@ -28,7 +28,11 @@
     }
 
     /* ─── Thumbnails ─── */
-    .thumbnails-wrap { overflow: hidden; padding: 32px 0 24px; }
+    .thumbnails-wrap {
+      position: sticky; top: 0; z-index: 200;
+      background: var(--almond);
+      overflow: hidden; padding: 32px 0 24px;
+    }
     .thumbnails { position: relative; height: var(--thumb-size); margin: 0 auto; }
     .thumb {
       width: var(--thumb-size); height: var(--thumb-size);
@@ -41,72 +45,92 @@
     }
     .thumb.active { border-color: var(--brown); }
     .thumb img { width: 85%; height: 85%; object-fit: contain; pointer-events: none; }
+    .thumb--logo { border: none !important; }
+    .thumb--logo svg { width: 60%; height: 60%; }
 
-    /* ─── Stack Container ─── */
+    /* ─── Scroll Track (provides scroll height for sticky animation) ─── */
+    .scroll-track {
+      position: relative;
+    }
+
+    /* ─── Sticky viewport for the stack ─── */
+    .stack-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 48px;
+      padding-top: 176px; /* thumbnail bar height */
+    }
+
     .stack-container {
       position: relative;
-      margin: 24px 48px 0;
+      width: 100%;
+      max-width: 1400px;
       height: 70vh;
-      margin-bottom: 240px;
     }
 
     .product-stack {
       position: absolute; inset: 0;
-      opacity: 0;
-      pointer-events: none;
+      opacity: 0; pointer-events: none;
       transition: opacity 0.4s ease;
     }
-    .product-stack.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
+    .product-stack.active { opacity: 1; pointer-events: auto; }
 
     /* ─── Frames ─── */
     .frame {
       position: absolute; inset: 0; overflow: hidden;
-      border-radius: 12px; cursor: pointer;
-      will-change: transform;
-      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      border-radius: 12px;
+      will-change: transform, opacity;
     }
-    .frame[data-depth="0"] { z-index: 10; transform: translateY(0) scale(1); }
-    .frame[data-depth="1"] { z-index: 9; transform: translateY(90px) scale(0.96); }
-    .frame[data-depth="2"] { z-index: 8; transform: translateY(180px) scale(0.92); }
-
-    /* Image-based frame */
     .frame__bg {
       position: absolute; inset: 0;
       background-size: cover; background-position: center;
     }
 
-    /* Generic placeholder frame */
     .frame--placeholder {
       display: flex; align-items: center; justify-content: center;
     }
     .frame--placeholder span {
-      font-family: var(--serif);
-      font-size: 18px;
-      opacity: 0.4;
-      text-align: center;
-      line-height: 1.5;
+      font-family: var(--serif); font-size: 18px;
+      opacity: 0.4; text-align: center; line-height: 1.5;
     }
 
-    /* Logo thumbnail */
-    .thumb--logo { border: none !important; }
-    .thumb--logo svg { width: 60%; height: 60%; }
-
-    /* Single hero frame (no stacking) */
     .frame--single {
-      position: relative;
-      border-radius: 12px;
-      overflow: hidden;
-      width: 100%;
-      height: 100%;
+      position: relative; border-radius: 12px; overflow: hidden;
+      width: 100%; height: 100%;
       display: flex; align-items: center; justify-content: center;
     }
 
+    /* ─── Scroll progress indicator ─── */
+    .scroll-dots {
+      position: fixed;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 150;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .scroll-dots.visible { opacity: 1; }
+    .scroll-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--brown);
+      opacity: 0.2;
+      transition: opacity 0.3s ease;
+    }
+    .scroll-dot.active { opacity: 1; }
+
     @media (max-width: 768px) {
       :root { --thumb-size: 72px; --thumb-gap: 12px; }
-      .stack-container { margin: 16px 16px 24px; }
+      .stack-sticky { padding: 0 16px; padding-top: 128px; }
+      .scroll-dots { right: 12px; }
     }
   </style>
 </head>
@@ -116,7 +140,17 @@
     <div class="thumbnails" id="thumbnails"></div>
   </div>
 
-  <div class="stack-container" id="stackContainer"></div>
+  <div class="scroll-track" id="scrollTrack">
+    <div class="stack-sticky">
+      <div class="stack-container" id="stackContainer"></div>
+    </div>
+  </div>
+
+  <!-- Scroll progress dots -->
+  <div class="scroll-dots" id="scrollDots"></div>
+
+  <!-- Spacer after scroll track -->
+  <div style="height: 100px;"></div>
 
   <script>
     const IMG_JAR = 'assets/b1983030efe5da27c6000b46e47a3bb5cb301ba1.png';
@@ -143,7 +177,6 @@
       },
       {
         name: 'Guava Glow Moisturizer', img: IMG_JAR,
-        color: '#e4bfae',
         frames: [
           { type: 'placeholder', color: '#e4bfae', label: 'Hero' },
           { type: 'placeholder', color: '#d4a08a', label: 'PDP' },
@@ -183,7 +216,7 @@
         ]
       },
       {
-        name: 'Glac\u00e9 Kiss Balm', img: IMG_SLIM,
+        name: 'Glacé Kiss Balm', img: IMG_SLIM,
         frames: [
           { type: 'placeholder', color: '#e4c8bc', label: 'Hero' },
           { type: 'placeholder', color: '#d4b0a0', label: 'PDP' },
@@ -192,13 +225,20 @@
       },
     ];
 
+    // ─── Config ───
+    const UNSTACK_SCROLL = 300;   // px of scroll to fully unstack
+    const FRAME_SCROLL = 600;     // px of scroll per frame while locked
+    const STACK_OFFSET = 90;      // initial Y offset between cards
+    const STACK_SCALE_STEP = 0.04;
+
     const N = products.length;
     let activeIndex = 0;
+    const scrollTrack = document.getElementById('scrollTrack');
     const stackContainer = document.getElementById('stackContainer');
     const thumbsContainer = document.getElementById('thumbnails');
-    const activeSlide = new Array(N).fill(0);
+    const scrollDotsEl = document.getElementById('scrollDots');
 
-    // Build thumbnails
+    // ─── Build thumbnails ───
     const thumbEls = [];
     products.forEach((p, i) => {
       const div = document.createElement('div');
@@ -214,7 +254,8 @@
       thumbEls.push(div);
     });
 
-    // Build frames per product
+    // ─── Build frames per product ───
+    const stackEls = [];
     products.forEach((p, pi) => {
       const stackDiv = document.createElement('div');
       stackDiv.className = 'product-stack';
@@ -235,29 +276,115 @@
           frame.innerHTML = `<span>${p.name}<br>${f.label}</span>`;
         }
 
-        frame.addEventListener('click', () => cycleSlide(pi));
         stackDiv.appendChild(frame);
       });
 
       stackContainer.appendChild(stackDiv);
+      stackEls.push(stackDiv);
     });
 
-    // ─── Slide cycling ───
-    function cycleSlide(pi) {
-      const count = products[pi].frames.length;
-      if (count <= 1) return; // no cycling for single-frame items
-      activeSlide[pi] = (activeSlide[pi] + 1) % count;
-      layoutStack(pi);
+    // ─── Scroll track height ───
+    function updateScrollTrackHeight() {
+      const p = products[activeIndex];
+      const frameCount = p.frames.length;
+      if (frameCount <= 1) {
+        // Single frame (logo): just viewport height, no scroll lock
+        scrollTrack.style.height = '100vh';
+      } else {
+        // Unstack phase + one "page" per frame + buffer
+        const total = UNSTACK_SCROLL + (frameCount * FRAME_SCROLL) + 100;
+        scrollTrack.style.height = total + 'px';
+      }
     }
 
-    function layoutStack(pi) {
-      const el = stackContainer.querySelector(`.product-stack[data-product="${pi}"]`);
-      const frames = el.querySelectorAll('.frame');
-      const count = products[pi].frames.length;
-      const cur = activeSlide[pi];
-      frames.forEach((f, fi) => {
-        f.dataset.depth = (fi - cur + count) % count;
-      });
+    // ─── Scroll-driven frame animation ───
+    function updateFrames() {
+      const p = products[activeIndex];
+      const frameCount = p.frames.length;
+      if (frameCount <= 1) {
+        scrollDotsEl.classList.remove('visible');
+        return;
+      }
+
+      const trackRect = scrollTrack.getBoundingClientRect();
+      // How far we've scrolled into the track (0 = top of track at viewport top)
+      const scrolled = -trackRect.top;
+      const totalScroll = UNSTACK_SCROLL + (frameCount * FRAME_SCROLL);
+
+      const stackEl = stackEls[activeIndex];
+      const frames = stackEl.querySelectorAll('.frame');
+
+      if (scrolled < 0) {
+        // Before scroll track — show initial stacked state
+        frames.forEach((f, fi) => {
+          f.style.transform = `translateY(${fi * STACK_OFFSET}px) scale(${1 - fi * STACK_SCALE_STEP})`;
+          f.style.zIndex = frameCount - fi;
+          f.style.opacity = '1';
+          f.style.borderRadius = '12px';
+        });
+        scrollDotsEl.classList.remove('visible');
+        return;
+      }
+
+      // Show dots
+      scrollDotsEl.classList.add('visible');
+
+      if (scrolled <= UNSTACK_SCROLL) {
+        // Phase 1: Unstacking — offsets collapse to 0, scales go to 1, radius goes to 0
+        const t = Math.min(1, scrolled / UNSTACK_SCROLL);
+        const ease = t * (2 - t); // ease-out
+        frames.forEach((f, fi) => {
+          const offsetY = (fi * STACK_OFFSET) * (1 - ease);
+          const scale = 1 - (fi * STACK_SCALE_STEP) * (1 - ease);
+          const radius = 12 * (1 - ease);
+          f.style.transform = `translateY(${offsetY}px) scale(${scale})`;
+          f.style.zIndex = frameCount - fi;
+          f.style.opacity = '1';
+          f.style.borderRadius = radius + 'px';
+        });
+        // Dots: first active during unstack
+        updateDots(frameCount, 0);
+      } else {
+        // Phase 2: Frame cycling — fully unstacked, crossfade between frames
+        const cycleScrolled = scrolled - UNSTACK_SCROLL;
+        const currentFrame = Math.min(frameCount - 1, Math.floor(cycleScrolled / FRAME_SCROLL));
+        const frameProgress = (cycleScrolled - currentFrame * FRAME_SCROLL) / FRAME_SCROLL;
+
+        frames.forEach((f, fi) => {
+          f.style.transform = 'translateY(0) scale(1)';
+          f.style.borderRadius = '0px';
+
+          if (fi === currentFrame) {
+            f.style.opacity = '1';
+            f.style.zIndex = 10;
+          } else if (fi === currentFrame + 1 && currentFrame < frameCount - 1) {
+            // Next frame fades in as we scroll
+            const fadeIn = Math.max(0, (frameProgress - 0.6) / 0.4); // fade in last 40% of scroll
+            f.style.opacity = fadeIn;
+            f.style.zIndex = 11;
+          } else {
+            f.style.opacity = '0';
+            f.style.zIndex = 1;
+          }
+        });
+
+        updateDots(frameCount, currentFrame);
+      }
+    }
+
+    // ─── Scroll dots ───
+    function buildDots(count) {
+      scrollDotsEl.innerHTML = '';
+      for (let i = 0; i < count; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'scroll-dot';
+        scrollDotsEl.appendChild(dot);
+      }
+    }
+
+    function updateDots(count, active) {
+      const dots = scrollDotsEl.querySelectorAll('.scroll-dot');
+      dots.forEach((d, i) => d.classList.toggle('active', i === active));
     }
 
     // ─── Thumbnail positioning ───
@@ -311,23 +438,35 @@
         setTimeout(() => { transitioning = false; }, 560);
       }
 
-      document.querySelectorAll('.product-stack').forEach((s, si) => {
-        s.classList.toggle('active', si === index);
-      });
-      activeSlide[index] = 0;
-      layoutStack(index);
+      // Show active stack
+      stackEls.forEach((s, si) => s.classList.toggle('active', si === index));
+
+      // Update scroll track height and dots
+      updateScrollTrackHeight();
+      buildDots(products[index].frames.length);
+
+      // Scroll to top of track
+      if (!force) {
+        scrollTrack.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      // Initial frame layout
+      updateFrames();
     }
 
-    // Init
+    // ─── Scroll listener ───
+    window.addEventListener('scroll', updateFrames, { passive: true });
+
+    // ─── Init ───
     selectProduct(activeIndex, true);
 
-    // Keyboard
+    // Keyboard — switch products
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); selectProduct((activeIndex + 1) % N); }
-      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); selectProduct((activeIndex - 1 + N) % N); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); selectProduct((activeIndex + 1) % N); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); selectProduct((activeIndex - 1 + N) % N); }
     });
 
-    // Swipe
+    // Swipe on stack to switch products
     let touchStartX = 0;
     stackContainer.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
     stackContainer.addEventListener('touchend', (e) => {
