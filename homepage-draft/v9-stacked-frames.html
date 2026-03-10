@@ -50,8 +50,16 @@
       margin-bottom: 240px;
     }
 
-    .product-stack { position: absolute; inset: 0; display: none; }
-    .product-stack.active { display: block; }
+    .product-stack {
+      position: absolute; inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    .product-stack.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
 
     /* ─── Frames ─── */
     .frame {
