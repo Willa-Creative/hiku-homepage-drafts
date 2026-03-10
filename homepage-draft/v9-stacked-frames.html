@@ -12,9 +12,6 @@
     :root {
       --brown: #3D1C1E;
       --almond: #FDF8F5;
-      --pink: #F5E6E0;
-      --rosewood: #C4A0A7;
-      --stone: #A6A09B;
       --serif: 'Playfair Display', 'Big Caslon', Georgia, serif;
       --sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       --thumb-size: 120px;
@@ -67,144 +64,27 @@
     .frame[data-depth="1"] { z-index: 9; transform: translateY(90px) scale(0.96); }
     .frame[data-depth="2"] { z-index: 8; transform: translateY(180px) scale(0.92); }
 
-    /* ─── Frame: Hero (split layout — texture left, model right) ─── */
-    .frame--hero { display: grid; grid-template-columns: 1fr 1fr; }
-    .frame--hero-left {
-      position: relative; padding: 60px 48px;
-      display: flex; flex-direction: column; justify-content: flex-end;
-    }
-    .frame--hero-left h2 {
-      font-family: var(--serif); font-size: clamp(32px, 4vw, 48px);
-      font-weight: 400; line-height: 1.1; margin-bottom: 16px;
-    }
-    .frame--hero-left p {
-      font-size: 13px; line-height: 1.6; max-width: 320px; opacity: 0.8;
-    }
-    .frame--hero-right {
-      position: relative; overflow: hidden;
-    }
-    .frame--hero-right img {
-      width: 100%; height: 100%; object-fit: cover;
-    }
-    /* Texture blobs (CSS only) */
-    .hero-blob {
-      position: absolute; border-radius: 50%; filter: blur(40px); opacity: 0.3;
-    }
-
-    /* ─── Frame: PDP (3-column layout) ─── */
-    .frame--pdp {
-      display: grid; grid-template-columns: 1fr 1.2fr 1fr;
-      align-items: center; padding: 40px;
-    }
-    .pdp-left { padding: 24px; }
-    .pdp-left .pdp-rating { font-size: 12px; color: var(--stone); margin-bottom: 12px; }
-    .pdp-left h2 {
-      font-family: var(--serif); font-size: clamp(24px, 3vw, 36px);
-      font-weight: 400; line-height: 1.15; margin-bottom: 16px;
-    }
-    .pdp-left p { font-size: 12px; line-height: 1.7; color: var(--stone); max-width: 280px; }
-    .pdp-center {
-      display: flex; align-items: center; justify-content: center;
-      position: relative;
-    }
-    .pdp-center img {
-      max-height: 55vh; width: auto; object-fit: contain;
-      filter: drop-shadow(0 4px 24px rgba(61,28,30,0.1));
-    }
-    .pdp-right { padding: 24px; }
-    .pdp-option {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 16px; border: 1px solid rgba(61,28,30,0.1);
-      border-radius: 8px; margin-bottom: 10px; font-size: 13px;
-    }
-    .pdp-option.selected { border-color: var(--brown); }
-    .pdp-option-radio {
-      width: 16px; height: 16px; border-radius: 50%;
-      border: 1.5px solid var(--brown); margin-right: 12px; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .pdp-option.selected .pdp-option-radio::after {
-      content: ''; width: 8px; height: 8px; border-radius: 50%;
-      background: var(--brown);
-    }
-    .pdp-option-label { flex: 1; }
-    .pdp-option-price { font-weight: 500; }
-    .pdp-save {
-      display: inline-block; font-size: 10px; padding: 3px 8px;
-      background: #EDE0F0; border-radius: 4px; margin-left: 8px;
-      color: var(--brown);
-    }
-    .pdp-btn {
-      width: 100%; padding: 16px; margin-top: 6px;
-      background: var(--brown); color: var(--almond);
-      border: none; border-radius: 8px; font-size: 13px;
-      font-family: var(--sans); cursor: pointer;
-      letter-spacing: 0.02em;
-    }
-
-    /* ─── Frame: UGC (3-column — community, stories, review) ─── */
-    .frame--ugc {
-      display: grid; grid-template-columns: 1fr 1.1fr 1fr;
-      padding: 48px; gap: 32px; align-items: center;
-    }
-    .ugc-left h2 {
-      font-family: var(--serif); font-size: clamp(28px, 3.5vw, 42px);
-      font-weight: 400; line-height: 1.1; margin-bottom: 16px;
-    }
-    .ugc-left p { font-size: 13px; line-height: 1.6; color: var(--stone); margin-bottom: 24px; }
-    .ugc-left-btn {
-      display: inline-block; padding: 12px 24px;
-      background: var(--brown); color: var(--almond);
-      border-radius: 6px; font-size: 11px;
-      letter-spacing: 0.06em; text-transform: lowercase;
-    }
-    .ugc-center {
-      border-radius: 16px; overflow: hidden;
-      aspect-ratio: 9/16; max-height: 100%; position: relative;
-    }
-    .ugc-story-img {
-      width: 100%; height: 100%; object-fit: cover;
-    }
-    .ugc-story-bar {
-      position: absolute; top: 12px; left: 12px; right: 12px;
-      display: flex; gap: 4px;
-    }
-    .ugc-story-bar span {
-      flex: 1; height: 2px; background: rgba(255,255,255,0.4);
-      border-radius: 1px;
-    }
-    .ugc-story-bar span:first-child { background: #fff; }
-    .ugc-story-user {
-      position: absolute; top: 24px; left: 16px;
-      display: flex; align-items: center; gap: 8px;
-      color: #fff; font-size: 12px;
-    }
-    .ugc-story-avatar {
-      width: 28px; height: 28px; border-radius: 50%;
-    }
-    .ugc-right {
-      display: flex; flex-direction: column; gap: 8px;
-    }
-    .ugc-reviewer { font-size: 13px; font-weight: 500; }
-    .ugc-stars { color: var(--brown); font-size: 14px; letter-spacing: 2px; }
-    .ugc-quote {
-      font-family: var(--serif); font-size: clamp(18px, 2vw, 24px);
-      font-weight: 400; line-height: 1.4; font-style: italic;
-    }
-
-    /* ─── Frame image for matcha (screenshot-based) ─── */
-    .frame--img { position: relative; }
-    .frame--img .frame__bg {
+    /* Image-based frame */
+    .frame__bg {
       position: absolute; inset: 0;
       background-size: cover; background-position: center;
+    }
+
+    /* Generic placeholder frame */
+    .frame--placeholder {
+      display: flex; align-items: center; justify-content: center;
+    }
+    .frame--placeholder span {
+      font-family: var(--serif);
+      font-size: 18px;
+      opacity: 0.4;
+      text-align: center;
+      line-height: 1.5;
     }
 
     @media (max-width: 768px) {
       :root { --thumb-size: 72px; --thumb-gap: 12px; }
       .stack-container { margin: 16px 16px 24px; }
-      .frame--hero { grid-template-columns: 1fr; }
-      .frame--pdp { grid-template-columns: 1fr; }
-      .frame--ugc { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -221,74 +101,64 @@
     const IMG_DROPPER = 'assets/2073f3c36a70227dc6ab5531ba597f67945f8777.png';
     const IMG_TUBE = 'assets/b0eb6302ee336ef8745a70594462453669872c14.png';
     const IMG_SLIM = 'assets/bf4ac0864ff9934a18e93943c82515606d8017bd.png';
-    const IMG_MODEL = 'assets/4e4e375a33e31d54fc1b5e9dfe21f71dffa5e5f6.png';
 
     const products = [
       {
-        name: 'Matcha Skin Cleanser', img: IMG_TUBE, price: '$42',
-        // Matcha uses the real Figma screenshot frames
-        frameType: 'image',
-        frames: ['assets/matcha-hero.png','assets/matcha-pdp.png','assets/matcha-ugc.png'],
+        name: 'Matcha Skin Cleanser', img: IMG_TUBE,
+        frames: [
+          { type: 'image', src: 'assets/matcha-hero.png' },
+          { type: 'image', src: 'assets/matcha-pdp.png' },
+          { type: 'image', src: 'assets/matcha-ugc.png' },
+        ]
       },
       {
-        name: 'Guava Glow Moisturizer', img: IMG_JAR, price: '$32',
-        frameType: 'html',
-        color1: '#e4bfae', color2: '#d4a08a', color3: '#c08870', accent: '#e8a090',
-        desc: 'A dewy, whipped moisturizer infused with guava extract for a lit-from-within glow. Lightweight, non-greasy, sinks right in.',
-        heroDesc: 'A bouncy gel-cream that melts into skin for an instant lit-from-within glow. Think of it like liquid sunshine — but gentler.',
-        ingredients: 'Formulated with hiku kind calmplex\u2122 \u2014 our proprietary blend of guava extract, hyaluronic acid, and botanical oils that hydrate without the heaviness.',
-        review: '\u201cMy skin has never looked this dewy without looking greasy. Obsessed.\u201d',
-        reviewer: 'Mia K.',
+        name: 'Guava Glow Moisturizer', img: IMG_JAR,
+        color: '#e4bfae',
+        frames: [
+          { type: 'placeholder', color: '#e4bfae', label: 'Hero' },
+          { type: 'placeholder', color: '#d4a08a', label: 'PDP' },
+          { type: 'placeholder', color: '#c08870', label: 'UGC' },
+        ]
       },
       {
-        name: 'Soft Matte Moisturizer', img: IMG_JAR, price: '$32',
-        frameType: 'html',
-        color1: '#e8ccc0', color2: '#d8b0a0', color3: '#c49888', accent: '#d4b8b0',
-        desc: 'Velvet-finish moisturizer that controls shine without drying. Perfect canvas for makeup or a fresh bare-face feel.',
-        heroDesc: 'A cloud-soft moisturizer that mattifies without stripping. Your skin, but with a soft-focus filter.',
-        ingredients: 'Formulated with hiku kind calmplex\u2122 \u2014 our proprietary blend of niacinamide, rice bran, and ceramides that refine without irritation.',
-        review: '\u201cFinally a matte moisturizer that doesn\u2019t make my skin feel tight. Perfect under makeup.\u201d',
-        reviewer: 'Ava T.',
+        name: 'Soft Matte Moisturizer', img: IMG_JAR,
+        frames: [
+          { type: 'placeholder', color: '#e8ccc0', label: 'Hero' },
+          { type: 'placeholder', color: '#d8b0a0', label: 'PDP' },
+          { type: 'placeholder', color: '#c49888', label: 'UGC' },
+        ]
       },
       {
-        name: 'Oak Milk Toner', img: IMG_DROPPER, price: '$28',
-        frameType: 'html',
-        color1: '#dcc4b4', color2: '#ccac98', color3: '#b89480', accent: '#c8b4a4',
-        desc: 'Milky, pH-balancing toner with oat extract to soothe and prep. The bridge between cleansing and everything after.',
-        heroDesc: 'A milky, soothing toner that preps and calms in one step. Think of it like a deep breath for your skin.',
-        ingredients: 'Formulated with hiku kind calmplex\u2122 \u2014 our proprietary blend of oat extract, panthenol, and allantoin that calm without coating.',
-        review: '\u201cSo soothing on my sensitive skin. It feels like silk going on.\u201d',
-        reviewer: 'Priya R.',
+        name: 'Oak Milk Toner', img: IMG_DROPPER,
+        frames: [
+          { type: 'placeholder', color: '#dcc4b4', label: 'Hero' },
+          { type: 'placeholder', color: '#ccac98', label: 'PDP' },
+          { type: 'placeholder', color: '#b89480', label: 'UGC' },
+        ]
       },
       {
-        name: 'Green Juice Serum', img: IMG_DROPPER, price: '$38',
-        frameType: 'html',
-        color1: '#c8d4b8', color2: '#b0c098', color3: '#98ac80', accent: '#b8c8a0',
-        desc: 'Concentrated green superfood serum. Kale, spinach, and chlorophyll feed your skin the nutrients it craves.',
-        heroDesc: 'A daily dose of green superfoods for your face. Concentrated nutrients that your skin actually drinks up.',
-        ingredients: 'Formulated with hiku kind calmplex\u2122 \u2014 our proprietary blend of kale extract, chlorophyll, and centella asiatica for deep nourishment.',
-        review: '\u201cMy acne scars are fading and my skin looks so healthy. This is my holy grail serum.\u201d',
-        reviewer: 'Jordan L.',
+        name: 'Green Juice Serum', img: IMG_DROPPER,
+        frames: [
+          { type: 'placeholder', color: '#c8d4b8', label: 'Hero' },
+          { type: 'placeholder', color: '#b0c098', label: 'PDP' },
+          { type: 'placeholder', color: '#98ac80', label: 'UGC' },
+        ]
       },
       {
-        name: 'Smooth Skin Face Scrub', img: IMG_TUBE, price: '$24',
-        frameType: 'html',
-        color1: '#dcc0b0', color2: '#cca898', color3: '#b89080', accent: '#c4a898',
-        desc: 'Fine rice powder exfoliant that buffs without micro-tears. Use 2-3x a week for that just-resurfaced smoothness.',
-        heroDesc: 'A pillow-soft scrub that resurfaces without scratching. Fine rice powder does the work so your skin can just glow.',
-        ingredients: 'Formulated with hiku kind calmplex\u2122 \u2014 our proprietary blend of rice powder, jojoba beads, and vitamin E for gentle-but-effective exfoliation.',
-        review: '\u201cSo gentle but my skin feels brand new after. No redness, no irritation. Just smooth.\u201d',
-        reviewer: 'Soph B.',
+        name: 'Smooth Skin Face Scrub', img: IMG_TUBE,
+        frames: [
+          { type: 'placeholder', color: '#dcc0b0', label: 'Hero' },
+          { type: 'placeholder', color: '#cca898', label: 'PDP' },
+          { type: 'placeholder', color: '#b89080', label: 'UGC' },
+        ]
       },
       {
-        name: 'Glac\u00e9 Kiss Balm', img: IMG_SLIM, price: '$22',
-        frameType: 'html',
-        color1: '#e4c8bc', color2: '#d4b0a0', color3: '#c09884', accent: '#d8b8ac',
-        desc: 'Glossy, hydrating lip balm with a barely-there tint. Shea butter + vitamin E keep lips soft all day.',
-        heroDesc: 'A glossy, hydrating balm that makes your lips look like they just had a spa day. Barely-there tint, all-day soft.',
-        ingredients: 'Formulated with hiku kind calmplex\u2122 \u2014 our proprietary blend of shea butter, vitamin E, and jojoba oil for lasting lip comfort.',
-        review: '\u201cThe perfect lip balm. Not sticky, not waxy, just pure gloss and hydration.\u201d',
-        reviewer: 'Ella M.',
+        name: 'Glac\u00e9 Kiss Balm', img: IMG_SLIM,
+        frames: [
+          { type: 'placeholder', color: '#e4c8bc', label: 'Hero' },
+          { type: 'placeholder', color: '#d4b0a0', label: 'PDP' },
+          { type: 'placeholder', color: '#c09884', label: 'UGC' },
+        ]
       },
     ];
 
@@ -315,95 +185,22 @@
       stackDiv.className = 'product-stack';
       stackDiv.dataset.product = pi;
 
-      if (p.frameType === 'image') {
-        // Matcha — real screenshot images
-        p.frames.forEach((src, fi) => {
-          const frame = document.createElement('div');
-          frame.className = 'frame frame--img';
-          frame.dataset.slide = fi;
-          frame.innerHTML = `<div class="frame__bg" style="background-image:url('${src}')"></div>`;
-          frame.addEventListener('click', () => cycleSlide(pi));
-          stackDiv.appendChild(frame);
-        });
-      } else {
-        // HTML-rendered frames
-        // Frame 1: Hero (split — texture left, model right)
-        const f1 = document.createElement('div');
-        f1.className = 'frame frame--hero';
-        f1.dataset.slide = 0;
-        f1.style.background = `linear-gradient(135deg, ${p.color1} 0%, ${p.color2} 100%)`;
-        f1.innerHTML = `
-          <div class="frame--hero-left" style="background: linear-gradient(160deg, ${p.color1} 0%, ${p.color2} 100%);">
-            <div class="hero-blob" style="width:200px;height:200px;background:${p.accent};top:10%;left:-20%;"></div>
-            <div class="hero-blob" style="width:140px;height:140px;background:${p.color3};top:50%;left:40%;opacity:0.2;"></div>
-            <h2>${p.name.toLowerCase()}</h2>
-            <p>${p.heroDesc}</p>
-          </div>
-          <div class="frame--hero-right">
-            <img src="${IMG_MODEL}" alt="model">
-          </div>`;
-        f1.addEventListener('click', () => cycleSlide(pi));
-        stackDiv.appendChild(f1);
+      p.frames.forEach((f, fi) => {
+        const frame = document.createElement('div');
+        frame.dataset.slide = fi;
 
-        // Frame 2: PDP
-        const f2 = document.createElement('div');
-        f2.className = 'frame frame--pdp';
-        f2.dataset.slide = 1;
-        f2.style.background = `var(--almond)`;
-        f2.innerHTML = `
-          <div class="pdp-left">
-            <div class="pdp-rating">\u2605 0.0 (00)</div>
-            <h2>${p.name.toLowerCase()}</h2>
-            <p>${p.ingredients}</p>
-          </div>
-          <div class="pdp-center">
-            <img src="${p.img}" alt="${p.name}">
-          </div>
-          <div class="pdp-right">
-            <div class="pdp-option selected">
-              <div class="pdp-option-radio"></div>
-              <span class="pdp-option-label">One Time Purchase</span>
-              <span class="pdp-option-price">${p.price}</span>
-            </div>
-            <div class="pdp-option">
-              <div class="pdp-option-radio"></div>
-              <span class="pdp-option-label">Subscribe & Save <span class="pdp-save">Save 10%</span></span>
-              <span class="pdp-option-price">$${(parseFloat(p.price.slice(1)) * 0.9).toFixed(2)}</span>
-            </div>
-            <button class="pdp-btn">Add to Cart</button>
-          </div>`;
-        f2.addEventListener('click', () => cycleSlide(pi));
-        stackDiv.appendChild(f2);
+        if (f.type === 'image') {
+          frame.className = 'frame';
+          frame.innerHTML = `<div class="frame__bg" style="background-image:url('${f.src}')"></div>`;
+        } else {
+          frame.className = 'frame frame--placeholder';
+          frame.style.background = f.color;
+          frame.innerHTML = `<span>${p.name}<br>${f.label}</span>`;
+        }
 
-        // Frame 3: UGC
-        const f3 = document.createElement('div');
-        f3.className = 'frame frame--ugc';
-        f3.dataset.slide = 2;
-        f3.style.background = `var(--pink)`;
-        f3.innerHTML = `
-          <div class="ugc-left">
-            <h2>hiku + you</h2>
-            <p>${p.desc}</p>
-            <div class="ugc-left-btn">join the community</div>
-          </div>
-          <div class="ugc-center" style="background: ${p.color3};">
-            <div class="ugc-story-bar"><span></span><span></span><span></span><span></span></div>
-            <div class="ugc-story-user">
-              <div class="ugc-story-avatar" style="background:${p.accent};"></div>
-              @username &nbsp; 3h
-            </div>
-            <img class="ugc-story-img" src="${IMG_MODEL}" alt="ugc">
-          </div>
-          <div class="ugc-right">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span class="ugc-reviewer">${p.reviewer}</span>
-              <span class="ugc-stars">\u2605\u2605\u2605\u2605\u2605</span>
-            </div>
-            <div class="ugc-quote">${p.review}</div>
-          </div>`;
-        f3.addEventListener('click', () => cycleSlide(pi));
-        stackDiv.appendChild(f3);
-      }
+        frame.addEventListener('click', () => cycleSlide(pi));
+        stackDiv.appendChild(frame);
+      });
 
       stackContainer.appendChild(stackDiv);
     });
