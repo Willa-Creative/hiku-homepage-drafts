@@ -497,6 +497,13 @@
     border-color: transparent;
   }
 
+  /* Image background stage — shows translucency on all variants */
+  .btn-stage.image-bg {
+    background: url('assets/main-hero.png') center/cover no-repeat;
+    border-color: transparent;
+    min-height: 120px;
+  }
+
   .btn-outline-glossy {
     color: var(--brown);
     background:
@@ -762,7 +769,7 @@
 
   <div class="concept">
     <span class="concept-label">E1 — Full Opaque</span>
-    <div class="btn-stage">
+    <div class="btn-stage image-bg">
       <button class="btn btn-opaque">Shop Now</button>
     </div>
     <p class="concept-desc">Thick lacquer. Zero translucency. Deepest shadows, heaviest body. Like a solid drop of nail polish.</p>
@@ -770,7 +777,7 @@
 
   <div class="concept">
     <span class="concept-label">E2 — Semi-Opaque</span>
-    <div class="btn-stage">
+    <div class="btn-stage image-bg">
       <button class="btn btn-semi-opaque">Shop Now</button>
     </div>
     <p class="concept-desc">Rich and solid, but with a hint of translucent edge glow. Same family as the Nail Lacquer (D) above.</p>
@@ -778,7 +785,7 @@
 
   <div class="concept">
     <span class="concept-label">E3 — Semi-Sheer</span>
-    <div class="btn-stage gradient-bg">
+    <div class="btn-stage image-bg">
       <button class="btn btn-semi-sheer">Shop Now</button>
     </div>
     <p class="concept-desc">Color is present but translucent — background peeks through slightly. Like tinted glass or a gel polish first coat.</p>
@@ -786,7 +793,7 @@
 
   <div class="concept">
     <span class="concept-label">E4 — Sheer</span>
-    <div class="btn-stage gradient-bg">
+    <div class="btn-stage image-bg">
       <button class="btn btn-sheer">Shop Now</button>
     </div>
     <p class="concept-desc">Glassy color wash. Background clearly visible. Backdrop blur adds frosted dimension. Like sheer lip gloss.</p>
@@ -794,7 +801,7 @@
 
   <div class="concept" style="grid-column: 1 / -1; max-width: 420px; margin: 0 auto;">
     <span class="concept-label">E5 — Ultra Sheer</span>
-    <div class="btn-stage gradient-bg">
+    <div class="btn-stage image-bg">
       <button class="btn btn-ultra-sheer">Shop Now</button>
     </div>
     <p class="concept-desc">Barely tinted clear glass. Just enough color to know it's there. Maximum backdrop blur. Dark text for contrast.</p>
