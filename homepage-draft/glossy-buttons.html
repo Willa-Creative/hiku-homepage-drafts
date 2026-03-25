@@ -661,13 +661,36 @@
         btn.style.setProperty('--hy', '20%');
       });
     } else {
-      btn.addEventListener('touchmove', e => {
-        e.preventDefault();
+      // Track touch start position to distinguish scroll vs intentional drag
+      btn.addEventListener('touchstart', e => {
         const t = e.touches[0];
-        updateHighlight(btn, t.clientX, t.clientY);
-        btn.style.animationPlayState = 'paused';
+        btn._touchStartX = t.clientX;
+        btn._touchStartY = t.clientY;
+        btn._isIntentionalDrag = false;
+      }, { passive: true });
+
+      btn.addEventListener('touchmove', e => {
+        const t = e.touches[0];
+        const dx = Math.abs(t.clientX - btn._touchStartX);
+        const dy = Math.abs(t.clientY - btn._touchStartY);
+
+        // If mostly vertical movement, let the page scroll
+        if (!btn._isIntentionalDrag && dy > dx && dy > 10) return;
+
+        // Horizontal drag across button = intentional highlight interaction
+        if (dx > 10) {
+          btn._isIntentionalDrag = true;
+          e.preventDefault();
+        }
+
+        if (btn._isIntentionalDrag) {
+          updateHighlight(btn, t.clientX, t.clientY);
+          btn.style.animationPlayState = 'paused';
+        }
       }, { passive: false });
+
       btn.addEventListener('touchend', () => {
+        btn._isIntentionalDrag = false;
         btn.style.animationPlayState = 'running';
       });
     }
