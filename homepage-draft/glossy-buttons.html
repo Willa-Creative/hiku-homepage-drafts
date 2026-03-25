@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hiku — Glossy CTA Explorations</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --brown: #3D1C1E;
+    --almond: #FDF8F5;
+    --rosewood: #C4A0A7;
+    --vivid-pink: #E782A9;
+    --pink: #F5E6E0;
+  }
+
+  body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: var(--almond);
+    color: var(--brown);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ========================================
+     HEADER
+     ======================================== */
+  .page-header {
+    text-align: center;
+    padding: 56px 24px 40px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .page-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 400;
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+
+  .page-header p {
+    font-size: 13px;
+    color: var(--rosewood);
+    line-height: 1.7;
+    letter-spacing: 0.01em;
+  }
+
+  .page-header .note {
+    margin-top: 16px;
+    font-size: 11px;
+    color: var(--rosewood);
+    opacity: 0.7;
+    letter-spacing: 0.03em;
+  }
+
+  /* ========================================
+     GRID
+     ======================================== */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px 32px;
+  }
+
+  .concept {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .concept-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--rosewood);
+  }
+
+  .concept-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 400;
+  }
+
+  .concept-desc {
+    font-size: 11.5px;
+    color: var(--rosewood);
+    text-align: center;
+    line-height: 1.65;
+    max-width: 300px;
+  }
+
+  .btn-stage {
+    min-height: 96px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background: white;
+    border-radius: 12px;
+    padding: 32px 24px;
+    border: 1px solid rgba(61,28,30,0.04);
+  }
+
+  .btn-stage.on-dark {
+    background: var(--brown);
+    border-color: transparent;
+  }
+
+  /* ========================================
+     SECTION DIVIDERS
+     ======================================== */
+  .section-divider {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 32px 0 8px;
+  }
+
+  .section-divider span {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--rosewood);
+  }
+
+  /* ========================================
+     SHARED BUTTON BASE
+     ======================================== */
+  .btn {
+    position: relative;
+    display: inline-block;
+    padding: 14px 36px;
+    border-radius: 6px;
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    --hx: 30%;
+    --hy: 20%;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* Desktop hover lift */
+  @media (hover: hover) {
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  .btn:active {
+    transform: translateY(0px) scale(0.97);
+    transition-duration: 0.1s;
+  }
+
+  /* Mobile idle shimmer — only when no pointer hover available */
+  @media (hover: none) {
+    .btn {
+      animation: idle-shimmer 4s ease-in-out infinite;
+    }
+  }
+
+  @keyframes idle-shimmer {
+    0%, 100% { --hx: 25%; --hy: 18%; }
+    33% { --hx: 55%; --hy: 14%; }
+    66% { --hx: 35%; --hy: 28%; }
+  }
+
+  /* ========================================
+     A — LACQUER DROP
+     ======================================== */
+  .btn-lacquer {
+    color: var(--almond);
+    background:
+      radial-gradient(ellipse 28% 24% at var(--hx) var(--hy), rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.1) 60%, transparent 100%),
+      radial-gradient(ellipse 20% 16% at calc(var(--hx) + 35%) calc(var(--hy) + 5%), rgba(255,255,255,0.12) 0%, transparent 100%),
+      linear-gradient(180deg, rgba(255,255,255,0.08) 0%, transparent 40%, transparent 85%, rgba(255,255,255,0.03) 100%),
+      radial-gradient(ellipse 90% 80% at 50% 45%, #4a2628 0%, #2a1214 100%);
+    box-shadow:
+      0 6px 20px rgba(61,28,30,0.35),
+      0 2px 4px rgba(61,28,30,0.25),
+      inset 0 1px 0 rgba(255,255,255,0.1),
+      inset 0 -2px 4px rgba(0,0,0,0.2);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  }
+
+  @media (hover: hover) {
+    .btn-lacquer:hover {
+      box-shadow:
+        0 10px 30px rgba(61,28,30,0.38),
+        0 2px 6px rgba(61,28,30,0.25),
+        inset 0 1px 0 rgba(255,255,255,0.14),
+        inset 0 -2px 4px rgba(0,0,0,0.2);
+    }
+  }
+
+  /* ========================================
+     B — POLISHED STONE
+     ======================================== */
+  .btn-stone {
+    color: var(--almond);
+    background:
+      radial-gradient(ellipse 32% 28% at var(--hx) var(--hy), rgba(255,245,240,0.6) 0%, rgba(255,230,220,0.08) 55%, transparent 100%),
+      radial-gradient(ellipse 60% 50% at 50% 60%, rgba(120,50,55,0.4) 0%, transparent 80%),
+      radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(0,0,0,0.12) 100%),
+      linear-gradient(170deg, #523032 0%, #3D1C1E 35%, #351618 70%, #2e1214 100%);
+    box-shadow:
+      0 6px 18px rgba(61,28,30,0.32),
+      0 1px 3px rgba(61,28,30,0.2),
+      inset 0 1px 0 rgba(255,255,255,0.08),
+      inset 0 -1px 2px rgba(0,0,0,0.2);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+  }
+
+  @media (hover: hover) {
+    .btn-stone:hover {
+      box-shadow:
+        0 10px 28px rgba(61,28,30,0.36),
+        0 2px 5px rgba(61,28,30,0.22),
+        0 0 16px rgba(196,160,167,0.12),
+        inset 0 1px 0 rgba(255,255,255,0.1),
+        inset 0 -1px 2px rgba(0,0,0,0.2);
+    }
+  }
+
+  /* ========================================
+     C — GLASS GEL
+     ======================================== */
+  .btn-gel {
+    color: var(--almond);
+    background:
+      radial-gradient(ellipse 36% 30% at var(--hx) var(--hy), rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.05) 65%, transparent 100%),
+      linear-gradient(170deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 30%, transparent 50%),
+      linear-gradient(to right, rgba(255,255,255,0.04) 0%, transparent 8%, transparent 92%, rgba(255,255,255,0.04) 100%),
+      radial-gradient(ellipse 80% 70% at 50% 50%, #472224 0%, #3D1C1E 50%, #311517 100%);
+    box-shadow:
+      0 5px 16px rgba(61,28,30,0.28),
+      0 1px 3px rgba(61,28,30,0.18),
+      inset 0 1px 0 rgba(255,255,255,0.14),
+      inset 1px 0 0 rgba(255,255,255,0.04),
+      inset -1px 0 0 rgba(255,255,255,0.04),
+      inset 0 -1px 0 rgba(0,0,0,0.12);
+    text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+  }
+
+  @media (hover: hover) {
+    .btn-gel:hover {
+      box-shadow:
+        0 8px 24px rgba(61,28,30,0.32),
+        0 2px 5px rgba(61,28,30,0.2),
+        inset 0 1px 0 rgba(255,255,255,0.18),
+        inset 1px 0 0 rgba(255,255,255,0.06),
+        inset -1px 0 0 rgba(255,255,255,0.06),
+        inset 0 -1px 0 rgba(0,0,0,0.12);
+    }
+  }
+
+  /* ========================================
+     D — NAIL LACQUER (MAX GLOSS)
+     ======================================== */
+  .btn-nail {
+    color: var(--almond);
+    background:
+      radial-gradient(ellipse 18% 14% at var(--hx) var(--hy), rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.35) 40%, transparent 70%),
+      radial-gradient(ellipse 35% 28% at var(--hx) calc(var(--hy) + 4%), rgba(255,255,255,0.12) 0%, transparent 100%),
+      radial-gradient(ellipse 50% 12% at 50% 95%, rgba(255,255,255,0.06) 0%, transparent 100%),
+      radial-gradient(ellipse 70% 60% at 50% 40%, #4e2a2c 0%, #2a1214 100%);
+    box-shadow:
+      0 8px 24px rgba(61,28,30,0.38),
+      0 2px 4px rgba(61,28,30,0.28),
+      inset 0 1.5px 0 rgba(255,255,255,0.15),
+      inset 0 -3px 6px rgba(0,0,0,0.25);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.35);
+  }
+
+  @media (hover: hover) {
+    .btn-nail:hover {
+      box-shadow:
+        0 12px 32px rgba(61,28,30,0.4),
+        0 3px 6px rgba(61,28,30,0.28),
+        inset 0 1.5px 0 rgba(255,255,255,0.18),
+        inset 0 -3px 6px rgba(0,0,0,0.25);
+    }
+  }
+
+  /* ========================================
+     COLOR VARIANTS (nail lacquer finish)
+     ======================================== */
+  .btn-nail-pink {
+    color: var(--almond);
+    background:
+      radial-gradient(ellipse 18% 14% at var(--hx) var(--hy), rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.35) 40%, transparent 70%),
+      radial-gradient(ellipse 35% 28% at var(--hx) calc(var(--hy) + 4%), rgba(255,255,255,0.12) 0%, transparent 100%),
+      radial-gradient(ellipse 50% 12% at 50% 95%, rgba(255,255,255,0.06) 0%, transparent 100%),
+      radial-gradient(ellipse 70% 60% at 50% 40%, #d98aa5 0%, #a5566e 100%);
+    box-shadow:
+      0 8px 24px rgba(169,86,110,0.35),
+      0 2px 4px rgba(169,86,110,0.25),
+      inset 0 1.5px 0 rgba(255,255,255,0.2),
+      inset 0 -3px 6px rgba(0,0,0,0.18);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  }
+
+  @media (hover: hover) {
+    .btn-nail-pink:hover {
+      box-shadow:
+        0 12px 32px rgba(169,86,110,0.38),
+        0 3px 6px rgba(169,86,110,0.25),
+        inset 0 1.5px 0 rgba(255,255,255,0.24),
+        inset 0 -3px 6px rgba(0,0,0,0.18);
+    }
+  }
+
+  .btn-outline-glossy {
+    color: var(--brown);
+    background:
+      radial-gradient(ellipse 18% 14% at var(--hx) var(--hy), rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.4) 40%, transparent 70%),
+      radial-gradient(ellipse 35% 28% at var(--hx) calc(var(--hy) + 4%), rgba(255,255,255,0.15) 0%, transparent 100%),
+      radial-gradient(ellipse 70% 60% at 50% 40%, rgba(253,248,245,0.95) 0%, rgba(240,230,225,0.9) 100%);
+    box-shadow:
+      0 6px 18px rgba(61,28,30,0.12),
+      0 1px 3px rgba(61,28,30,0.08),
+      inset 0 1.5px 0 rgba(255,255,255,0.6),
+      inset 0 -2px 4px rgba(61,28,30,0.06);
+    border: 1px solid rgba(61,28,30,0.1);
+    text-shadow: none;
+  }
+
+  @media (hover: hover) {
+    .btn-outline-glossy:hover {
+      box-shadow:
+        0 10px 28px rgba(61,28,30,0.15),
+        0 2px 5px rgba(61,28,30,0.1),
+        inset 0 1.5px 0 rgba(255,255,255,0.7),
+        inset 0 -2px 4px rgba(61,28,30,0.06);
+    }
+  }
+
+  /* ========================================
+     IN-CONTEXT DEMOS
+     ======================================== */
+  .context-section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px 48px;
+  }
+
+  .context-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(61,28,30,0.04);
+  }
+
+  .context-card + .context-card {
+    margin-top: 24px;
+  }
+
+  .context-card-header {
+    padding: 20px 24px 12px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--rosewood);
+  }
+
+  /* Hero mock */
+  .hero-mock {
+    padding: 48px 32px 56px;
+    background: var(--brown);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .hero-mock h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 3.5vw, 28px);
+    font-weight: 400;
+    color: var(--almond);
+    line-height: 1.3;
+  }
+
+  .hero-mock p {
+    font-size: 13px;
+    color: var(--rosewood);
+    max-width: 360px;
+    line-height: 1.6;
+  }
+
+  .hero-mock .btn-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 4px;
+  }
+
+  /* Product card mock */
+  .product-mock {
+    padding: 32px;
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+
+  .product-mock-img {
+    width: 140px;
+    height: 180px;
+    background: var(--pink);
+    border-radius: 12px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: var(--rosewood);
+    letter-spacing: 0.05em;
+  }
+
+  .product-mock-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .product-mock-info h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 400;
+  }
+
+  .product-mock-info .price {
+    font-size: 14px;
+    color: var(--brown);
+    font-weight: 500;
+  }
+
+  .product-mock-info .desc {
+    font-size: 12px;
+    color: var(--rosewood);
+    line-height: 1.6;
+  }
+
+  .product-mock-info .btn {
+    align-self: flex-start;
+    margin-top: 8px;
+  }
+
+  /* ========================================
+     FOOTER
+     ======================================== */
+  .page-footer {
+    text-align: center;
+    padding: 32px 24px 56px;
+  }
+
+  .page-footer p {
+    font-size: 11px;
+    color: var(--rosewood);
+    opacity: 0.6;
+    letter-spacing: 0.03em;
+    line-height: 1.7;
+  }
+
+  /* ========================================
+     RESPONSIVE
+     ======================================== */
+  @media (max-width: 640px) {
+    .grid {
+      grid-template-columns: 1fr;
+      gap: 28px;
+      padding: 0 16px 28px;
+    }
+
+    .page-header {
+      padding: 40px 16px 32px;
+    }
+
+    .product-mock {
+      flex-direction: column;
+      text-align: center;
+      padding: 24px;
+    }
+
+    .product-mock-info .btn {
+      align-self: center;
+    }
+
+    .hero-mock {
+      padding: 36px 20px 44px;
+    }
+
+    .context-section {
+      padding: 0 16px 40px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="page-header">
+  <h1>Glossy CTA Explorations</h1>
+  <p>Four surface finish directions for Hiku's primary buttons. Each uses a cursor-tracking highlight that follows your mouse — like light catching on polished lacquer. On mobile, the highlight gently drifts on its own.</p>
+  <p class="note">Desktop: hover &amp; move cursor across buttons &nbsp;·&nbsp; Mobile: tap and drag across buttons</p>
+</div>
+
+<!-- Surface finish options -->
+<div class="grid">
+
+  <div class="concept">
+    <span class="concept-label">A — Lacquer Drop</span>
+    <div class="btn-stage">
+      <button class="btn btn-lacquer">Shop Now</button>
+    </div>
+    <p class="concept-desc">Sharp catchlight, rim light, deep body. Clean and confident.</p>
+  </div>
+
+  <div class="concept">
+    <span class="concept-label">B — Polished Stone</span>
+    <div class="btn-stage">
+      <button class="btn btn-stone">Shop Now</button>
+    </div>
+    <p class="concept-desc">Warm-tinted highlight, subsurface glow. Richer, more organic.</p>
+  </div>
+
+  <div class="concept">
+    <span class="concept-label">C — Glass Gel</span>
+    <div class="btn-stage">
+      <button class="btn btn-gel">Shop Now</button>
+    </div>
+    <p class="concept-desc">Soft diffused highlight, thin bright edges. Lightest, most subtle.</p>
+  </div>
+
+  <div class="concept">
+    <span class="concept-label">D — Nail Lacquer</span>
+    <div class="btn-stage">
+      <button class="btn btn-nail">Shop Now</button>
+    </div>
+    <p class="concept-desc">Intense sharp specular, deep convexity. Most faithful to reference.</p>
+  </div>
+
+  <!-- Color variants -->
+  <div class="section-divider">
+    <span>Color Variants (Nail Lacquer finish)</span>
+  </div>
+
+  <div class="concept">
+    <span class="concept-label">Accent — Vivid Pink</span>
+    <div class="btn-stage">
+      <button class="btn btn-nail-pink">Subscribe</button>
+    </div>
+    <p class="concept-desc">For secondary CTAs or promotional moments. Pink as accent only.</p>
+  </div>
+
+  <div class="concept">
+    <span class="concept-label">Light — On Dark</span>
+    <div class="btn-stage on-dark">
+      <button class="btn btn-outline-glossy">Learn More</button>
+    </div>
+    <p class="concept-desc">Ghost/outline variant with glossy surface. For dark backgrounds.</p>
+  </div>
+</div>
+
+<!-- In-context demos -->
+<div class="context-section">
+  <div class="section-divider" style="padding-bottom:24px;">
+    <span>In Context</span>
+  </div>
+
+  <!-- Hero demo -->
+  <div class="context-card">
+    <div class="context-card-header">Hero Section</div>
+    <div class="hero-mock">
+      <h2>The Coolest Thing You<br>Can Be Is Yourself</h2>
+      <p>Skincare that actually gets your skin — and your vibe.</p>
+      <div class="btn-row">
+        <button class="btn btn-nail" style="padding:13px 32px;">Shop All</button>
+        <button class="btn btn-outline-glossy" style="padding:13px 32px;">Take the Quiz</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product card demo -->
+  <div class="context-card">
+    <div class="context-card-header">Product Page</div>
+    <div class="product-mock">
+      <div class="product-mock-img">product image</div>
+      <div class="product-mock-info">
+        <h3>Matcha Skin Cleanser</h3>
+        <span class="price">$28</span>
+        <p class="desc">A gentle, antioxidant-rich cleanser that dissolves impurities without stripping your skin barrier.</p>
+        <button class="btn btn-nail">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="page-footer">
+  <p>Hiku — Glossy Button Exploration · Internal Review · All CSS + lightweight JS<br>No canvas, no WebGL — fully responsive &amp; performant</p>
+</div>
+
+<script>
+  // Feature detect: does the device support hover?
+  const hasHover = window.matchMedia('(hover: hover)').matches;
+
+  document.querySelectorAll('.btn').forEach(btn => {
+    if (hasHover) {
+      // Desktop: mouse tracking
+      btn.addEventListener('mousemove', e => {
+        const rect = btn.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        const hx = 15 + (x / 100) * 55;
+        const hy = 8 + (y / 100) * 35;
+        btn.style.setProperty('--hx', hx + '%');
+        btn.style.setProperty('--hy', hy + '%');
+      });
+
+      btn.addEventListener('mouseleave', () => {
+        btn.style.setProperty('--hx', '30%');
+        btn.style.setProperty('--hy', '20%');
+      });
+    } else {
+      // Mobile: touch tracking — drag finger across button
+      btn.addEventListener('touchmove', e => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const rect = btn.getBoundingClientRect();
+        const x = ((touch.clientX - rect.left) / rect.width) * 100;
+        const y = ((touch.clientY - rect.top) / rect.height) * 100;
+        const hx = Math.max(10, Math.min(70, 15 + (x / 100) * 55));
+        const hy = Math.max(5, Math.min(40, 8 + (y / 100) * 35));
+        btn.style.setProperty('--hx', hx + '%');
+        btn.style.setProperty('--hy', hy + '%');
+        // Pause idle animation while touching
+        btn.style.animationPlayState = 'paused';
+      }, { passive: false });
+
+      btn.addEventListener('touchend', () => {
+        btn.style.animationPlayState = 'running';
+      });
+    }
+  });
+</script>
+
+</body>
+</html>
