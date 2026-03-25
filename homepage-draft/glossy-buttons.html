@@ -7,6 +7,19 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
 
+  /* Register custom properties so CSS can interpolate them in animations */
+  @property --hx {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 30%;
+  }
+
+  @property --hy {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 20%;
+  }
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
@@ -622,42 +635,38 @@
 </div>
 
 <script>
-  // Feature detect: does the device support hover?
   const hasHover = window.matchMedia('(hover: hover)').matches;
+
+  // RAF-throttled property update — one repaint per frame max
+  function updateHighlight(btn, clientX, clientY) {
+    if (btn._rafPending) return;
+    btn._rafPending = true;
+    requestAnimationFrame(() => {
+      const rect = btn.getBoundingClientRect();
+      const x = ((clientX - rect.left) / rect.width) * 100;
+      const y = ((clientY - rect.top) / rect.height) * 100;
+      const hx = Math.max(10, Math.min(70, 15 + (x / 100) * 55));
+      const hy = Math.max(5, Math.min(40, 8 + (y / 100) * 35));
+      btn.style.setProperty('--hx', hx + '%');
+      btn.style.setProperty('--hy', hy + '%');
+      btn._rafPending = false;
+    });
+  }
 
   document.querySelectorAll('.btn').forEach(btn => {
     if (hasHover) {
-      // Desktop: mouse tracking
-      btn.addEventListener('mousemove', e => {
-        const rect = btn.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 100;
-        const y = ((e.clientY - rect.top) / rect.height) * 100;
-        const hx = 15 + (x / 100) * 55;
-        const hy = 8 + (y / 100) * 35;
-        btn.style.setProperty('--hx', hx + '%');
-        btn.style.setProperty('--hy', hy + '%');
-      });
-
+      btn.addEventListener('mousemove', e => updateHighlight(btn, e.clientX, e.clientY));
       btn.addEventListener('mouseleave', () => {
         btn.style.setProperty('--hx', '30%');
         btn.style.setProperty('--hy', '20%');
       });
     } else {
-      // Mobile: touch tracking — drag finger across button
       btn.addEventListener('touchmove', e => {
         e.preventDefault();
-        const touch = e.touches[0];
-        const rect = btn.getBoundingClientRect();
-        const x = ((touch.clientX - rect.left) / rect.width) * 100;
-        const y = ((touch.clientY - rect.top) / rect.height) * 100;
-        const hx = Math.max(10, Math.min(70, 15 + (x / 100) * 55));
-        const hy = Math.max(5, Math.min(40, 8 + (y / 100) * 35));
-        btn.style.setProperty('--hx', hx + '%');
-        btn.style.setProperty('--hy', hy + '%');
-        // Pause idle animation while touching
+        const t = e.touches[0];
+        updateHighlight(btn, t.clientX, t.clientY);
         btn.style.animationPlayState = 'paused';
       }, { passive: false });
-
       btn.addEventListener('touchend', () => {
         btn.style.animationPlayState = 'running';
       });
